@@ -22,7 +22,16 @@ class MitraController extends BaseController
     public function getdata()
     {
         date_default_timezone_set('Asia/Jakarta');
-        $query = $this->db->table('profile_mitra')->get()->getResult();
+
+        $builder = $this->db->table('profile_mitra a');
+        $builder->select('a.*');
+        $builder->select(
+            'CASE WHEN b.username IS NULL THEN "0" ELSE "1" END AS status_account',
+            false// jangan escape, biarkan raw SQL
+        );
+        $builder->join('users b', 'a.kode_mitra = b.username', 'left');
+
+        $query = $builder->get()->getResult();
         return $this->response->setJSON($query);
     }
 
@@ -131,6 +140,28 @@ class MitraController extends BaseController
                 'message' => $e->getMessage(),
             ]);
         }
+    }
+
+    public function getmitra_detail()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = json_decode(file_get_contents('php://input'), true);
+        $kode_mitra = $input['kode_mitra'];
+        $query = $this->db->table('profile_mitra_detail')->where('kode_mitra', $kode_mitra)->get()->getResult();
+        return $this->response->setJSON($query);
+    }
+
+    public function getmitra_detail_document()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = $this->request->getJSON(true); // atau getJSON() jika tidak ingin sebagai array
+        $kode_mitra = $input['kode_mitra'];
+        $builder = $this->db->table('profile_mitra_document a');
+        $builder->select('a.*, b.type_name');
+        $builder->join('support_doc_types b', 'a.doc_type_id = b.id');
+        $builder->where('a.kode_mitra', $kode_mitra);
+        $query = $builder->get()->getResult();
+        return $this->response->setJSON($query);
     }
 
 }

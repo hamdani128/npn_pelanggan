@@ -43,10 +43,10 @@
                                     <tr>
                                         <th style="width: 5%;">#</th>
                                         <th style="width: 30%;text-align: center;">Profile Mitra</th>
-                                        <th style="width: 8%;text-align: center;">E-mail</th>
                                         <th style="width: 15%;text-align: center;">Alamat</th>
                                         <th style="width: 15%;text-align: center;">Alamat Instalasi</th>
-                                        <th style="width: 13%;text-align: center;">Created at</th>
+                                        <th style="width: 8%;text-align: center;">Status Account</th>
+                                        <th style="width: 15%;text-align: center;">Created at</th>
                                         <th style="width: 13%;text-align: center;">Act</th>
                                     </tr>
                                 </thead>
@@ -57,10 +57,16 @@
                                             <span>Kode Mitra : <strong>{{dt.kode_mitra}}</strong></span><br>
                                             <span>Nama Perusahaan : <strong>{{dt.nama_perusahaan}}</strong></span><br>
                                             <span>No.Kontak : <strong>{{dt.no_hp}}</strong></span><br>
+                                            <span>E-mail : <strong>{{dt.email}}</strong></span><br>
                                         </td>
-                                        <td>{{dt.email}}</td>
                                         <td>{{dt.alamat}}</td>
                                         <td>{{dt.alamat_instalasi}}</td>
+                                        <td>
+                                            <span class="badge badge-success" ng-if="dt.status_account == '1'">Account
+                                                Active</span>
+                                            <span class="badge badge-danger" ng-if="dt.status_account == '0'">Account
+                                                Non Active</span>
+                                        </td>
                                         <td>{{dt.created_at}}</td>
                                         <td>
                                             <div class="input-group">
@@ -72,6 +78,9 @@
                                                 </button>
                                                 <button class="btn btn-sm btn-dark" ng-click="showProfile(dt)">
                                                     <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-dark" ng-click="showProfile(dt)">
+                                                    <i class="fa fa-key"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -102,51 +111,77 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">ID Mitra</label>
-                                <input type="text" name="mitra_id" id="mitra_id" class="form-control"
-                                    placeholder="ID Mitra" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Nama Perusahaan</label>
-                                <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control"
-                                    placeholder="Nama Perusahaan">
-                            </div>
-                            <div class="form-group">
-                                <label for="">E-mail</label>
-                                <input type="email" name="email" id="email" class="form-control" placeholder="E-mail">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">No.Kontak</label>
-                                <input type="text" name="no_kontak" id="no_kontak" class="form-control"
-                                    placeholder="No.Kontak">
-                            </div>
-                            <div class="form-group">
-                                <label for="">Alamat</label>
-                                <textarea name="alamat_perusahaan" id="alamat_perusahaan" cols="3" rows="3"
-                                    class="form-control" placeholder="Alamat Perusahaan"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Alamat Instalasi</label>
-                                <textarea name="alamat_instalasi" id="alamat_instalasi" cols="3" rows="3"
-                                    class="form-control" placeholder="Alamat Instalasi"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- row Struktural -->
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-justified nav-tabs-custom" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#custom-home" role="tab">
+                                <i class="dripicons-user mr-1 align-middle"></i> <span
+                                    class="d-none d-md-inline-block">Data Pelanggan</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#custom-profile" role="tab">
+                                <i class="dripicons-store mr-1 align-middle"></i> <span
+                                    class="d-none d-md-inline-block">Profile Organisasi</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#custom-messages" role="tab">
+                                <i class="dripicons-mail mr-1 align-middle"></i> <span
+                                    class="d-none d-md-inline-block">Data Layanan</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#custom-settings" role="tab">
+                                <i class="dripicons-suitcase mr-1 align-middle"></i> <span
+                                    class="d-none d-md-inline-block">Dokumen Support</span>
+                            </a>
+                        </li>
+                    </ul>
 
-                    <!-- row -->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header bg-dark">
-                                    <h6 class="card-title text-white">Struktural Mitra</h6>
+                    <!-- Tab panes -->
+                    <div class="tab-content p-3">
+                        <div class="tab-pane active" id="custom-home" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">ID Mitra</label>
+                                        <input type="text" name="mitra_id" id="mitra_id" class="form-control"
+                                            placeholder="ID Mitra" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Nama Perusahaan</label>
+                                        <input type="text" name="nama_perusahaan" id="nama_perusahaan"
+                                            class="form-control" placeholder="Nama Perusahaan">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">E-mail</label>
+                                        <input type="email" name="email" id="email" class="form-control"
+                                            placeholder="E-mail">
+                                    </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">No.Kontak</label>
+                                        <input type="text" name="no_kontak" id="no_kontak" class="form-control"
+                                            placeholder="No.Kontak">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Alamat</label>
+                                        <textarea name="alamat_perusahaan" id="alamat_perusahaan" cols="3" rows="3"
+                                            class="form-control" placeholder="Alamat Perusahaan"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Alamat Instalasi</label>
+                                        <textarea name="alamat_instalasi" id="alamat_instalasi" cols="3" rows="3"
+                                            class="form-control" placeholder="Alamat Instalasi"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="custom-profile" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12 justify-content-end">
                                             <button class="btn btn-md btn-dark" ng-click="AddBaris()">
@@ -167,11 +202,15 @@
                                                             <th style="width: 3%;text-align: center;">Act</th>
                                                             <th style="width: 10%;text-align: center;">NIK</th>
                                                             <th style="width: 10%;text-align: center;">Nama</th>
-                                                            <th style="width: 10%;text-align: center;">No.Wa</th>
-                                                            <th style="width: 10%;text-align: center;">Email</th>
+                                                            <th style="width: 10%;text-align: center;">No.Wa
+                                                            </th>
+                                                            <th style="width: 10%;text-align: center;">Email
+                                                            </th>
                                                             <th style="width: 10%;text-align: center;">NPWP</th>
-                                                            <th style="width: 15%;text-align: center;">FileName</th>
-                                                            <th style="width: 10%;text-align: center;">Posisi</th>
+                                                            <th style="width: 15%;text-align: center;">FileName
+                                                            </th>
+                                                            <th style="width: 10%;text-align: center;">Posisi
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbody-struktural">
@@ -209,19 +248,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- End Row -->
+                        <div class="tab-pane" id="custom-messages" role="tabpanel">
 
-
-
-                    <!-- Row -->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header bg-dark">
-                                    <h6 class="card-title text-white">Dokumen Tambahan</h6>
-                                </div>
-                                <div class="card-body">
+                        </div>
+                        <div class="tab-pane" id="custom-settings" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
                                     <div class="row pt-2">
                                         <div class="col-md-12">
                                             <div class="table-responsive">
@@ -232,8 +264,10 @@
                                                         <tr>
                                                             <th style="width: 2%;text-align: center;">#</th>
                                                             <th style="width: 5%;display: none;">ID</th>
-                                                            <th style="width: 15%;text-align: center;">Nama Dokumen</th>
-                                                            <th style="width: 15%;text-align: center;">FileName</th>
+                                                            <th style="width: 15%;text-align: center;">Nama
+                                                                Dokumen</th>
+                                                            <th style="width: 15%;text-align: center;">FileName
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbody-tambahan">
@@ -264,7 +298,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- End Row -->
                 </div>
                 <div class="modal-footer justify-content-start">
                     <button type="button" class="btn btn-md btn-primary" ng-click="Insert()">
@@ -294,7 +327,146 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    `
+                    <!-- Row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">ID Mitra</label>
+                                <input type="text" name="mitra_id_profile" id="mitra_id_profile" class="form-control"
+                                    placeholder="ID Mitra" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Nama Perusahaan</label>
+                                <input type="text" name="nama_perusahaan_profile" id="nama_perusahaan_profile"
+                                    class="form-control" placeholder="Nama Perusahaan" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="">E-mail</label>
+                                <input type="email" name="email_profile" id="email_profile" class="form-control"
+                                    placeholder="E-mail" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">No.Kontak</label>
+                                <input type="text" name="no_kontak_profile" id="no_kontak_profile"" class="
+                                    form-control" placeholder="No.Kontak" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Alamat</label>
+                                <textarea name="alamat_perusahaan_profile" id="alamat_perusahaan_profile" cols="3"
+                                    rows="3" class="form-control" placeholder="Alamat Perusahaan" readonly></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Alamat Instalasi</label>
+                                <textarea name="alamat_instalasi_profile" id="alamat_instalasi_profile" cols="3"
+                                    rows="3" class="form-control" placeholder="Alamat Instalasi" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h6 class="card-title text-white">Struktural Mitra</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row pt-2">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered dt-responsive nowrap table-hover table-striped"
+                                                    style="border-collapse: collapse; border-spacing: 0; width: 150%;">
+                                                    <thead class="bg-dark text-white">
+                                                        <tr>
+                                                            <th style="width: 3%;">#</th>
+                                                            <th style="width: 10%;text-align: center;">NIK</th>
+                                                            <th style="width: 10%;text-align: center;">Nama</th>
+                                                            <th style="width: 10%;text-align: center;">No.Wa</th>
+                                                            <th style="width: 10%;text-align: center;">Email</th>
+                                                            <th style="width: 10%;text-align: center;">NPWP</th>
+                                                            <th style="width: 15%;text-align: center;">FileName</th>
+                                                            <th style="width: 10%;text-align: center;">Posisi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-struktural-profile">
+                                                        <tr ng-repeat="id in mitra_detail" class="text-center">
+                                                            <td>{{$index + 1}}</td>
+                                                            <td>{{id.nik}}</td>
+                                                            <td>{{id.nama}}</td>
+                                                            <td>{{id.no_wa}}</td>
+                                                            <td>{{id.email}}</td>
+                                                            <td>{{id.npwp}}</td>
+                                                            <td>
+                                                                <a
+                                                                    href="<?=base_url()?>upload/mitra/{{id.kode_mitra}}/{{id.filename}}">
+                                                                    {{id.filename}}
+                                                                </a>
+                                                            </td>
+                                                            <td>{{id.posisi}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Row -->
+                    <!-- Detail Table Struktur -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h6 class="card-title text-white">Dokumen Tambahan</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row pt-2">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered dt-responsive nowrap table-hover table-striped"
+                                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                    <thead class="bg-dark text-white">
+                                                        <tr>
+                                                            <th style="width: 2%;text-align: center;">#</th>
+                                                            <th style="width: 5%;display: none;">ID</th>
+                                                            <th style="width: 15%;text-align: center;">Nama Dokumen</th>
+                                                            <th style="width: 15%;text-align: center;">FileName</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-tambahan">
+                                                        <tr ng-repeat="dt in mitra_detail_dokumen">
+                                                            <td style="width: 2%;text-align: center;">
+                                                                {{$index + 1}}
+                                                            </td>
+                                                            <td style="width: 2%;text-align: center; display: none;">
+                                                                <input type="hidden" value="{{dt.id}}"
+                                                                    class="form-control">
+                                                            </td>
+                                                            <td>
+                                                                {{dt.type_name}}
+                                                            </td>
+                                                            <td>
+                                                                <a
+                                                                    href="<?=base_url()?>upload/mitra/{{dt.kode_mitra}}/{{dt.file_name}}">
+                                                                    {{dt.file_name}}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Table Struktur -->
                 </div>
                 <div class="modal-footer justify-content-start">
                     <!-- <button type="button" class="btn btn-md btn-primary" ng-click="Insert()">
@@ -309,7 +481,212 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
+    <!-- End Modal Show Profile -->
+
+
     <!-- End Modal Show -->
+    <div id="My-Modal-Edit" class="modal fade modal-right" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title mt-0 text-white"> Edit Data Mitra</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">ID Mitra</label>
+                                <input type="text" name="mitra_id_edit" id="mitra_id_edit" class="form-control"
+                                    placeholder="ID Mitra" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Nama Perusahaan</label>
+                                <input type="text" name="nama_perusahaan_edit" id="nama_perusahaan_edit"
+                                    class="form-control" placeholder="Nama Perusahaan">
+                            </div>
+                            <div class="form-group">
+                                <label for="">E-mail</label>
+                                <input type="email" name="email_edit" id="email_edit" class="form-control"
+                                    placeholder="E-mail">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">No.Kontak</label>
+                                <input type="text" name="no_kontak_edit" id="no_kontak_edit" class="form-control"
+                                    placeholder="No.Kontak">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Alamat</label>
+                                <textarea name="alamat_perusahaan_edit" id="alamat_perusahaan_edit" cols="3" rows="3"
+                                    class="form-control" placeholder="Alamat Perusahaan"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Alamat Instalasi</label>
+                                <textarea name="alamat_instalasi_edit" id="alamat_instalasi_edit" cols="3" rows="3"
+                                    class="form-control" placeholder="Alamat Instalasi"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- row Struktural -->
+
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h6 class="card-title text-white">Struktural Mitra</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 justify-content-end">
+                                            <button class="btn btn-md btn-dark" ng-click="AddBarisEdit()">
+                                                <i class="fa fa-plus"></i>
+                                                Tambah
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row pt-2">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered dt-responsive nowrap table-hover table-striped"
+                                                    style="border-collapse: collapse; border-spacing: 0; width: 150%;">
+                                                    <thead class="bg-dark text-white">
+                                                        <tr>
+                                                            <th style="width: 3%;">#</th>
+                                                            <th style="width: 3%;text-align: center;">Act</th>
+                                                            <th style="width: 10%;text-align: center;">NIK</th>
+                                                            <th style="width: 10%;text-align: center;">Nama</th>
+                                                            <th style="width: 10%;text-align: center;">No.Wa</th>
+                                                            <th style="width: 10%;text-align: center;">Email</th>
+                                                            <th style="width: 10%;text-align: center;">NPWP</th>
+                                                            <th style="width: 15%;text-align: center;">FileName</th>
+                                                            <th style="width: 10%;text-align: center;">Posisi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-struktural-edit">
+                                                        <tr ng-repeat="item in listDataEdit track by $index">
+                                                            <td>{{$index + 1}}</td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-danger"
+                                                                    ng-click="HapusBarisEdit($index)">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                            <td><input type="text" ng-model="item.nik"
+                                                                    class="form-control" /></td>
+                                                            <td><input type="text" ng-model="item.nama"
+                                                                    class="form-control" /></td>
+                                                            <td><input type="text" ng-model="item.no_wa"
+                                                                    class="form-control" /></td>
+                                                            <td><input type="email" ng-model="item.email"
+                                                                    class="form-control" /></td>
+                                                            <td><input type="text" ng-model="item.npwp"
+                                                                    class="form-control" /></td>
+                                                            <td>
+                                                                <input type="file" class="form-control"
+                                                                    onchange="angular.element(this).scope().setFileName(this, item)" />
+                                                                <small>
+                                                                    <a
+                                                                        href="<?=base_url()?>upload/mitra/{{item.kode_mitra}}/{{item.filename}}">
+                                                                        {{item.filename}}
+                                                                    </a>
+                                                                </small>
+                                                                <!-- Display filename -->
+                                                            </td>
+                                                            <td><input type="text" ng-model="item.posisi"
+                                                                    class="form-control" /></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Row -->
+
+                    <!-- Row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h6 class="card-title text-white">Dokumen Tambahan</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row pt-2">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered dt-responsive nowrap table-hover table-striped"
+                                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                    <thead class="bg-dark text-white">
+                                                        <tr>
+                                                            <th style="width: 2%;text-align: center;">#</th>
+                                                            <th style="width: 5%;display: none;">ID</th>
+                                                            <th style="width: 15%;text-align: center;">Nama Dokumen</th>
+                                                            <th style="width: 15%;text-align: center;">FileName</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-tambahan">
+                                                        <tr ng-repeat="dt in listDataDocTambahanEdit">
+                                                            <td style="width: 2%;text-align: center;">
+                                                                {{$index + 1}}
+                                                            </td>
+                                                            <td style="width: 2%;text-align: center; display: none;">
+                                                                <input type="hidden" value="{{dt.id}}"
+                                                                    class="form-control">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" ng-model="dt.type_name"
+                                                                    value="{{dt.type_name}}" class="form-control"
+                                                                    readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="file" ng-model="dt.filename"
+                                                                    class="form-control" />
+                                                                <small>
+                                                                    <a
+                                                                        href="<?=base_url()?>upload/mitra/{{dt.kode_mitra}}/{{dt.file_name}}">
+                                                                        {{dt.file_name}}
+                                                                    </a>
+                                                                </small>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Row -->
+                </div>
+                <div class="modal-footer justify-content-start">
+                    <button type="button" class="btn btn-md btn-warning" ng-click="Update()">
+                        <i class="fa fa-paper-plane"></i>
+                        Update
+                    </button>
+                    <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        close
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- Edit Modal Show -->
+
+    <!-- End Edit Modal Show -->
 </div>
 
 

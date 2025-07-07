@@ -28,4 +28,6 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->get('profile_pelanggan/kemitraan_reseller/getdata', 'Admin\Kemitraan\MitraController::getdata');
     $routes->get('profile_pelanggan/kemitraan_reseller/getmitra_id', 'Admin\Kemitraan\MitraController::getmitra_id');
     $routes->post('profile_pelanggan/kemitraan_reseller/insert', 'Admin\Kemitraan\MitraController::insert');
+    $routes->post('profile_pelanggan/kemitraan_reseller/getmitra_detail', 'Admin\Kemitraan\MitraController::getmitra_detail');
+    $routes->post('profile_pelanggan/kemitraan_reseller/getmitra_detail_document', 'Admin\Kemitraan\MitraController::getmitra_detail_document');
 });

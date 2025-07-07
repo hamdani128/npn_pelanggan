@@ -169,7 +169,146 @@ app.controller("KemitraanAppController", function ($scope, $http) {
 
   $scope.EditShow = function (dt) {};
 
-  $scope.showProfile = function () {
+  $scope.showProfile = function (dt) {
+    $("#mitra_id_profile").val(dt.kode_mitra);
+    $("#nama_perusahaan_profile").val(dt.nama_perusahaan);
+    $("#no_kontak_profile").val(dt.no_hp);
+    $("#email_profile").val(dt.email);
+    $("#alamat_perusahaan_profile").val(dt.alamat);
+    $("#alamat_instalasi_profile").val(dt.alamat_instalasi);
+    $scope.GetMitraDetail(dt.kode_mitra);
+    $scope.GetMitraDetailDokumen(dt.kode_mitra);
     $("#My-Modal-Show-Profile").modal("show");
+  };
+
+  $scope.GetMitraDetail = function (kode_mitra) {
+    var formdata = {
+      kode_mitra: kode_mitra,
+    };
+    $http
+      .post(
+        base_url("profile_pelanggan/kemitraan_reseller/getmitra_detail"),
+        formdata
+      )
+      .then(function (response) {
+        $scope.mitra_detail = response.data;
+      })
+      .catch(function (error) {
+        console.error("Terjadi kesalahan:", error);
+      });
+  };
+
+  $scope.GetMitraDetailDokumen = function (kode_mitra) {
+    var formdata = {
+      kode_mitra: kode_mitra,
+    };
+
+    $http
+      .post(
+        base_url(
+          "profile_pelanggan/kemitraan_reseller/getmitra_detail_document"
+        ),
+        formdata
+      )
+      .then(function (response) {
+        $scope.mitra_detail_dokumen = response.data;
+      })
+      .catch(function (error) {
+        console.error("Terjadi kesalahan:", error);
+      });
+  };
+
+  $scope.listDataEdit = [];
+  $scope.listDataDocTambahanEdit = [];
+
+  $scope.AddBarisEdit = function () {
+    $scope.listDataEdit.push({
+      nik: "",
+      nama: "",
+      no_wa: "",
+      email: "",
+      npwp: "",
+      filename: "",
+      posisi: "",
+    });
+  };
+
+  $scope.HapusBarisEdit = function (index) {
+    $scope.listDataEdit.splice(index, 1);
+  };
+
+  $scope.EditShow = function (dt) {
+    $scope.GetMitraDetailForEdit(dt.kode_mitra);
+    $scope.GetMitraDocumentForEdit(dt.kode_mitra);
+    $("#My-Modal-Edit").modal("show");
+  };
+
+  $scope.setFileName = function (element, item) {
+    $scope.$apply(function () {
+      const file = element.files[0];
+      if (file) {
+        item.filename = file.name;
+        item.fileObject = file; // optional: simpan file untuk upload
+      } else {
+        item.filename = "";
+        item.fileObject = null;
+      }
+    });
+  };
+
+  $scope.GetMitraDetailForEdit = function (kode_mitra) {
+    $scope.listDataEdit = [];
+    var formdata = {
+      kode_mitra: kode_mitra,
+    };
+
+    $http
+      .post(
+        base_url("profile_pelanggan/kemitraan_reseller/getmitra_detail"),
+        formdata
+      )
+      .then(function (response) {
+        var dataList = response.data;
+
+        // Loop jika datanya array
+        if (Array.isArray(dataList)) {
+          dataList.forEach(function (item) {
+            $scope.listDataEdit.push({
+              kode_mitra: item.kode_mitra,
+              nik: item.nik,
+              nama: item.nama,
+              no_wa: item.no_wa,
+              email: item.email,
+              npwp: item.npwp,
+              filename: item.filename,
+              posisi: item.posisi,
+              fileObject: null, // untuk handle file upload jika dibutuhkan
+            });
+          });
+        }
+      })
+      .catch(function (error) {
+        console.error("Gagal mengambil data:", error);
+      });
+  };
+
+  $scope.GetMitraDocumentForEdit = function (kode_mitra) {
+    var formdata = {
+      kode_mitra: kode_mitra,
+    };
+
+    $http
+      .post(
+        base_url(
+          "profile_pelanggan/kemitraan_reseller/getmitra_detail_document"
+        ),
+        formdata
+      )
+      .then(function (response) {
+        $scope.listDataDocTambahanEdit = response.data;
+      })
+      .catch(function (error) {
+        console.error("Gagal mengambil data:", error);
+      });
   };
 });
