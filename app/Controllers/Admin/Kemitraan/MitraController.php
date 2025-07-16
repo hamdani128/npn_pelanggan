@@ -67,6 +67,49 @@ class MitraController extends BaseController
             $struktural = json_decode($this->request->getPost("struktural"), true);
             $tambahan_file = json_decode($this->request->getPost("tambahan_file_data"), true);
 
+            // layanan
+            $jenis_layanan = $this->request->getPost("jenis_layanan");
+            $kapasitas_layanan = $this->request->getPost("kapasitas_layanan");
+            $satuan_layanan = $this->request->getPost("satuan_layanan");
+            $vendor_media = $this->request->getPost("vendor_media");
+            $deskripsi_month = $this->request->getPost("harga_dasar_price_month");
+            $price_dasar_price_month = $this->request->getPost("price_dasar_price_month");
+            $harga_jual_price_month = $this->request->getPost("harga_jual_price_month");
+            $ppn_price_mont = $this->request->getPost("ppn_price_month");
+            $periode_start_price_month = $this->request->getPost("periode_start_price_month");
+            $periode_end_price_month = $this->request->getPost("periode_end_price_month");
+
+            $data_temp = [
+                'kode_mitra' => $mitra_id,
+                'jenis_layanan' => $jenis_layanan,
+                'kapasitas' => $kapasitas_layanan,
+                'quantity' => $satuan_layanan,
+                'vendor' => $vendor_media,
+                'deskripsi_price' => $deskripsi_month,
+                'harga_dasar' => $price_dasar_price_month,
+                'harga_dasar' => $price_dasar_price_month,
+                'ppn_text' => $ppn_price_mont,
+                'periode_start' => $periode_start_price_month,
+                'periode_end' => $periode_end_price_month,
+            ];
+
+            // otc_data
+            $otc = json_decode($this->request->getPost("otc_data"), true);
+            foreach ($otc as $index => $row) {
+                $data_row = [
+                    'kode_mitra' => $mitra_id,
+                    'deskripsi_price' => $row['deskripsi'] ?? '',
+                    'harga_dasar' => $row['harga_dasar'] ?? '',
+                    'harga_jual' => $row['harga_jual'] ?? '',
+                    'ppn_text' => $row['ppn'] ?? '',
+                    'ppn' => $row['harga_jual'] * ($row['ppn'] / 100) ?? '',
+                    'subtotal' => $row['subtotal'] ?? '',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => session()->get('username'),
+                ];
+                $this->db->table("profile_mitra_data_layanan_otc")->insert($data_row);
+            }
+
             // Buat folder berdasarkan mitra_id
             $uploadPath = FCPATH . 'upload/mitra/' . $mitra_id . '/';
             if (!is_dir($uploadPath)) {
@@ -161,6 +204,13 @@ class MitraController extends BaseController
         $builder->join('support_doc_types b', 'a.doc_type_id = b.id');
         $builder->where('a.kode_mitra', $kode_mitra);
         $query = $builder->get()->getResult();
+        return $this->response->setJSON($query);
+    }
+
+    public function getrefcode()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $query = $this->db->table('cg_ref_codes')->where('domain', 'OTC')->get()->getResult();
         return $this->response->setJSON($query);
     }
 

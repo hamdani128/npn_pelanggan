@@ -143,6 +143,57 @@ app.controller("KemitraanAppController", function ($scope, $http) {
 
     formData.append("tambahan_file_data", JSON.stringify(tambahanDokumen));
 
+    // OTC Data Table
+    var tbody3 = document.getElementById("tbody-otc");
+    var rows3 = tbody3.getElementsByTagName("tr");
+    var otdata = [];
+
+    for (var i = 0; i < rows3.length; i++) {
+      var cells3 = rows3[i].getElementsByTagName("td");
+
+      var rowData3 = {
+        deskripsi: cells3[1].querySelector("label").textContent.trim(), // ambil isi label
+        harga_dasar: cells3[2].querySelector("input").value,
+        harga_jual: cells3[3].querySelector("input").value,
+        ppn: cells3[4].querySelector("select").value,
+        subtotal: cells3[5].querySelector("input").value,
+      };
+
+      otdata.push(rowData3);
+    }
+
+    formData.append("otc_data", JSON.stringify(otdata));
+    formData.append("jenis_layanan", $("#jenis_layanan").val());
+    formData.append("satuan_layanan", $("#satuan_layanan").val());
+    formData.append("kapasitas_layanan", $("#kapasitas_layanan").val());
+    formData.append("vendor_media", $("#vendor_media").val());
+
+    formData.append("deskripsi_price_month", $("#deskripsi_price_month").val());
+    formData.append(
+      "harga_dasar_price_month",
+      $("#harga_dasar_price_month").val()
+    );
+    formData.append(
+      "harga_jual_price_month",
+      $("#harga_jual_price_month").val()
+    );
+    formData.append("ppn_text_price_month", $("#combo_ppn_price_month").val());
+    formData.append(
+      "nominal_ppn_price_month",
+      $("#nominal_ppn_price_month").val()
+    );
+    formData.append("subtotal_price_month", $("#subtotal_price_month").val());
+    formData.append("subtotal_price_month", $("#subtotal_price_month").val());
+    formData.append(
+      "start_date_price_month",
+      $("#start_date_price_month").val()
+    );
+    formData.append("end_date_price_month", $("#end_date_price_month").val());
+    formData.append(
+      "pembayaran_paling_lama_month",
+      $("#pembayaran_paling_lama_month").val()
+    );
+
     fetch(base_url("profile_pelanggan/kemitraan_reseller/insert"), {
       method: "POST",
       body: formData,
@@ -165,6 +216,69 @@ app.controller("KemitraanAppController", function ($scope, $http) {
         console.error(err);
         alert("Terjadi kesalahan saat mengirim data.");
       });
+  };
+
+  $scope.SetTableRefrencePeriode = function () {
+    $scope.ListDataArrayRefrencePeriode = [];
+
+    var start = $("#start_date_price_month").val();
+    var End = $("#end_date_price_month").val();
+    var Deskripsi = $("#deskripsi_price_month").val();
+    var harga_dasar = $("#harga_dasar_price_month").val();
+    var harga_jual = $("#harga_jual_price_month").val();
+    var ppn = parseFloat($("#combo_ppn_price_month").val()) || 0;
+    var pembayaran_paling_lama =
+      parseInt($("#pembayaran_paling_lama_month").val()) || 0;
+
+    // Ubah harga dasar dan jual dari format string ke number
+    var harga_dasar_number = UnFormatNumber(harga_dasar);
+    var harga_jual_number = UnFormatNumber(harga_jual);
+
+    if (start && End) {
+      var start_date = new Date(start);
+      var end_date = new Date(End);
+
+      // Normalisasi ke tanggal 1
+      var current = new Date(
+        start_date.getFullYear(),
+        start_date.getMonth(),
+        1
+      );
+      var end = new Date(end_date.getFullYear(), end_date.getMonth(), 1);
+
+      while (current <= end) {
+        var periode =
+          current.getFullYear() +
+          "-" +
+          (current.getMonth() + 1).toString().padStart(2, "0") +
+          "-01";
+
+        var payment_late_date =
+          current.getFullYear() +
+          "-" +
+          (current.getMonth() + 1).toString().padStart(2, "0") +
+          "-" +
+          pembayaran_paling_lama.toString().padStart(2, "0");
+
+        var subtotal = Math.round(
+          harga_jual_number + harga_jual_number * (ppn / 100)
+        );
+
+        $scope.ListDataArrayRefrencePeriode.push({
+          deskripsi_label_price_month: Deskripsi,
+          price_dasar_price_month: formatNumber(harga_dasar_number),
+          price_jual_price_month: formatNumber(harga_jual_number),
+          combo_ppn: ppn,
+          subtotal: formatNumber(subtotal),
+          periode: periode,
+          payment_late_date: payment_late_date,
+          payment_late_days: pembayaran_paling_lama - 1, // karena periode awal selalu tanggal 1
+          denda: 0,
+        });
+
+        current.setMonth(current.getMonth() + 1);
+      }
+    }
   };
 
   $scope.EditShow = function (dt) {};
@@ -311,4 +425,67 @@ app.controller("KemitraanAppController", function ($scope, $http) {
         console.error("Gagal mengambil data:", error);
       });
   };
+
+  $scope.GetrefCode = function () {
+    $http
+      .get(base_url("profile_pelanggan/kemitraan_reseller/getrefcode"))
+      .then(function (response) {
+        $scope.listDataOtc = response.data;
+      })
+      .catch(function (error) {
+        console.error("Gagal mengambil data:", error);
+      });
+  };
+
+  $scope.GetrefCode();
+
+  $scope.CalculateHargaMonth = function () {
+    var harga_dasar =
+      parseFloat($("#harga_dasar_price_month").val().replace(/\./g, "")) || 0;
+    var harga_jual =
+      parseFloat($("#harga_jual_price_month").val().replace(/\./g, "")) || 0;
+    var ppn_persen = parseFloat($("#combo_ppn_price_month").val()) || 0;
+
+    // Hitung nominal PPN
+    var nominal_ppn = Math.round(harga_jual * (ppn_persen / 100));
+
+    // Hitung subtotal
+    var subtotal = harga_jual + nominal_ppn;
+
+    // Tampilkan hasil ke form (dengan format angka Indonesia)
+    $("#harga_dasar_price_month").val(formatNumber(harga_dasar));
+    $("#harga_jual_price_month").val(formatNumber(harga_jual));
+    $("#nominal_ppn_price_month").val(formatNumber(nominal_ppn));
+    $("#subtotal_price_month").val(formatNumber(subtotal));
+  };
+
+  $(
+    "#harga_dasar_price_month, #harga_jual_price_month, #combo_ppn_price_month"
+  ).on("input change", function () {
+    $scope.CalculateHargaMonth();
+  });
+
+  $scope.UpdateSubtotalOtc = function (row) {
+    $scope.FormatFieldNumber(row, "price_jual");
+    var harga_jual = UnFormatNumber(row.price_jual);
+    var ppn = parseFloat(row.combo_ppn) || 0;
+
+    var subtotal = harga_jual + (harga_jual * ppn) / 100;
+    row.subtotal = formatNumber(subtotal);
+  };
+
+  $scope.FormatFieldNumber = function (row, field) {
+    var value = UnFormatNumber(row[field]);
+    row[field] = formatNumber(value);
+  };
 });
+
+function UnFormatNumber(value) {
+  if (typeof value === "number") return value;
+  if (!value) return 0;
+  return parseFloat(value.replace(/\./g, "").replace(/,/g, "."));
+}
+
+function formatNumber(value) {
+  return value.toLocaleString("id-ID", { minimumFractionDigits: 0 });
+}

@@ -35,20 +35,29 @@ class ProfileMitraDataLayanan extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'harga_pokok_otc' => [
-                'type' => 'TEXT',
+            'deskripsi_otc' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
             ],
-            'harga_pokok_month' => [
+            'harga_pokok_otc' => [
                 'type' => 'INT',
+                'null' => true,
             ],
             'harga_jual_otc' => [
                 'type' => 'INT',
                 'null' => true,
             ],
-
-            'harga_jual_month' => [
-                'type' => 'DATETIME',
+            'harga_pokok_month' => [
+                'type' => 'INT',
                 'null' => true,
+            ],
+            'harga_jual_month' => [
+                'type' => 'INT',
+                'null' => true,
+            ],
+            'deskripsi_price' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
             ],
             'period_start_price' => [
                 'type' => 'DATE',
@@ -76,11 +85,11 @@ class ProfileMitraDataLayanan extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('profile_mitra');
+        $this->forge->createTable('profile_mitra_data_layanan');
     }
 
     public function down()
     {
-        //
+        $this->forge->dropTable('profile_mitra_data_layanan');
     }
 }
