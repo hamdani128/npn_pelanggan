@@ -21,7 +21,7 @@
     <link href="<?=base_url()?>/assets/sweetalert/sweetalert2.css" rel="stylesheet" type="text/css">
 </head>
 
-<body class="bg-primary bg-pattern">
+<body class="bg-dark bg-pattern">
     <div class="home-btn d-none d-sm-block">
         <a href="<?=base_url("auth/login")?>"><i class="mdi mdi-home-variant h2 text-white"></i></a>
     </div>
@@ -32,8 +32,8 @@
                 <div class="col-lg-12">
                     <div class="text-center mb-5">
                         <a href="<?=base_url("auth/login")?>" class="logo"><img
-                                src="<?=base_url()?>assets/images/logo-light.png" height="24" alt="logo"></a>
-                        <h5 class="font-size-16 text-white-50 mb-4">
+                                src="<?=base_url()?>assets/images/logo-npn.png" height="80" alt="logo"></a>
+                        <h5 class="font-size-16 text-white-50 mb-2 mt-4">
                             Login Administrator Manajemen NPN
                         </h5>
                     </div>
@@ -46,8 +46,8 @@
                     <div class="card">
                         <div class="card-body p-4">
                             <div class="p-2">
-                                <h5 class="mb-5 text-center">Sign in to continue to NPN.</h5>
-                                <form class="form-horizontal" action="index.html">
+                                <h5 class="mb-5 text-center">Sign in to ERP NPN.</h5>
+                                <form class="form-horizontal" action="<?=base_url('auth/login')?>">
 
                                     <div class="row">
                                         <div class="col-md-12">
@@ -89,7 +89,7 @@
                                             <div class="mt-4 text-center">
                                                 <a href="#" class="text-muted">
                                                     <i class="mdi mdi-account-circle mr-1"></i>
-                                                    Create an account
+                                                    Register Now
                                                 </a>
                                             </div>
                                         </div>

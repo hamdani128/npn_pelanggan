@@ -41,8 +41,8 @@
                         <span>Modul Pelanggan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="javascript: void(0);">Retail</a></li>
-                        <li><a href="javascript: void(0);">B2B</a></li>
+                        <!-- <li><a href="javascript: void(0);">Retail</a></li>
+                        <li><a href="javascript: void(0);">B2B</a></li> -->
                         <li><a href="javascript: void(0);" class="has-arrow">Kemitraan / Reseller</a>
                             <ul class="sub-menu" aria-expanded="true">
                                 <li>

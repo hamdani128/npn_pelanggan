@@ -20,7 +20,7 @@ class AuthCheckFilter implements FilterInterface
         $loggedUserId = $session->get('loggedUser');
 
         if (!$loggedUserId) {
-            return redirect()->to('/auth/login')->with('warning', 'Harap login terlebih dahulu');
+            return redirect()->to('auth/login')->with('warning', 'Harap login terlebih dahulu');
         }
 
         $db = Database::connect();
@@ -63,6 +63,6 @@ class AuthCheckFilter implements FilterInterface
         ]);
 
         $session->destroy();
-        return redirect()->to('/auth/login')->with('warning', $message);
+        return redirect()->to('auth/login')->with('warning', $message);
     }
 }

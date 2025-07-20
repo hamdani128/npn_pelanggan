@@ -38,7 +38,7 @@ async function login_administrator() {
             title: "Berhasil",
             text: "Anda Berhasil Login !",
           });
-          document.location.href = base_url("");
+          document.location.href = base_url("admin");
         } else if (data.status === "user not found") {
           Swal.fire({
             icon: "warning",

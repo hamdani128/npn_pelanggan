@@ -48,7 +48,7 @@ class MitraController extends BaseController
             $kd = sprintf("%05s", $n);
         }
 
-        $kode_mitra = date('YmdHi') . $kd;
+        $kode_mitra = date('Ymd') . $kd;
 
         return $this->response->setJSON(['kode_mitra' => $kode_mitra]);
     }
@@ -72,12 +72,15 @@ class MitraController extends BaseController
             $kapasitas_layanan = $this->request->getPost("kapasitas_layanan");
             $satuan_layanan = $this->request->getPost("satuan_layanan");
             $vendor_media = $this->request->getPost("vendor_media");
-            $deskripsi_month = $this->request->getPost("harga_dasar_price_month");
-            $price_dasar_price_month = $this->request->getPost("price_dasar_price_month");
+            $deskripsi_month = $this->request->getPost("deskripsi_price_month");
+            $harga_dasar_price_month = $this->request->getPost("harga_dasar_price_month");
             $harga_jual_price_month = $this->request->getPost("harga_jual_price_month");
-            $ppn_price_mont = $this->request->getPost("ppn_price_month");
-            $periode_start_price_month = $this->request->getPost("periode_start_price_month");
-            $periode_end_price_month = $this->request->getPost("periode_end_price_month");
+            $ppn_text_price_month = $this->request->getPost("ppn_text_price_month");
+            $nominal_ppn_price_month = $this->request->getPost("nominal_ppn_price_month");
+            $subtotal_price_month = $this->request->getPost("subtotal_price_month");
+            $start_date_price_month = $this->request->getPost("start_date_price_month");
+            $end_date_price_month = $this->request->getPost("end_date_price_month");
+            $pembayaran_paling_lama_month = $this->request->getPost("pembayaran_paling_lama_month");
 
             $data_temp = [
                 'kode_mitra' => $mitra_id,
@@ -86,15 +89,21 @@ class MitraController extends BaseController
                 'quantity' => $satuan_layanan,
                 'vendor' => $vendor_media,
                 'deskripsi_price' => $deskripsi_month,
-                'harga_dasar' => $price_dasar_price_month,
-                'harga_dasar' => $price_dasar_price_month,
-                'ppn_text' => $ppn_price_mont,
-                'periode_start' => $periode_start_price_month,
-                'periode_end' => $periode_end_price_month,
+                'harga_dasar' => $harga_dasar_price_month,
+                'harga_jual' => $harga_jual_price_month,
+                'ppn_text' => $ppn_text_price_month,
+                'ppn' => $nominal_ppn_price_month,
+                'subtotal' => $subtotal_price_month,
+                'period_start' => $start_date_price_month,
+                'period_end' => $end_date_price_month,
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => session()->get('username'),
             ];
-
+            // var_dump($data_temp);
+            $this->db->table("profile_mitra_data_layanan")->insert($data_temp);
             // otc_data
             $otc = json_decode($this->request->getPost("otc_data"), true);
+            // var_dump($otc);
             foreach ($otc as $index => $row) {
                 $data_row = [
                     'kode_mitra' => $mitra_id,
@@ -108,6 +117,32 @@ class MitraController extends BaseController
                     'created_by' => session()->get('username'),
                 ];
                 $this->db->table("profile_mitra_data_layanan_otc")->insert($data_row);
+            }
+
+            // Periode Price Month
+
+            $refrencedata = json_decode($this->request->getPost("refrencedata"), true);
+            // var_dump($refrencedata);
+            foreach ($refrencedata as $index => $row) {
+                $harga_jual = is_numeric($row['harga_jual']) ? floatval($row['harga_jual']) : 0;
+                $ppn_persen = is_numeric($row['ppn_text']) ? floatval($row['ppn_text']) : 0;
+                $ppn_nominal = $harga_jual * ($ppn_persen / 100);
+                $data_row_layanan = [
+                    'kode_mitra' => $mitra_id,
+                    'deskripsi_price' => $row['deskripsi'] ?? '',
+                    'harga_dasar' => $row['harga_dasar'] ?? '',
+                    'harga_jual' => $harga_jual,
+                    'ppn_text' => $ppn_persen,
+                    'ppn' => $ppn_nominal,
+                    'subtotal' => $row['subtotal'] ?? '',
+                    'periode' => $row['periode'] ?? '',
+                    'last_pay_periode' => $row['payment_late_date'] ?? '',
+                    'denda' => $row['denda'] ?? '',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => session()->get('username'),
+                ];
+                // Simpan ke database
+                $this->db->table("profile_mitra_data_layanan_periode")->insert($data_row_layanan);
             }
 
             // Buat folder berdasarkan mitra_id
@@ -127,9 +162,11 @@ class MitraController extends BaseController
                 'created_at' => date('Y-m-d H:i:s'),
                 'created_by' => session()->get('username'),
             ];
+
+            // var_dump($data_mitra);
             $this->db->table('profile_mitra')->insert($data_mitra);
 
-            // Simpan detail struktural
+            // // Simpan detail struktural
             foreach ($struktural as $index => $row) {
                 $data_row = [
                     'kode_mitra' => $mitra_id,
@@ -153,7 +190,7 @@ class MitraController extends BaseController
                 $this->db->table("profile_mitra_detail")->insert($data_row);
             }
 
-            // Simpan tambahan dokumen
+            // // Simpan tambahan dokumen
             foreach ($tambahan_file as $index => $row) {
                 $data_row = [
                     'kode_mitra' => $mitra_id,
@@ -212,6 +249,41 @@ class MitraController extends BaseController
         date_default_timezone_set('Asia/Jakarta');
         $query = $this->db->table('cg_ref_codes')->where('domain', 'OTC')->get()->getResult();
         return $this->response->setJSON($query);
+    }
+
+    public function getmitra_data_layanan()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $input = $this->request->getJSON(true); // true = return as array
+        $kode_mitra = $input['kode_mitra'];
+
+        $builder = $this->db->table("profile_mitra_data_layanan")
+            ->where('kode_mitra', $kode_mitra)
+            ->get()
+            ->getRowObject();
+        return $this->response->setJSON($builder);
+    }
+
+    public function getmitra_data_layanan_refrence_table()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = $this->request->getJSON(true); // true = return as array
+        $kode_mitra = $input['kode_mitra'];
+        $builder = $this->db->table("profile_mitra_data_layanan_periode")
+            ->where('kode_mitra', $kode_mitra)
+            ->get()
+            ->getResult();
+        return $this->response->setJSON($builder);
+    }
+
+    public function getmitra_data_layanan_otc()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = $this->request->getJSON(true); // true = return as array
+        $kode_mitra = $input['kode_mitra'];
+        $builder = $this->db->table("profile_mitra_data_layanan_otc")->where('kode_mitra', $kode_mitra)->get()->getResult();
+        return $this->response->setJSON($builder);
     }
 
 }
