@@ -26,4 +26,32 @@ app.controller("RegisterKemitraanAppController", function ($scope, $http) {
   };
 
   $scope.LoadDataRegisterKemitraan();
+
+  $scope.Approval = function (dt) {
+    Swal.fire({
+      title: "Apakah anda yakin?",
+      text: "Anda akan menyetujui data ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Setuju!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $http
+          .post(base_url("profile_pelanggan/register_approval"), {
+            kode_register: dt.kode_register,
+          })
+          .then(function (response) {
+            if (response.data.status == "success") {
+              Swal.fire("Berhasil!", "Data berhasil disetujui.", "success");
+              document.location.reload();
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    });
+  };
 });

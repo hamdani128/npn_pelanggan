@@ -50,14 +50,31 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="<?=base_url("master/employee_master")?>">
                                 Employee Management
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="javascript: void(0);" class="has-arrow">
                                 Asset Management
                             </a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li>
+                                    <a href="#">
+                                        Lists Item
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Kategori
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Satuan
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
@@ -81,7 +98,11 @@
                                         Profile Legalitas
                                     </a>
                                 </li>
-                                <li><a href="javascript: void(0);">Hostory Deleted Account</a></li>
+                                <li>
+                                    <a href="<?=base_url("profile_pelanggan/kemitraan_deleted_history")?>">
+                                        History Deleted Account
+                                    </a>
+                                </li>
                                 <li><a href="javascript: void(0);">Data Pelanggan</a></li>
                             </ul>
                         </li>

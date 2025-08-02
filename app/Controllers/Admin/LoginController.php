@@ -18,6 +18,11 @@ class LoginController extends BaseController
         return view('auth/login');
     }
 
+    public function forgot_password()
+    {
+        return view('auth/forgot_password');
+    }
+
     public function check_login()
     {
         date_default_timezone_set('Asia/Kolkata');
@@ -68,6 +73,17 @@ class LoginController extends BaseController
         return $this->response->setJSON($response);
     }
 
+    public function send_email()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = $this->request->getJSON();
+        $email = $input->email;
+        echo $email;
+        // return $this->response->setJSON([
+        //     'status' => 'success',
+        //     'message' => 'Email berhasil dikirim ke ' . $email,
+        // ]);
+    }
     public function logout()
     {
         helper(['url', 'form']);

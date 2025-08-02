@@ -15,6 +15,23 @@ class RegisterModel extends Model
         $this->db = Config::connect();
     }
 
+    public function getmitra_id()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $query = $this->db->query("SELECT MAX(RIGHT(kode_mitra,5)) as KD_MAX FROM profile_mitra");
+        $kd = "00001";
+
+        if ($query->getNumRows() > 0) {
+            $row = $query->getRow();
+            $n = (int) $row->KD_MAX + 1;
+            $kd = sprintf("%05s", $n);
+        }
+
+        $kode_mitra = date('Ymd') . $kd;
+
+        return $kode_mitra;
+    }
+
     public function blast_mitra_register_for_register($email_to, $data)
     {
         $email = \Config\Services::email();

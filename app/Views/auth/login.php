@@ -21,7 +21,7 @@
     <link href="<?=base_url()?>/assets/sweetalert/sweetalert2.css" rel="stylesheet" type="text/css">
 </head>
 
-<body class="bg-dark bg-pattern">
+<body class="bg-info bg-pattern">
     <div class="home-btn d-none d-sm-block">
         <a href="<?=base_url("auth/login")?>"><i class="mdi mdi-home-variant h2 text-white"></i></a>
     </div>
@@ -73,7 +73,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="text-md-right mt-3 mt-md-0">
-                                                        <a href="auth-recoverpw.html" class="text-muted">
+                                                        <a href="<?=base_url('auth/forgot_password')?>"
+                                                            class="text-muted">
                                                             <i class="mdi mdi-lock"></i>
                                                             Forgot your password?
                                                         </a>

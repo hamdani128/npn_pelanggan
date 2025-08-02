@@ -113,8 +113,47 @@ class MitraCorporateController extends BaseController
     public function register_admin_getdata()
     {
         date_default_timezone_set('Asia/Jakarta');
-        $data = $this->db->table('mitra_by_register')->get()->getResultObject();
+        $data = $this->db->table('mitra_by_register')->where('deleted_at', null)->get()->getResultObject();
         return $this->response->setJSON($data);
+    }
+
+    public function register_approval()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = $this->request->getJSON(true);
+        $kode_register = $input['kode_register'];
+        $RegisterModel = new RegisterModel();
+        $kode_mitra = $RegisterModel->getmitra_id();
+        $row = $this->db->table('mitra_by_register')->where('kode_register', $kode_register)->get()->getRow();
+        $data_mitra = [
+            'kode_mitra' => $kode_mitra,
+            'nama_perusahaan' => $row->nama_perusahaan,
+            'email' => $row->email,
+            'no_hp' => $row->no_hp,
+            'alamat' => $row->alamat,
+            'alamat_instalasi' => $row->alamat_instalasi,
+            'created_at' => date('Y-m-d H:i:s'),
+            'created_by' => session()->get('username'),
+        ];
+        $data_temp = [
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'deleted_by' => session()->get('username'),
+        ];
+
+        $query1 = $this->db->table('profile_mitra')->insert($data_mitra);
+        $query2 = $this->db->table('mitra_by_register')->where('kode_register', $kode_register)->update($data_temp);
+        if ($query1 && $query2) {
+            $response = [
+                'status' => 'success',
+                'message' => 'Registrasi berhasil, data mitra telah disimpan.',
+            ];
+        } else {
+            $response = [
+                'status' => 'error',
+                'message' => 'Registrasi gagal, data mitra tidak disimpan.',
+            ];
+        }
+        return $this->response->setJSON($response);
     }
 
 }

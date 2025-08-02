@@ -668,4 +668,26 @@ class MitraController extends BaseController
         return $this->response->setJSON($response);
     }
 
+    public function kemitraan_deleted_history()
+    {
+        return view('pages/user/kemitraan_deleted_history');
+    }
+
+    public function get_deleted_history()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $builder = $this->db->table('profile_mitra a');
+        $builder->select('a.*');
+        $builder->select(
+            'CASE WHEN b.username IS NULL THEN "0" ELSE "1" END AS status_account',
+            false// jangan escape, biarkan raw SQL
+        );
+        $builder->join('users b', 'a.kode_mitra = b.username', 'left');
+        $builder->where('a.deleted_at IS NOT NULL', null, false); // raw SQL condition
+        $query = $builder->get()->getResult();
+
+        return $this->response->setJSON($query);
+    }
+
 }

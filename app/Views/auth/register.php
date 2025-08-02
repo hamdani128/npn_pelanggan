@@ -8,7 +8,7 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesdesign" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="<?=base_url()?>assets/images/favicon.ico">
+    <link rel="shortcut icon" href="<?=base_url()?>assets/images/logo-npn.png">
     <!-- Bootstrap Css -->
     <link href="<?=base_url()?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -17,7 +17,7 @@
     <link href="<?=base_url()?>assets/css/app.min.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="bg-dark bg-pattern" ng-app="RegisterApp" ng-controller="RegisterControllerApp">
+<body class="bg-info bg-pattern" ng-app="RegisterApp" ng-controller="RegisterControllerApp">
 
     <div class="account-pages my-5 pt-5">
         <div class="container">
@@ -61,14 +61,13 @@
                                                 <label for="userpassword">Alamat Perusahaan</label>
                                                 <textarea name="alamat_perusahaan" id="alamat_perusahaan" cols="3"
                                                     rows="3" class="form-control"
-                                                    placeholder="Alamat Perusahaan/Instansi">
-                                                </textarea>
+                                                    placeholder="Alamat Perusahaan/Instansi"></textarea>
                                             </div>
                                             <div class="form-group mb-4">
                                                 <label for="userpassword">Alamat Instlasi</label>
                                                 <textarea name="alamat_instalasi" id="alamat_instalasi" cols="3"
-                                                    rows="3" class="form-control" placeholder="Alamat Instalasi">
-                                                </textarea>
+                                                    rows="3" class="form-control"
+                                                    placeholder="Alamat Instalasi"></textarea>
                                             </div>
                                             <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input"

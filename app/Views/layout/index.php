@@ -459,6 +459,7 @@
     <script src="<?=base_url()?>assets/custom/mitra/register.js"></script>
     <script src="<?=base_url()?>assets/custom/users-management.js"></script>
     <script src="<?=base_url()?>assets/custom/master-document.js"></script>
+    <script src="<?=base_url()?>assets/custom/master-employee.js"></script>
     <!-- Datatable init js -->
     <script src="<?=base_url()?>assets/js/pages/datatables.init.js"></script>
     <script src="<?=base_url()?>assets/js/app.js"></script>

@@ -77,6 +77,39 @@ app.controller("KemitraanAppController", function ($scope, $http) {
     $scope.listData.splice(index, 1);
   };
 
+  $scope.listDataOtcArray = [];
+  $scope.AddBarisOTC = function () {
+    $scope.listDataOtcArray.push({
+      deskripsi_otc_add: "",
+      price_dasar: "",
+      price_jual: "",
+      combo_ppn: "",
+      subtotal: "",
+    });
+  };
+
+  $scope.listDataLayananArray = [];
+  $scope.AddLayanan = function () {
+    $scope.listDataLayananArray.push({
+      jenis_layanan: "",
+      kapasitas_layanan: "",
+      satuan_layanan: "",
+      vendor_media: "",
+      alamat_instalasi_layanan: "",
+      status_layanan: "",
+      deskripsi_price_month: "",
+      harga_dasar_price_month: 0,
+      harga_jual_price_month: 0,
+      combo_ppn_price_month: "",
+      nominal_ppn_price_month: 0,
+      subtotal_price_month: 0,
+    });
+  };
+
+  $scope.DeleteLayanan = function (index) {
+    $scope.listDataLayananArray.splice(index, 1);
+  };
+
   $scope.Insert = function () {
     var mitra_id = $("#mitra_id").val();
     var perusahaan = $("#nama_perusahaan").val();
@@ -1157,6 +1190,19 @@ app.controller("KemitraanAppController", function ($scope, $http) {
   $scope.backToKemitraan = function () {
     document.location.href = base_url("profile_pelanggan/kemitraan_reseller");
   };
+
+  $scope.LoadDataDeletedHistory = function () {
+    $http
+      .get(base_url("profile_pelanggan/kemitraan_deleted_history_getdata"))
+      .then(function (response) {
+        $scope.RowLegalitasDeleted = response.data;
+      })
+      .catch(function (error) {
+        console.error("Terjadi kesalahan:", error);
+      });
+  };
+
+  $scope.LoadDataDeletedHistory();
 });
 
 function UnFormatNumber(value) {
