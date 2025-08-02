@@ -1,6 +1,9 @@
 function base_url(string_url) {
   var pathparts = location.pathname.split("/");
-  if (location.host == "localhost:8080" || location.host == "10.20.5.104") {
+  if (
+    location.host == "localhost:8080" ||
+    location.host == "192.168.191.100:8080"
+  ) {
     var url = location.origin + "/" + pathparts[1].trim("/") + "/" + string_url; // http://localhost/myproject/
   } else {
     var url = location.origin + "/" + string_url; // http://stackoverflow.com
@@ -13,7 +16,6 @@ async function login_administrator() {
   var password = $("#password").val();
   var browser = getBrowserName(); // Ambil nama browser
 
-  //   alert(ip_address);
   if (username == "" || password == "") {
     Swal.fire({
       icon: "warning",
@@ -32,13 +34,19 @@ async function login_administrator() {
       },
       dataType: "JSON",
       success: function (data) {
+        console.log(data);
         if (data.status === "success") {
           Swal.fire({
             icon: "success",
-            title: "Berhasil",
-            text: "Anda Berhasil Login !",
+            title: "Success",
+            text: data.message,
+          }).then(() => {
+            if (data.data.level === "Mitra") {
+              document.location.href = base_url("mitra");
+            } else {
+              document.location.href = base_url("admin");
+            }
           });
-          document.location.href = base_url("admin");
         } else if (data.status === "user not found") {
           Swal.fire({
             icon: "warning",

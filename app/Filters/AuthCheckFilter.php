@@ -9,11 +9,10 @@ use Config\Database;
 
 class AuthCheckFilter implements FilterInterface
 {
-    protected $timeout = 900; // 15 menit (900 detik)
+    protected $timeout = 14400; // 15 menit (900 detik)
 
     public function before(RequestInterface $request, $arguments = null)
     {
-        // Gunakan timezone global atau konfigurasi CI (index.php)
         date_default_timezone_set('Asia/Jakarta');
 
         $session = session();
@@ -30,17 +29,16 @@ class AuthCheckFilter implements FilterInterface
             return $this->forceLogout($loggedUserId, $db, $session, 'User tidak ditemukan.');
         }
 
-        // ✅ Cek session_id cocok tidak
-        // if (session_id() !== $user->session_id) {
-        //     return $this->forceLogout($loggedUserId, $db, $session, 'Session Anda tidak valid. Silakan login kembali.');
-        // }
+        // Ambil last activity dari session
+        $lastActivity = $session->get('lastActivity');
+        $now = time();
 
-        // ✅ Cek timeout aktivitas terakhir
-        if ($user->last_activity && strtotime($user->last_activity) < (time() - $this->timeout)) {
+        if ($lastActivity && ($now - $lastActivity) > $this->timeout) {
             return $this->forceLogout($loggedUserId, $db, $session, 'Session Anda telah kedaluwarsa. Silakan login kembali.');
         }
 
-        // ✅ Update aktivitas terakhir user jika masih valid
+        // Perbarui last_activity di session dan database
+        $session->set('lastActivity', $now);
         $db->table('users')->where('id', $loggedUserId)->update([
             'last_activity' => date('Y-m-d H:i:s'),
         ]);

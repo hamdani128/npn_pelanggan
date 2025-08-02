@@ -51,6 +51,7 @@ class LoginController extends BaseController
                 $response = [
                     'status' => 'success',
                     'message' => 'Login Successfull',
+                    'data' => $sessionData,
                 ];
             } else {
                 $response = [
@@ -81,8 +82,7 @@ class LoginController extends BaseController
             $query = $this->db->table('users')->where('id', session('loggedUser'))->update($data);
             session()->remove('loggedUser');
             session()->destroy();
-            return redirect()->to('admin/auth/login')->with('logout', 'You Are logged Out');
+            return redirect()->to('auth/login')->with('logout', 'You Are logged Out');
         }
     }
-
 }

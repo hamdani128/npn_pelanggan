@@ -3,7 +3,7 @@ function base_url(string_url) {
   if (
     location.host == "localhost:8080" ||
     location.host == "localhost" ||
-    location.host == "10.32.18.206"
+    location.host == "192.168.191.100:8080"
   ) {
     var url = location.origin + "/" + pathparts[1].trim("/") + "/" + string_url; // http://localhost/myproject/
   } else {
@@ -875,7 +875,6 @@ app.controller("KemitraanAppController", function ($scope, $http) {
       "pembayaran_paling_lama_month",
       $scope.pembayaran_paling_lama_month_edit
     );
-
     // OTC Data Table
     var tbody4 = document.getElementById("tbody-RefrencePeriode-Edit");
     var rows4 = tbody4.getElementsByTagName("tr");
@@ -934,6 +933,229 @@ app.controller("KemitraanAppController", function ($scope, $http) {
           });
       }
     });
+  };
+
+  $scope.Print = function (dt) {
+    var kode_mitra = dt.kode_mitra;
+    // Langsung arahkan ke URL yang sesuai dengan route
+    var url = base_url(
+      "profile_pelanggan/kemitraan_reseller/" + encodeURIComponent(kode_mitra)
+    );
+    // Buka di tab baru
+    window.open(url, "_blank");
+  };
+
+  $scope.ActivateAccount = function (dt) {
+    if (dt.status_account == "0") {
+      Swal.fire({
+        title: "Aktifkan Akun Mitra?",
+        text: "Akun mitra akan diaktifkan secara otomatis setelah anda mengisi data diri.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Aktifkan !",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Tampilkan modal loading
+          Swal.fire({
+            title: "Memproses...",
+            html: "Mohon tunggu sebentar",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
+          var formdata = {
+            kode_mitra: dt.kode_mitra,
+          };
+
+          $http
+            .post(
+              base_url("profile_pelanggan/kemitraan_reseller/activate_account"),
+              formdata
+            )
+            .then(function (response) {
+              if (response.data.status === "success") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Berhasil",
+                  text: "Akun mitra berhasil diaktifkan!",
+                  showConfirmButton: false,
+                  timer: 1500,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Gagal",
+                  text: response.data.message || "Aktivasi gagal.",
+                });
+              }
+            })
+            .catch(function (error) {
+              console.error("Gagal mengaktifkan akun:", error);
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Terjadi kesalahan sistem.",
+              });
+            });
+        }
+      });
+    }
+  };
+
+  $scope.NonActiveAccount = function (dt) {
+    if (dt.status_account == "1") {
+      Swal.fire({
+        title: "Nonaktifkan Akun Mitra ?",
+        text:
+          "Akun mitra akan dinonaktifkan " +
+          dt.nama_perusahaan +
+          "  secara otomatis.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Nonaktifkan !",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Tampilkan modal loading
+          Swal.fire({
+            title: "Memproses...",
+            html: "Mohon tunggu sebentar",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
+          var formdata = {
+            kode_mitra: dt.kode_mitra,
+          };
+          $http
+            .post(
+              base_url(
+                "profile_pelanggan/kemitraan_reseller/nonactive_account"
+              ),
+              formdata
+            )
+            .then(function (response) {
+              if (response.data.status === "success") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Berhasil",
+                  text: "Akun mitra berhasil dinonaktifkan!",
+                  showConfirmButton: false,
+                  timer: 1500,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Gagal",
+                  text: response.data.message || "Nonaktifkan gagal.",
+                });
+              }
+            })
+            .catch(function (error) {
+              console.error("Gagal menonaktifkan akun:", error);
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Terjadi kesalahan sistem.",
+              });
+            });
+        }
+      });
+    }
+  };
+
+  $scope.Delete = function (dt) {
+    if (dt.status_account == "1") {
+      Swal.fire({
+        title: "Error",
+        text: "This account is already activated, you can't delete it",
+        icon: "error",
+      });
+    } else {
+      Swal.fire({
+        title: "Hapus Akun Mitra ?",
+        text:
+          "Akun mitra " + dt.nama_perusahaan + " akan dihapus secara permanen.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Hapus !",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Tampilkan modal loading
+          Swal.fire({
+            title: "Memproses...",
+            html: "Mohon tunggu sebentar",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
+          var formdata = {
+            kode_mitra: dt.kode_mitra,
+          };
+          $http
+            .post(
+              base_url("profile_pelanggan/kemitraan_reseller/delete"),
+              formdata
+            )
+            .then(function (response) {
+              if (response.data.status === "success") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Berhasil",
+                  text: "Akun mitra berhasil dihapus!",
+                  showConfirmButton: false,
+                  timer: 1500,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Gagal",
+                  text: response.data.message || "Hapus gagal.",
+                });
+              }
+            })
+            .catch(function (error) {
+              console.error("Gagal menghapus akun:", error);
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Terjadi kesalahan sistem.",
+              });
+            });
+        }
+      });
+    }
+  };
+
+  $scope.selectedRow = null;
+
+  $scope.selectRow = function (row) {
+    $scope.selectedRow = row;
+    // Contoh log (opsional)
+    document.location.href = base_url(
+      "profile_pelanggan/kemitraan_reseller/detail/" + row.kode_mitra
+    );
+  };
+
+  $scope.backToKemitraan = function () {
+    document.location.href = base_url("profile_pelanggan/kemitraan_reseller");
   };
 });
 

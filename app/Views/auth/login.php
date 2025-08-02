@@ -8,7 +8,7 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesdesign" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="<?=base_url()?>assets/images/favicon.ico">
+    <link rel="shortcut icon" href="<?=base_url()?>assets/images/logo-npn.png">
 
     <!-- Bootstrap Css -->
     <link href="<?=base_url()?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -34,7 +34,7 @@
                         <a href="<?=base_url("auth/login")?>" class="logo"><img
                                 src="<?=base_url()?>assets/images/logo-npn.png" height="80" alt="logo"></a>
                         <h5 class="font-size-16 text-white-50 mb-2 mt-4">
-                            Login Administrator Manajemen NPN
+                            PT.NETINDO PERSADA NUSANTARA
                         </h5>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                     <div class="card">
                         <div class="card-body p-4">
                             <div class="p-2">
-                                <h5 class="mb-5 text-center">Sign in to ERP NPN.</h5>
+                                <h5 class="mb-5 text-center">Sign in to Application</h5>
                                 <form class="form-horizontal" action="<?=base_url('auth/login')?>">
 
                                     <div class="row">
@@ -87,7 +87,7 @@
                                                 </button>
                                             </div>
                                             <div class="mt-4 text-center">
-                                                <a href="#" class="text-muted">
+                                                <a href="<?=base_url('/register')?>" class="text-muted">
                                                     <i class="mdi mdi-account-circle mr-1"></i>
                                                     Register Now
                                                 </a>

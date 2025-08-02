@@ -30,7 +30,7 @@
                         <div class="col-md-12">
                             <button type="button" class="btn btn-md btn-primary" ng-click="Add()">
                                 <i class="fa fa-plus"></i>
-                                Add Mitra
+                                Tambah Pelanggan
                             </button>
                         </div>
                     </div>
@@ -51,7 +51,8 @@
                                     </tr>
                                 </thead>
                                 <tbody style="text-align: center;">
-                                    <tr ng-repeat="dt in RowLegalitas" ng-if="RowLegalitas.length > 0">
+                                    <tr ng-repeat="dt in RowLegalitas" ng-if="RowLegalitas.length > 0"
+                                        ng-click="selectRow(dt)" ng-class="{'selected-row': selectedRow === dt}">
                                         <td>{{$index + 1}}</td>
                                         <td style="text-align: left;">
                                             <span>Kode Mitra : <strong>{{dt.kode_mitra}}</strong></span><br>
@@ -70,21 +71,33 @@
                                         <td>{{dt.created_at}}</td>
                                         <td>
                                             <div class="input-group">
-                                                <button class="btn btn-sm btn-danger" ng-click="Delete(dt)">
+                                                <button class="btn btn-sm btn-danger"
+                                                    ng-click="Delete(dt); $event.stopPropagation()">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-warning" ng-click="EditShow(dt)">
+                                                <button class="btn btn-sm btn-warning"
+                                                    ng-click="EditShow(dt); $event.stopPropagation()">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-dark" ng-click="showProfile(dt)">
+                                                <!-- <button class="btn btn-sm btn-dark"
+                                                    ng-click="showProfile(dt); $event.stopPropagation()">
                                                     <i class="fa fa-eye"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-success" ng-click="showProfile(dt)">
+                                                </button> -->
+                                                <button class="btn btn-sm btn-success"
+                                                    ng-click="ActivateAccount(dt); $event.stopPropagation()"
+                                                    ng-if="dt.status_account == '0'">
                                                     <i class="fa fa-key"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-secondary" ng-click="Print(dt)">
+                                                <button class="btn btn-sm btn-success"
+                                                    ng-click="NonActiveAccount(dt); $event.stopPropagation()"
+                                                    ng-if="dt.status_account == '1'">
+                                                    <i class="fa fa-user-times" aria-hidden="true"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-secondary"
+                                                    ng-click="Print(dt); $event.stopPropagation()">
                                                     <i class="fa fa-print"></i>
                                                 </button>
+
                                             </div>
                                         </td>
                                     </tr>
@@ -1757,6 +1770,14 @@
     flex: 1 1 auto;
     overflow-y: auto;
     /* <-- scroll isi modal kalau konten panjang */
+}
+</style>
+
+<style>
+.selected-row {
+    background-color: #adb5bd !important;
+    /* abu-abu gelap */
+    color: #fff;
 }
 </style>
 

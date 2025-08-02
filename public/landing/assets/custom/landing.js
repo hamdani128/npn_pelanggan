@@ -3,7 +3,7 @@ function base_url(string_url) {
   if (
     location.host == "localhost:8080" ||
     location.host == "localhost" ||
-    location.host == "10.32.18.206"
+    location.host == "192.168.191.100"
   ) {
     var url = location.origin + "/" + pathparts[1].trim("/") + "/" + string_url; // http://localhost/myproject/
   } else {

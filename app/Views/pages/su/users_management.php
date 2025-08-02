@@ -76,9 +76,15 @@
                                                 <button class="btn btn-md btn-warning" ng-click="EditShow(dt)">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
-                                                <button class="btn btn-md btn-dark" ng-click="ActivateAccount(dt)">
-                                                    <i class="fa fa-users"></i>
+                                                <button class="btn btn-md btn-dark" ng-click="ActivateAccount(dt)"
+                                                    ng-if="dt.status_account == '0'">
+                                                    <i class="fa fa-address-card" aria-hidden="true"></i>
                                                 </button>
+                                                <button class="btn btn-md btn-dark" ng-click="DisableAccount(dt)"
+                                                    ng-if="dt.status_account == '1'">
+                                                    <i class="fa fa-user-times" aria-hidden="true"></i>
+                                                </button>
+
                                                 <button class="btn btn-md btn-info" ng-click="RoleModule(dt)">
                                                     <i class="fa fa-cog" aria-hidden="true"></i>
                                                 </button>
@@ -151,6 +157,63 @@
         </div><!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    <!-- Modal Edit -->
+    <div id="My-Modal-Edit" class="modal fade bs-example-modal-center" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title mt-0 text-white">Edit Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="hidden" name="id_update" id="id_update" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Fullname</label>
+                                <input type="text" name="fullname-edit" id="fullname-edit" class="form-control"
+                                    placeholder="Fullname">
+                            </div>
+                            <div class="form-group">
+                                <label for="">E-mail</label>
+                                <input type="email" name="email-edit" id="email-edit" class="form-control"
+                                    placeholder="Fulname">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Username</label>
+                                <input type="text" name="username-edit" id="username-edit" class="form-control"
+                                    placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Level users</label>
+                                <select name="combo_users-edit" id="combo_users-edit" class="form-control">
+                                    <option value="">Pilih :</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-md btn-warning" ng-click="Update()">
+                        <i class="fa fa-paper-plane"></i>
+                        update
+                    </button>
+                    <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        close
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- End Modal -->
 </div>
 <!-- container-fluid -->
 <?=$this->endSection();?>

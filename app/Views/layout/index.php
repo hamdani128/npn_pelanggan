@@ -8,7 +8,7 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesdesign" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="<?=base_url()?>assets/images/favicon.ico">
+    <link rel="shortcut icon" href="<?=base_url()?>assets/images/logo-npn.png">
 
     <!-- slick css -->
     <link href="<?=base_url()?>assets/libs/slick-slider/slick/slick.css" rel="stylesheet" type="text/css" />
@@ -456,6 +456,7 @@
     <script src="<?=base_url()?>assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <!-- custom -->
     <script src="<?=base_url()?>assets/custom/mitra/legalitas.js"></script>
+    <script src="<?=base_url()?>assets/custom/mitra/register.js"></script>
     <script src="<?=base_url()?>assets/custom/users-management.js"></script>
     <script src="<?=base_url()?>assets/custom/master-document.js"></script>
     <!-- Datatable init js -->

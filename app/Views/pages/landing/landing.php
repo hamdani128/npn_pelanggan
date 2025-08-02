@@ -51,7 +51,7 @@
             <nav id="navmenu" class="navmenu">
                 <ul>
                     <li><a href="#hero" class="active">Home</a></li>
-                    <li><a href="#">Registrasi</a></li>
+                    <li><a href="<?=base_url("/register")?>">Registrasi</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>

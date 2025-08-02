@@ -9,15 +9,21 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'MitraCorporateController::index');
 $routes->get('/landing/corporate/supported_document', 'MitraCorporateController::supported_document');
 $routes->get('auth/login', 'Admin\LoginController::index');
+$routes->get('/register', 'MitraCorporateController::register');
+$routes->post('/register/insert', 'MitraCorporateController::register_insert');
 $routes->post('auth/login/check_login', 'Admin\LoginController::check_login');
 $routes->get('auth/logout', 'Admin\LoginController::logout');
 
 $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->get('admin', 'Home::index');
-
+    $routes->get('mitra', 'Home::mitra');
     $routes->get('users_management', 'UsersManagement::index');
     $routes->get('users_management/getdata', 'UsersManagement::getdata');
     $routes->post('users_management/insert', 'UsersManagement::insert');
+    $routes->post('users_management/activate', 'UsersManagement::activate');
+    $routes->post('users_management/deactivate', 'UsersManagement::deactivate');
+    $routes->post('users_management/update', 'UsersManagement::update');
+    $routes->post('users_management/delete', 'UsersManagement::delete');
     // Master
     $routes->get('master/supported_document', 'Admin\Master\DocumentController::index');
     $routes->get('master/supported_document/getdata', 'Admin\Master\DocumentController::getdata');
@@ -25,6 +31,8 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->post('master/supported_document/update', 'Admin\Master\DocumentController::update');
     $routes->post('master/supported_document/delete', 'Admin\Master\DocumentController::delete');
     // Profile Mitra
+    $routes->get('profile_pelanggan/register', 'MitraCorporateController::register_view_admin');
+    $routes->get('profile_pelanggan/register_getdata', 'MitraCorporateController::register_admin_getdata');
     $routes->get('profile_pelanggan/kemitraan_reseller', 'Admin\Kemitraan\MitraController::index');
     $routes->get('profile_pelanggan/kemitraan_reseller/getdata', 'Admin\Kemitraan\MitraController::getdata');
     $routes->get('profile_pelanggan/kemitraan_reseller/getmitra_id', 'Admin\Kemitraan\MitraController::getmitra_id');
@@ -35,5 +43,10 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->post('profile_pelanggan/kemitraan_reseller/getmitra_data_layanan', 'Admin\Kemitraan\MitraController::getmitra_data_layanan');
     $routes->post('profile_pelanggan/kemitraan_reseller/getmitra_data_layanan_refrence_table', 'Admin\Kemitraan\MitraController::getmitra_data_layanan_refrence_table');
     $routes->post('profile_pelanggan/kemitraan_reseller/getmitra_data_layanan_otc', 'Admin\Kemitraan\MitraController::getmitra_data_layanan_otc');
-
+    $routes->post('profile_pelanggan/kemitraan_reseller/update', 'Admin\Kemitraan\MitraController::update');
+    $routes->post('profile_pelanggan/kemitraan_reseller/delete', 'Admin\Kemitraan\MitraController::delete');
+    $routes->get('profile_pelanggan/kemitraan_reseller/(:num)', 'Admin\Kemitraan\MitraController::print_document/$1');
+    $routes->get('profile_pelanggan/kemitraan_reseller/detail/(:num)', 'Admin\Kemitraan\MitraController::pelanggan_detail/$1');
+    $routes->post('profile_pelanggan/kemitraan_reseller/activate_account', 'Admin\Kemitraan\MitraController::activate_account');
+    $routes->post('profile_pelanggan/kemitraan_reseller/nonactive_account', 'Admin\Kemitraan\MitraController::nonactive_account');
 });
