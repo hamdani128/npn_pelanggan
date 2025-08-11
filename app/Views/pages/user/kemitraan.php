@@ -81,9 +81,9 @@
                                                         <td>{{dt.alamat || '-'}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="font-weight: bold;">Instalasi</td>
+                                                        <td style="font-weight: bold;">NPWP</td>
                                                         <td style="text-align: right;">:</td>
-                                                        <td>{{dt.alamat_instalasi || '-'}}</td>
+                                                        <td>{{dt.npwp || '-'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -120,10 +120,10 @@
                                                     ng-if="dt.status_account == '1'">
                                                     <i class="fa fa-user-times" aria-hidden="true"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-secondary"
+                                                <!-- <button class="btn btn-sm btn-secondary"
                                                     ng-click="Print(dt); $event.stopPropagation()">
                                                     <i class="fa fa-print"></i>
-                                                </button>
+                                                </button> -->
 
                                             </div>
                                         </td>
@@ -233,17 +233,6 @@
                                         class="form-control" placeholder="Alamat Perusahaan"></textarea>
                                 </div>
                             </div>
-
-                            <!-- <div class="form-group row">
-                                <label for="" for="example-text-input" class="col-md-2 col-form-label">
-                                    Alamat Instalasi
-                                </label>
-                                <div class="col-md-10">
-                                    <textarea name="alamat_instalasi" id="alamat_instalasi" cols="3" rows="3"
-                                        class="form-control" placeholder="Alamat Instalasi"></textarea>
-                                </div>
-                            </div> -->
-
                             <div class="form-group row">
                                 <label for="" for="example-text-input" class="col-md-2 col-form-label">
                                     NPWP
@@ -325,17 +314,18 @@
                         <div class="tab-pane" id="custom-messages" role="tabpanel">
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <button class="btn btn-md btn-dark" ng-click="AddLayanan()">
+                                    <button class="btn btn-md btn-info" ng-click="AddLayanan()">
                                         <i class="fa fa-plus"></i>
                                         Tambah Layanan
                                     </button>
                                 </div>
                             </div>
+
                             <div ng-repeat="layanan in listDataLayananArray track by $index">
                                 <div class="row mb-1">
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="card">
-                                            <div class="card-header bg-dark d-flex justify-content-between">
+                                            <div class="card-header bg-info d-flex justify-content-between">
                                                 <label class="text-white">Transaction Layanan {{$index + 1}}</label>
                                                 <button class="btn btn-sm btn-danger" ng-click="DeleteLayanan($index)">
                                                     <i class="fa fa-trash"></i> Hapus
@@ -350,7 +340,7 @@
                                                                 Jenis Layanan
                                                             </label>
                                                             <div class="col-md-9">
-                                                                <select name="jenis_layanan" id="jenis_layanan"
+                                                                <select ng-model="layanan.jenis_layanan"
                                                                     class="form-control">
                                                                     <option value="">Pilih Jenis Layanan :</option>
                                                                     <option value="Layanan corporate">Layanan corporate
@@ -367,11 +357,11 @@
                                                             </label>
                                                             <div class="col-md-9">
                                                                 <div class="input-group">
-                                                                    <input type="text" name="kapasitas_layanan"
-                                                                        id="kapasitas_layanan"
-                                                                        placeholder="sample : 100" class="form-control">
-                                                                    <select class="form-control" name="satuan_layanan"
-                                                                        id="satuan_layanan">
+                                                                    <input type="text"
+                                                                        ng-model="layanan.kapasitas_layanan"
+                                                                        class="form-control" placeholder="sample : 100">
+                                                                    <select ng-model="layanan.satuan_layanan"
+                                                                        class="form-control">
                                                                         <option value="">Pilih Satuan :</option>
                                                                         <option value="Mbps">Mbps</option>
                                                                         <option value="Gbps">Gbps</option>
@@ -386,19 +376,15 @@
                                                             </label>
                                                             <div class="col-md-9">
                                                                 <div class="input-group">
-                                                                    <select class="form-control" name="vendor_media"
-                                                                        id="vendor_media">
+                                                                    <select ng-model="layanan.vendor_media"
+                                                                        class="form-control">
                                                                         <option value="">Pilih :</option>
                                                                         <option
-                                                                            value="PT Mega Akses Persada / Fiberstar">
-                                                                            PT Mega Akses Persada / Fiberstar
-                                                                        </option>
-                                                                        <option value="PT Telkom Indonesia / Telkom">
-                                                                            PT Telkom Indonesia / Telkom
-                                                                        </option>
-                                                                        <option value="Mandiri">
-                                                                            Mandiri
-                                                                        </option>
+                                                                            value="PT Mega Akses Persada / Fiberstar">PT
+                                                                            Mega Akses Persada / Fiberstar</option>
+                                                                        <option value="PT Telkom Indonesia / Telkom">PT
+                                                                            Telkom Indonesia / Telkom</option>
+                                                                        <option value="Mandiri">Mandiri</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -410,10 +396,11 @@
                                                             </label>
                                                             <div class="col-md-9">
                                                                 <div class="input-group">
-                                                                    <textarea class="form-control"
-                                                                        name="alamat_instalasi_layanan"
-                                                                        id="alamat_instalasi_layanan" cols="5"
+                                                                    <textarea
+                                                                        ng-model="layanan.alamat_instalasi_layanan"
+                                                                        class="form-control" cols="5"
                                                                         rows="5"></textarea>
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -424,8 +411,8 @@
                                                             </label>
                                                             <div class="col-md-9">
                                                                 <div class="input-group">
-                                                                    <select class="form-control" name="vendor_media"
-                                                                        id="vendor_media">
+                                                                    <select ng-model="layanan.status_layanan"
+                                                                        class="form-control">
                                                                         <option value="">Pilih :</option>
                                                                         <option value="Baru">Baru</option>
                                                                         <option value="Upgrade">Upgrade</option>
@@ -456,8 +443,7 @@
                                                                                     Deskripsi :
                                                                                 </label>
                                                                                 <input type="text"
-                                                                                    name="deskripsi_price_month"
-                                                                                    id="deskripsi_price_month"
+                                                                                    ng-model="layanan.deskripsi_price_month"
                                                                                     class="form-control col-md-9"
                                                                                     placeholder="Deskripsi">
                                                                             </div>
@@ -467,10 +453,9 @@
                                                                                     Harga Dasar :
                                                                                 </label>
                                                                                 <input type="text"
-                                                                                    name="harga_dasar_price_month"
-                                                                                    id="harga_dasar_price_month"
-                                                                                    class="form-control col-md-9"
-                                                                                    value="0">
+                                                                                    ng-model="layanan.harga_dasar_price_month"
+                                                                                    ng-change="layanan.harga_dasar_price_month = formatNumberAuto(layanan.harga_dasar_price_month)"
+                                                                                    class="form-control col-md-9">
                                                                             </div>
                                                                             <div class="form-group row">
                                                                                 <label for=""
@@ -478,11 +463,9 @@
                                                                                     Harga Jual :
                                                                                 </label>
                                                                                 <input type="text"
-                                                                                    id="harga_jual_price_month"
-                                                                                    ng-model="harga_jual_price_month"
-                                                                                    ng-change="CalculateHargaMonth()"
-                                                                                    class="form-control col-md-9"
-                                                                                    value="0">
+                                                                                    ng-model="layanan.harga_jual_price_month"
+                                                                                    ng-change="CalculateHargaMonth(layanan)"
+                                                                                    class="form-control col-md-9">
                                                                             </div>
                                                                             <div class="form-group row">
                                                                                 <label for=""
@@ -493,28 +476,22 @@
                                                                                     <div
                                                                                         class="input-daterange input-group">
                                                                                         <select
-                                                                                            id="combo_ppn_price_month"
-                                                                                            ng-model="combo_ppn_price_month"
-                                                                                            ng-change="CalculateHargaMonth()"
+                                                                                            ng-model="layanan.combo_ppn_price_month"
+                                                                                            ng-change="CalculateHargaMonth(layanan)"
                                                                                             class="form-control">
-                                                                                            <option value="">
-                                                                                                Pilih :
+                                                                                            <option value="">Pilih :
                                                                                             </option>
-                                                                                            <option value="10">
-                                                                                                10%
+                                                                                            <option value="10">10%
                                                                                             </option>
-                                                                                            <option value="11">
-                                                                                                11%
+                                                                                            <option value="11">11%
                                                                                             </option>
-                                                                                            <option value="12">
-                                                                                                12%
+                                                                                            <option value="12">12%
                                                                                             </option>
                                                                                         </select>
                                                                                         <input type="text"
-                                                                                            name="nominal_ppn_price_month"
-                                                                                            id="nominal_ppn_price_month"
+                                                                                            ng-model="layanan.nominal_ppn_price_month"
                                                                                             class="form-control col-md-9"
-                                                                                            value="0">
+                                                                                            readonly>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -524,17 +501,14 @@
                                                                                     Subtotal :
                                                                                 </label>
                                                                                 <input type="text"
-                                                                                    name="subtotal_price_month"
-                                                                                    id="subtotal_price_month"
+                                                                                    ng-model="layanan.subtotal_price_month"
                                                                                     class="form-control col-md-9"
-                                                                                    placeholder="Harga Jual Price Month">
+                                                                                    readonly>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <!-- OTC -->
-
-
                                                             </div>
                                                         </div>
                                                     </div>
@@ -650,7 +624,35 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            <ul class="nav nav-tabs" role="tablist">
+                                            <div class="form-group row">
+                                                <label for="" class="col-md-3 col-form-label">
+                                                    Periode Kerja Sama :
+                                                </label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group button-group">
+                                                        <input type="date" name="start_date_price_month"
+                                                            id="start_date_price_month" class="form-control"
+                                                            placeholder="Periode Start">
+                                                        <input type="date" name="end_date_price_month"
+                                                            id="end_date_price_month" class="form-control"
+                                                            placeholder="Periode Start">
+                                                        <!-- <button class="btn btn-md btn-dark" type="button"
+                                                            ng-click="SetTableRefrencePeriode()">
+                                                            <i class="fa fa-table"></i>
+                                                        </button> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-md-3 col-form-label">
+                                                    Tanggal Pembayaran Paling
+                                                    Lama :
+                                                </label>
+                                                <input type="text" name="pembayaran_paling_lama_month"
+                                                    id="pembayaran_paling_lama_month" class="form-control col-md-9"
+                                                    placeholder="Example : 10">
+                                            </div>
+                                            <!-- <ul class="nav nav-tabs" role="tablist">
                                                 <li class="nav-item">
                                                     <a class="nav-link active" data-toggle="tab" href="#home"
                                                         role="tab">
@@ -668,38 +670,11 @@
                                                         </span>
                                                     </a>
                                                 </li>
-                                            </ul>
+                                            </ul> -->
                                             <!-- Tab panes -->
-                                            <div class="tab-content p-3">
+                                            <!-- <div class="tab-content p-3">
                                                 <div class="tab-pane active" id="home" role="tabpanel">
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-md-3 col-form-label">
-                                                            Periode Kerja Sama :
-                                                        </label>
-                                                        <div class="col-md-9">
-                                                            <div class="input-group button-group">
-                                                                <input type="date" name="start_date_price_month"
-                                                                    id="start_date_price_month" class="form-control"
-                                                                    placeholder="Periode Start">
-                                                                <input type="date" name="end_date_price_month"
-                                                                    id="end_date_price_month" class="form-control"
-                                                                    placeholder="Periode Start">
-                                                                <button class="btn btn-md btn-dark" type="button"
-                                                                    ng-click="SetTableRefrencePeriode()">
-                                                                    <i class="fa fa-table"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-md-3 col-form-label">
-                                                            Tanggal Pembayaran Paling
-                                                            Lama :
-                                                        </label>
-                                                        <input type="text" name="pembayaran_paling_lama_month"
-                                                            id="pembayaran_paling_lama_month"
-                                                            class="form-control col-md-9" placeholder="Example : 10">
-                                                    </div>
+
                                                 </div>
                                                 <div class="tab-pane" id="profile" role="tabpanel">
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
@@ -783,16 +758,12 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
-
-
                         </div>
                         <div class="tab-pane" id="custom-settings" role="tabpanel">
                             <div class="row">
@@ -1428,12 +1399,11 @@
 
                             <div class="form-group row">
                                 <label for="" for="example-text-input" class="col-md-2 col-form-label">
-                                    Alamat Instalasi
+                                    NPWP
                                 </label>
                                 <div class="col-md-10">
-                                    <textarea name="alamat_instalasi_edit" id="alamat_instalasi_edit" cols="3" rows="3"
-                                        class="form-control" placeholder="Alamat Instalasi"
-                                        ng-model="alamat_instalasi_edit">
+                                    <textarea name="npwp_edit" id="npwp_edit" cols="3" rows="3" class="form-control"
+                                        placeholder="Alamat Instalasi" ng-model="npwp_edit">
                                     </textarea>
                                 </div>
                             </div>
@@ -1511,348 +1481,351 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="custom-messages-edit" role="tabpanel">
-                            <div class="form-group row">
-                                <label for="" for="example-text-input" class="col-md-2 col-form-label">
-                                    Jenis Layanan
-                                </label>
-                                <div class="col-md-10">
-                                    <select name="jenis_layanan_edit" id="jenis_layanan_edit" class="form-control"
-                                        ng-model="jenis_layanan_edit">
-                                        <option value="">Pilih Jenis Layanan :</option>
-                                        <option value="Layanan corporate">Layanan corporate</option>
-                                        <option value="Layanan kemitraan">Layanan kemitraan</option>
-                                    </select>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <button class="btn btn-md btn-info" ng-click="AddLayananEdit()">
+                                        <i class="fa fa-plus"></i>
+                                        Tambah Layanan
+                                    </button>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="" for="example-text-input" class="col-md-2 col-form-label">
-                                    Kapasitas Layanan
-                                </label>
-                                <div class="col-md-10">
-                                    <div class="input-group">
-                                        <input type="text" name="kapasitas_layanan_edit" id="kapasitas_layanan_edit"
-                                            placeholder="sample : 100" class="form-control"
-                                            ng-model="kapasitas_layanan_edit">
-                                        <select class="form-control" name="satuan_layanan_edit"
-                                            id="satuan_layanan_edit">
-                                            <option value="">Pilih Satuan :</option>
-                                            <option value="Mbps">Mbps</option>
-                                            <option value="Gbps">Gbps</option>
-                                        </select>
-                                        <!-- <input type="text" name="satuan_layanan_edit" id="satuan_layanan_edit"
-                                            class="form-control" placeholder="sample : Mbps, Gbps"
-                                            ng-model="satuan_layanan_edit"> -->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="" for="example-text-input" class="col-md-2 col-form-label">
-                                    Vendor / Media Hantar Jaringan
-                                </label>
-                                <div class="col-md-10">
-                                    <div class="input-group">
-                                        <select class="form-control" name="vendor_media_edit" id="vendor_media_edit"
-                                            ng-model="vendor_media_edit">
-                                            <option value="">Pilih :</option>
-                                            <option value="PT Mega Akses Persada / Fiberstar">
-                                                PT Mega Akses Persada / Fiberstar
-                                            </option>
-                                            <option value="PT Telkom Indonesia / Telkom">
-                                                PT Telkom Indonesia / Telkom
-                                            </option>
-                                            <option value="Mandiri">
-                                                Mandiri
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="" for="example-text-input" class="col-md-2 col-form-label">
-                                    Price / Rate
-                                </label>
-                                <div class="col-md-10">
-                                    <div class="card">
-                                        <div class="card-header bg-dark">
-                                            <label for="" class="text-white">Price Month Periode</label>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul class="nav nav-tabs" role="tablist">
-                                                <li class="nav-item">
-                                                    <a class="nav-link active" data-toggle="tab" href="#home-edit"
-                                                        role="tab">
-                                                        <i class="dripicons-document-edit mr-1 align-middle"></i>
-                                                        <span class="d-none d-md-inline-block">
-                                                            Form
-                                                        </span>
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="tab" href="#profile-edit"
-                                                        role="tab">
-                                                        <i class="dripicons-browser mr-1 align-middle"></i>
-                                                        <span class="d-none d-md-inline-block">
-                                                            Table Refrence Periode
-                                                        </span>
-                                                    </a>
-                                                </li>
-                                            </ul>
 
-                                            <!-- Tab panes -->
-                                            <div class="tab-content p-3">
-                                                <div class="tab-pane active" id="home-edit" role="tabpanel">
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div ng-repeat="layanan in listDataLayananArrayEdit track by $index">
+                                <div class="row mb-1">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header bg-info d-flex justify-content-between">
+                                                <label class="text-white">Transaction Layanan {{$index + 1}}</label>
+                                                <button class="btn btn-sm btn-danger"
+                                                    ng-click="DeleteLayananEdit($index)">
+                                                    <i class="fa fa-trash"></i> Hapus
+                                                </button>
+                                            </div>
+                                            <div class="card-body bg-light">
+                                                <div class="row">
+                                                    <div class="col-md-12">
                                                         <div class="form-group row">
-                                                            <label for="" class="col-md-3 col-form-label">
-                                                                Deskripsi :
-                                                            </label>
-                                                            <input type="text" name="deskripsi_price_month_edit"
-                                                                id="deskripsi_price_month_edit"
-                                                                ng-model="deskripsi_price_month_edit"
-                                                                class="form-control col-md-9" placeholder="Deskripsi">
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-md-3 col-form-label">
-                                                                Harga Dasar :
-                                                            </label>
-                                                            <input type="text" name="harga_dasar_price_month_edit"
-                                                                id="harga_dasar_price_month_edit"
-                                                                ng-model="harga_dasar_price_month_edit"
-                                                                class="form-control col-md-9" value="0">
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-md-3 col-form-label">
-                                                                Harga Jual :
-                                                            </label>
-                                                            <input type="text" id="harga_jual_price_month_edit"
-                                                                ng-model="harga_jual_price_month_edit"
-                                                                ng-change="CalculateHargaMonth()"
-                                                                class="form-control col-md-9" value="0">
-
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-md-3 col-form-label">
-                                                                PPN (%) :
+                                                            <label for="" for="example-text-input"
+                                                                class="col-md-3 col-form-label">
+                                                                Jenis Layanan
                                                             </label>
                                                             <div class="col-md-9">
-                                                                <div class="input-daterange input-group">
-                                                                    <select id="combo_ppn_price_month_edit"
-                                                                        ng-model="combo_ppn_price_month_edit"
-                                                                        ng-change="CalculateHargaMonth()"
+                                                                <select ng-model="layanan.jenis_layanan_edit"
+                                                                    class="form-control">
+                                                                    <option value="">Pilih Jenis Layanan :</option>
+                                                                    <option value="Layanan corporate">Layanan corporate
+                                                                    </option>
+                                                                    <option value="Layanan kemitraan">Layanan kemitraan
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="" for="example-text-input"
+                                                                class="col-md-3 col-form-label">
+                                                                Kapasitas Layanan
+                                                            </label>
+                                                            <div class="col-md-9">
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        ng-model="layanan.kapasitas_layanan_edit"
+                                                                        class="form-control" placeholder="sample : 100">
+                                                                    <select ng-model="layanan.satuan_layanan_edit"
+                                                                        class="form-control">
+                                                                        <option value="">Pilih Satuan :</option>
+                                                                        <option value="Mbps">Mbps</option>
+                                                                        <option value="Gbps">Gbps</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="" for="example-text-input"
+                                                                class="col-md-3 col-form-label">
+                                                                Vendor / Media Hantar Jaringan
+                                                            </label>
+                                                            <div class="col-md-9">
+                                                                <div class="input-group">
+                                                                    <select ng-model="layanan.vendor_media_edit"
                                                                         class="form-control">
                                                                         <option value="">Pilih :</option>
-                                                                        <option value="10">10%</option>
-                                                                        <option value="11">11%</option>
-                                                                        <option value="12">12%</option>
+                                                                        <option
+                                                                            value="PT Mega Akses Persada / Fiberstar">PT
+                                                                            Mega Akses Persada / Fiberstar</option>
+                                                                        <option value="PT Telkom Indonesia / Telkom">PT
+                                                                            Telkom Indonesia / Telkom</option>
+                                                                        <option value="Mandiri">Mandiri</option>
                                                                     </select>
-                                                                    <input type="text"
-                                                                        name="nominal_ppn_price_month_edit"
-                                                                        id="nominal_ppn_price_month_edit"
-                                                                        ng-model="nominal_ppn_price_month_edit"
-                                                                        class="form-control col-md-9" value="0">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label for="" class="col-md-3 col-form-label">
-                                                                Subtotal :
-                                                            </label>
-                                                            <input type="text" name="subtotal_price_month_edit" id=" "
-                                                                ng-model="subtotal_price_month_edit"
-                                                                class="form-control col-md-9"
-                                                                placeholder="Harga Jual Price Month">
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-md-3 col-form-label">
-                                                                Periode Kerja Sama :
+                                                            <label for="" for="example-text-input"
+                                                                class="col-md-3 col-form-label">
+                                                                Alamat Instalasi
                                                             </label>
                                                             <div class="col-md-9">
-                                                                <div class="input-group button-group">
-                                                                    <input type="date"
-                                                                        name="start_date_price_month_edit"
-                                                                        id="start_date_price_month_edit"
-                                                                        ng-model="start_date_price_month_edit"
-                                                                        class="form-control"
-                                                                        placeholder="Periode Start">
-                                                                    <input type="date" name="end_date_price_month_edit"
-                                                                        id="end_date_price_month_edit"
-                                                                        ng-model="end_date_price_month_edit"
-                                                                        class="form-control"
-                                                                        placeholder="Periode Start">
-                                                                    <button class="btn btn-md btn-dark" type="button"
-                                                                        ng-click="SetTableRefrencePeriodeEdit()">
-                                                                        <i class="fa fa-table"></i>
-                                                                    </button>
+                                                                <div class="input-group">
+                                                                    <textarea
+                                                                        ng-model="layanan.alamat_instalasi_layanan_edit"
+                                                                        class="form-control" cols="5"
+                                                                        rows="5"></textarea>
+
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label for="" class="col-md-3 col-form-label">
-                                                                Tanggal Pembayaran Paling Lama :
+                                                            <label for="" for="example-text-input"
+                                                                class="col-md-3 col-form-label">
+                                                                Status Layanan
                                                             </label>
-                                                            <input type="text" name="pembayaran_paling_lama_month_edit"
-                                                                id="pembayaran_paling_lama_month_edit"
-                                                                ng-model="pembayaran_paling_lama_month_edit"
-                                                                class="form-control col-md-9"
-                                                                placeholder="Example : 10">
+                                                            <div class="col-md-9">
+                                                                <div class="input-group">
+                                                                    <select ng-model="layanan.status_layanan_edit"
+                                                                        class="form-control">
+                                                                        <option value="">Pilih :</option>
+                                                                        <option value="Baru">Baru</option>
+                                                                        <option value="Upgrade">Upgrade</option>
+                                                                        <option value="Perpanjangan">Perpanjangan
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="tab-pane" id="profile-edit" role="tabpanel">
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                        <div class="table-responsive">
-                                                            <table
-                                                                class="table table-bordered dt-responsive nowrap table-hover table-striped"
-                                                                style="border-collapse: collapse; border-spacing: 0; width: 120%;">
-                                                                <thead class="bg-dark text-white">
-                                                                    <tr>
-                                                                        <th style="width: 12%;text-align: center;">
-                                                                            Deskripsi
-                                                                        </th>
-                                                                        <th style="width: 10%;text-align: center;">
-                                                                            Harga Dasar
-                                                                        </th>
-                                                                        <th style="width: 10%;text-align: center;">
-                                                                            Harga Jual
-                                                                        </th>
-                                                                        <th style="width: 10%;text-align: center;">
-                                                                            PPN(%)
-                                                                        </th>
-                                                                        <th style="width: 12%;text-align: center;">
-                                                                            Subtotal
-                                                                        </th>
-                                                                        <th style="width: 10%;text-align: center;">
-                                                                            Periode
-                                                                        </th>
-                                                                        <th style="width: 13%;text-align: center;">
-                                                                            Payment Late Date
-                                                                        </th>
-                                                                        <th style="width: 10%;text-align: center;">
-                                                                            Denda
-                                                                        </th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody id="tbody-RefrencePeriode-Edit">
-                                                                    <tr
-                                                                        ng-repeat="dt in ListDataArrayRefrencePeriodeEdit">
-                                                                        <td>
-                                                                            <label>{{ dt.deskripsi_price }}</label>
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="text"
-                                                                                ng-model="formatNumber(dt['harga_dasar'])"
-                                                                                class="form-control" readonly />
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="text"
-                                                                                ng-model="formatNumber(dt['harga_jual'])"
-                                                                                class="form-control"
-                                                                                ng-change="updateSubtotal(dt)"
-                                                                                readonly />
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="text" ng-model="dt['ppn_text']"
-                                                                                class="form-control" readonly />
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="text"
-                                                                                ng-model="formatNumber(dt['subtotal'])"
-                                                                                class="form-control" readonly />
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="text" ng-model="dt['periode']"
-                                                                                class="form-control" readonly />
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="text"
-                                                                                ng-model="dt['last_pay_periode']"
-                                                                                class="form-control" readonly />
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="text"
-                                                                                ng-model="formatNumber(dt['denda'])"
-                                                                                class="form-control" />
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
 
-                                                            </table>
+                                                        <div class="form-group row">
+                                                            <label for="" for="example-text-input"
+                                                                class="col-md-12 col-form-label">
+                                                                Price / Rate
+                                                            </label>
+                                                            <div class="col-md-12">
+                                                                <div class="card">
+                                                                    <div class="card-header bg-dark">
+                                                                        <label for="" class="text-white">Price Month
+                                                                            Periode</label>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div
+                                                                            class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                                            <div class="form-group row">
+                                                                                <label for=""
+                                                                                    class="col-md-3 col-form-label">
+                                                                                    Deskripsi :
+                                                                                </label>
+                                                                                <input type="text"
+                                                                                    ng-model="layanan.deskripsi_price_month_edit"
+                                                                                    class="form-control col-md-9"
+                                                                                    placeholder="Deskripsi">
+                                                                            </div>
+                                                                            <div class="form-group row">
+                                                                                <label for=""
+                                                                                    class="col-md-3 col-form-label">
+                                                                                    Harga Dasar :
+                                                                                </label>
+                                                                                <input type="text"
+                                                                                    ng-model="layanan.harga_dasar_price_month_edit"
+                                                                                    ng-change="layanan.harga_dasar_price_month_edit = formatNumberAuto(layanan.harga_dasar_price_month_edit)"
+                                                                                    class="form-control col-md-9">
+                                                                            </div>
+                                                                            <div class="form-group row">
+                                                                                <label for=""
+                                                                                    class="col-md-3 col-form-label">
+                                                                                    Harga Jual :
+                                                                                </label>
+                                                                                <input type="text"
+                                                                                    ng-model="layanan.harga_jual_price_month_edit"
+                                                                                    ng-change="CalculateHargaMonthEdit(layanan)"
+                                                                                    class="form-control col-md-9">
+                                                                            </div>
+                                                                            <div class="form-group row">
+                                                                                <label for=""
+                                                                                    class="col-md-3 col-form-label">
+                                                                                    PPN (%) :
+                                                                                </label>
+                                                                                <div class="col-md-9">
+                                                                                    <div
+                                                                                        class="input-daterange input-group">
+                                                                                        <select
+                                                                                            ng-model="layanan.combo_ppn_price_month_edit"
+                                                                                            ng-change="CalculateHargaMonthEdit(layanan)"
+                                                                                            class="form-control">
+                                                                                            <option value="">Pilih :
+                                                                                            </option>
+                                                                                            <option value="10">10%
+                                                                                            </option>
+                                                                                            <option value="11">11%
+                                                                                            </option>
+                                                                                            <option value="12">12%
+                                                                                            </option>
+                                                                                        </select>
+                                                                                        <input type="text"
+                                                                                            ng-model="layanan.nominal_ppn_price_month_edit"
+                                                                                            class="form-control col-md-9"
+                                                                                            readonly>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group row">
+                                                                                <label for=""
+                                                                                    class="col-md-3 col-form-label">
+                                                                                    Subtotal :
+                                                                                </label>
+                                                                                <input type="text"
+                                                                                    ng-model="layanan.subtotal_price_month_edit"
+                                                                                    class="form-control col-md-9"
+                                                                                    readonly>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- OTC -->
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- OTC -->
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="card">
                                         <div class="card-header bg-dark">
-                                            <h6 class="card-title text-white">OTC (On Time Charge)</h6>
+                                            <h6 class="card-title text-white">OTC (On Time
+                                                Charge)</h6>
                                         </div>
                                         <div class="card-body">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                <div class="table-responsive">
-                                                    <table
-                                                        class="table table-bordered dt-responsive nowrap table-hover table-striped"
-                                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                                        <thead class="bg-dark text-white">
-                                                            <tr>
-                                                                <th style="width: 2%;text-align: center;">#</th>
-                                                                <th style="width: 5%;display: none;">Deskripsi</th>
-                                                                <th style="width: 15%;text-align: center;">
-                                                                    Deskripsi
-                                                                </th>
-                                                                <th style="width: 15%;text-align: center;">
-                                                                    Harga Dasar
-                                                                </th>
-                                                                <th style="width: 15%;text-align: center;">
-                                                                    Harga Jual
-                                                                </th>
-                                                                <th style="width: 15%;text-align: center;">
-                                                                    PPN(%)
-                                                                </th>
-                                                                <th style="width: 15%;text-align: center;">
-                                                                    Subtotal
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tbody-otc-edit">
-                                                            <tr ng-repeat="dt in listDataOtcEdit">
-                                                                <td style="width: 2%; text-align: center;">
-                                                                    {{$index + 1}}
-                                                                </td>
-                                                                <td>
-                                                                    <label>{{ dt.deskripsi_price }}</label>
-                                                                </td>
-                                                                <td>
-                                                                    <input type="text"
-                                                                        ng-model="formatNumber(dt.harga_dasar)"
-                                                                        class="form-control"
-                                                                        ng-change="FormatFieldNumber(dt, 'harga_dasar')" />
-                                                                </td>
-                                                                <td>
-                                                                    <input type="text"
-                                                                        ng-model="formatNumber(dt.harga_jual)"
-                                                                        class="form-control"
-                                                                        ng-change="UpdateSubtotalOtcEdit(dt)" />
-                                                                </td>
-                                                                <td>
-                                                                    <select class="form-control" ng-model="dt.ppn_text"
-                                                                        ng-change="UpdateSubtotalOtcEdit(dt)">
-                                                                        <option value="">Pilih :</option>
-                                                                        <option value="10">10%</option>
-                                                                        <option value="11">11%</option>
-                                                                        <option value="12">12%</option>
-                                                                    </select>
-                                                                </td>
-                                                                <td>
-                                                                    <input type="text"
-                                                                        ng-model="formatNumber(dt.subtotal)"
-                                                                        class="form-control" readonly />
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                            <div class="row mb-1">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                    <button class="btn btn-md btn-dark" ng-click="AddBarisOTCEdit()">
+                                                        <i class="fa fa-plus"></i>
+                                                        Tambah OTC
+                                                    </button>
                                                 </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                    <div class="table-responsive">
+                                                        <table
+                                                            class="table table-bordered dt-responsive nowrap table-hover table-striped"
+                                                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                            <thead class="bg-dark text-white">
+                                                                <tr>
+                                                                    <th style="width: 2%;text-align: center;">
+                                                                        #</th>
+                                                                    <th style="width: 5%;">Act
+                                                                    </th>
+                                                                    <th style="width: 25%;text-align: center;">
+                                                                        Deskripsi
+                                                                    </th>
+                                                                    <th style="width: 15%;text-align: center;">
+                                                                        Harga Dasar
+                                                                    </th>
+                                                                    <th style="width: 15%;text-align: center;">
+                                                                        Harga Jual
+                                                                    </th>
+                                                                    <th style="width: 8%;text-align: center;">
+                                                                        PPN(%)
+                                                                    </th>
+                                                                    <th style="width: 15%;text-align: center;">
+                                                                        Subtotal
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbody-otc-edit">
+                                                                <tr
+                                                                    ng-repeat="dt in listDataOtcArrayEdit track by $index">
+                                                                    <td>{{$index + 1}}</td>
+                                                                    <td>
+                                                                        <button class="btn btn-sm btn-danger"
+                                                                            ng-click="DeleteOtcEdit($index)">
+                                                                            <i class="fa fa-trash"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                    <td>
+                                                                        <textarea ng-model="dt.deskripsi_otc_edit"
+                                                                            name="deskripsi_otc_edit"
+                                                                            id="deskripsi_otc_edit" cols="3" rows="3"
+                                                                            class="form-control"></textarea>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text"
+                                                                            ng-model="dt.price_dasar_edit"
+                                                                            class="form-control"
+                                                                            ng-change="FormatFieldNumber(dt, 'price_dasar_edit')" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" ng-model="dt.price_jual_edit"
+                                                                            class="form-control"
+                                                                            ng-change="FormatFieldNumber(dt, 'price_jual_edit')"
+                                                                            ng-change="UpdateSubtotalOtcEdit(dt)" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control"
+                                                                            ng-model="dt.combo_ppn_Edit"
+                                                                            ng-change="UpdateSubtotalOtcEdit(dt)">
+                                                                            <option value="">
+                                                                                Pilih :</option>
+                                                                            <option value="10">
+                                                                                10%</option>
+                                                                            <option value="11">
+                                                                                11%</option>
+                                                                            <option value="12">
+                                                                                12%</option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" ng-model="dt.subtotal_edit"
+                                                                            class="form-control" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-group row">
+                                                <label for="" class="col-md-3 col-form-label">
+                                                    Periode Kerja Sama :
+                                                </label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group button-group">
+                                                        <input type="date" name="start_date_price_month_edit"
+                                                            id="start_date_price_month_edit"
+                                                            ng-model="start_date_price_month_edit" class="form-control"
+                                                            placeholder="Periode Start">
+                                                        <input type="date" name="end_date_price_month_edit"
+                                                            id="end_date_price_month_edit"
+                                                            ng-model="end_date_price_month_edit" class="form-control"
+                                                            placeholder="Periode Start">
+                                                        <!-- <button class="btn btn-md btn-dark" type="button"
+                                                            ng-click="SetTableRefrencePeriode()">
+                                                            <i class="fa fa-table"></i>
+                                                        </button> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-md-3 col-form-label">
+                                                    Tanggal Pembayaran Paling
+                                                    Lama :
+                                                </label>
+                                                <input type="text" name="pembayaran_paling_lama_month_edit"
+                                                    id="pembayaran_paling_lama_month_edit" class="form-control col-md-9"
+                                                    placeholder="Example : 10">
                                             </div>
                                         </div>
                                     </div>

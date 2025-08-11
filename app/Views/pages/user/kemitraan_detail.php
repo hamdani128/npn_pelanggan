@@ -30,64 +30,7 @@
             <div class="card-body border-bottom">
                 <div class="fro_profile">
                     <div class="row">
-                        <div class="col-lg-3 mb-3 mb-lg-0">
-                            <div class="fro_profile-main text-center p-3 border rounded shadow-sm bg-white">
-                                <!-- Foto/logo -->
-                                <div class="user-thumb mb-3">
-                                    <img src="<?=base_url()?>assets/images/logo-npn.png"
-                                        class="rounded-circle avatar-lg img-thumbnail mx-auto d-block" alt="thumbnail">
-                                </div>
-
-                                <!-- Info Utama -->
-                                <div class="fro_profile_user-detail">
-                                    <h5 class="mb-1 font-size-18 font-weight-bold"><?=$profile->kode_mitra?></h5>
-                                    <h6 class="mb-3 font-size-16"><?=$profile->nama_perusahaan?></h6>
-                                </div>
-
-                                <!-- Info Detail dalam Table -->
-                                <table class="table table-sm table-borderless text-left mx-auto"
-                                    style="max-width: 100%; width: 90%;">
-                                    <tbody>
-                                        <tr>
-                                            <th>Email Perusahaan :</th>
-                                        </tr>
-                                        <tr>
-                                            <td><span style="color: #007bff;"><?=$profile->email?></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>No. Kontak :</th>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span style="color: #007bff;">
-                                                    <?=$profile->no_hp?>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Alamat Perusahaan :</th>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: justify;color: #007bff;"><?=$profile->alamat?></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Alamat Instalasi :</th>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: justify;color: #007bff;">
-                                                <?=$profile->alamat_instalasi?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-
-                            </div>
-                        </div>
-
-                        <!--end col-->
-
-                        <div class="col-lg-9 mb-3 mb-lg-0">
+                        <div class="col-md-12 col-sm-12 col-lg-12 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="card-body">
                                     <!-- Nav tabs -->
@@ -122,56 +65,140 @@
                                     <!-- Tab panes -->
                                     <div class="tab-content p-3">
                                         <div class="tab-pane active" id="home-struktural" role="tabpanel">
-                                            <?php foreach ($profile_struktural as $row) {?>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title mb-3">PENANGGUNG JAWAB STRUKTURAL
-                                                        <?=$row->posisi?>
-                                                    </h5>
-                                                    <div class="table-responsive">
-                                                        <table>
-                                                            <tr>
-                                                                <td style="width: 30%;">NIK</td>
-                                                                <td style="width: 5%;">:</td>
-                                                                <td><?=$row->nik?></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width: 30%;">Nama</td>
-                                                                <td style="width: 5%;">:</td>
-                                                                <td><?=$row->nama?></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width: 30%;">E-Mail</td>
-                                                                <td style="width: 5%;">:</td>
-                                                                <td><?=$row->email?></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width: 30%;">No.Kontak</td>
-                                                                <td style="width: 5%;">:</td>
-                                                                <td><?=$row->no_wa?></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width: 30%;">Dokumen</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="3">
-                                                                    <?php if ($row->filename != '' || $row->filename != null) {?>
-                                                                    <img src="<?php echo base_url('upload/mitra/' . $row->kode_mitra . '/' . $row->filename); ?>"
-                                                                        alt="" style="width: 300px; height: 200px;">
-                                                                    <?php } else {?>
-                                                                    <img src="<?php echo base_url('assets/images/id-card-blank.png'); ?>"
-                                                                        alt="" style="width: 300px; height: 200px;">
-                                                                    <?php }?>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
+                                            <div class="row">
+                                                <!-- Card Logo & Nama Perusahaan -->
+                                                <div class="col-md-4 mb-4">
+                                                    <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                                                        <div class="card-body p-4 text-center"
+                                                            style="background: linear-gradient(135deg, #0066cc, #004d99); color: white;">
+                                                            <!-- Foto/logo -->
+                                                            <div class="user-thumb mb-3">
+                                                                <img src="<?=base_url()?>assets/images/logo-npn.png"
+                                                                    class="rounded-circle img-thumbnail mx-auto d-block border border-3 border-light shadow-sm"
+                                                                    style="width: 120px; height: 120px; object-fit: cover;"
+                                                                    alt="thumbnail">
+                                                            </div>
+
+                                                            <!-- Info Utama -->
+                                                            <div>
+                                                                <h5 class="mb-1 fw-bold text-white">
+                                                                    <?=$profile->kode_mitra?></h5>
+                                                                <h6 class="mb-0 text-white">
+                                                                    <?=$profile->nama_perusahaan?></h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Card About Company -->
+                                                <div class="col-md-8 mb-4">
+                                                    <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
+                                                        <div class="card-header text-white"
+                                                            style="background: linear-gradient(90deg, #17a2b8, #138496);">
+                                                            <h5 class="mb-0 text-white"><i
+                                                                    class="fas fa-building me-2"></i>
+                                                                About Company
+                                                            </h5>
+                                                        </div>
+                                                        <div class="card-body" style="background-color: #f8f9fa;">
+                                                            <strong>
+                                                                <i class="fas fa-envelope me-2"></i>
+                                                                E-Mail
+                                                            </strong>
+                                                            <p class="text-muted"><?=$profile->email?></p>
+                                                            <hr>
+                                                            <strong>
+                                                                <i class="fas fa-map-marker-alt me-2"></i>
+                                                                Alamat Perusahaan
+                                                            </strong>
+                                                            <p class="text-muted"><?=$profile->alamat?></p>
+                                                            <hr>
+
+                                                            <strong>
+                                                                <i class="fas fa-mobile-alt me-2"></i>
+                                                                No.Kontak
+                                                            </strong>
+                                                            <p class="text-muted"><?=$profile->no_hp?></p>
+                                                            <hr>
+
+                                                            <strong>
+                                                                <i class="fa fa-address-card me-2"></i>
+                                                                NPWP
+                                                            </strong>
+                                                            <p class="text-muted"><?=$profile->npwp?></p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php }?>
+
+                                            <div class="row">
+                                                <div class="col-md-12 col-lg-12 col-sm-12">
+                                                    <?php foreach ($profile_struktural as $row) {?>
+                                                    <div class="card shadow-lg border-0 mb-4 rounded-3 overflow-hidden">
+                                                        <div class="card-header text-white"
+                                                            style="background: linear-gradient(90deg, #0066cc, #004d99);">
+                                                            <h6 class="mb-0 text-white">
+                                                                <i class="fas fa-user-tie me-2"></i> PENANGGUNG JAWAB
+                                                                STRUKTURAL - <?=$row->posisi?>
+                                                            </h6>
+                                                        </div>
+                                                        <div class="card-body" style="background-color: #f8f9fa;">
+                                                            <div class="row align-items-center">
+                                                                <!-- Info Table -->
+                                                                <div class="col-md-7">
+                                                                    <table class="table table-borderless table-sm mb-0">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <th style="width: 35%">NIK</th>
+                                                                                <td><?=$row->nik?></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>Nama</th>
+                                                                                <td><?=$row->nama?></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>E-Mail</th>
+                                                                                <td><?=$row->email?></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th>No. Kontak</th>
+                                                                                <td><?=$row->no_wa?></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                <!-- Image -->
+                                                                <div class="col-md-5 text-center">
+                                                                    <?php if (!empty($row->filename)) {?>
+                                                                    <img src="<?=base_url('upload/mitra/' . $row->kode_mitra . '/' . $row->filename)?>"
+                                                                        alt="Dokumen"
+                                                                        class="img-fluid rounded shadow-sm border"
+                                                                        style="max-height: 200px; object-fit: cover;">
+                                                                    <?php } else {?>
+                                                                    <img src="<?=base_url('assets/images/id-card-blank.png')?>"
+                                                                        alt="ID Card Kosong"
+                                                                        class="img-fluid rounded shadow-sm border"
+                                                                        style="max-height: 200px; object-fit: cover;">
+                                                                    <?php }?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <?php }?>
+
+
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <div class="tab-pane" id="data_layanan" role="tabpanel">
+                                            <?php $no = 1; ?>
+                                            <?php foreach ($profile_data_layanan as $row) {?>
+
                                             <div class="card">
+                                                <div class="card-header">
+                                                    <label for="" class="form-label">Data Layanan <?=$no++;?></label>
+                                                </div>
                                                 <div class="card-body">
                                                     <div class="table-responsive">
                                                         <table style="width: 100%; border-collapse: collapse;">
@@ -181,20 +208,30 @@
                                                                         <b>Jenis Layanan</b>
                                                                     </td>
                                                                     <td style="width: 2%;">:</td>
-                                                                    <td><?=$profile_data_layanan->jenis_layanan?></td>
+                                                                    <td><?=$row->jenis_layanan?></td>
                                                                 </tr>
                                                                 <tr style="height: 30px;">
                                                                     <td><b>Kapasitas</b></td>
                                                                     <td>:</td>
                                                                     <td>
-                                                                        <?=$profile_data_layanan->kapasitas?>
-                                                                        <?=$profile_data_layanan->quantity?>
+                                                                        <?=$row->kapasitas?>
+                                                                        <?=$row->quantity?>
                                                                     </td>
                                                                 </tr>
                                                                 <tr style="height: 30px;">
                                                                     <td><b>Vendor</b></td>
                                                                     <td>:</td>
-                                                                    <td><?=$profile_data_layanan->vendor?></td>
+                                                                    <td><?=$row->vendor?></td>
+                                                                </tr>
+                                                                <tr style="height: 30px;">
+                                                                    <td><b>Alamat Instalasi</b></td>
+                                                                    <td>:</td>
+                                                                    <td><?=$row->alamat_instalasi?></td>
+                                                                </tr>
+                                                                <tr style="height: 30px;">
+                                                                    <td><b>Status Layanan</b></td>
+                                                                    <td>:</td>
+                                                                    <td><?=$row->status_layanan?></td>
                                                                 </tr>
                                                                 <tr style="height: 30px;">
                                                                     <td><b>Price List</b></td>
@@ -222,7 +259,7 @@
                                                                                     <th
                                                                                         style="width: 10%;text-align: center;">
                                                                                         PPN
-                                                                                        (<?=$profile_data_layanan->ppn_text?>%)
+                                                                                        (<?=$row->ppn_text?>%)
                                                                                     </th>
                                                                                     <th
                                                                                         style="width: 10%;text-align: center;">
@@ -233,86 +270,85 @@
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <?=$profile_data_layanan->deskripsi_price?>
+                                                                                        <?=$row->deskripsi_price?>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <?=number_format($profile_data_layanan->harga_dasar, 0, ',', '.')?>
+                                                                                        <?=number_format($row->harga_dasar, 0, ',', '.')?>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <?=number_format($profile_data_layanan->harga_jual, 0, ',', '.')?>
+                                                                                        <?=number_format($row->harga_jual, 0, ',', '.')?>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <?=number_format($profile_data_layanan->ppn, 0, ',', '.')?>
+                                                                                        <?=number_format($row->ppn, 0, ',', '.')?>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <?=number_format($profile_data_layanan->subtotal, 0, ',', '.')?>
+                                                                                        <?=number_format($row->subtotal, 0, ',', '.')?>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <hr>
                                                                             </tbody>
                                                                         </table>
-                                                                        <hr>
-                                                                        <h5>On Time Charge</h5>
-                                                                        <div class="table-responsive">
-                                                                            <table
-                                                                                class="table table-bordered dt-responsive nowrap table-hover table-striped"
-                                                                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                                                                <thead class="bg-dark text-white">
-                                                                                    <tr>
-                                                                                        <th
-                                                                                            style="width: 15%;text-align: center;">
-                                                                                            Deskripsi
-                                                                                        </th>
-                                                                                        <th
-                                                                                            style="width: 10%;text-align: center;">
-                                                                                            Harga Dasar
-                                                                                        </th>
-                                                                                        <th
-                                                                                            style="width: 10%;text-align: center;">
-                                                                                            Harga Jual
-                                                                                        </th>
-                                                                                        <th
-                                                                                            style="width: 5%;text-align: center;">
-                                                                                            PPN(%)
-                                                                                        </th>
-                                                                                        <th
-                                                                                            style="width: 10%;text-align: center;">
-                                                                                            Subtotal
-                                                                                        </th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <?php foreach ($profile_data_otc as $dt) {?>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            <label><?=$dt->deskripsi_price?></label>
-                                                                                        </td>
-                                                                                        <td style="text-align: right;">
-                                                                                            <span><?=number_format($dt->harga_dasar, 0, ',', '.')?></span>
-                                                                                        </td>
-                                                                                        <td style="text-align: right;">
-                                                                                            <span><?=number_format($dt->harga_jual, 0, ',', '.')?></span>
-                                                                                        </td>
-                                                                                        <td style="text-align: center;">
-                                                                                            <span><?=$dt->ppn_text?>%</span>
-                                                                                        </td>
-                                                                                        <td style="text-align: center;">
-                                                                                            <span><?=number_format($dt->subtotal, 0, ',', '.')?></span>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <?php }?>
-
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
-
                                                     </div>
                                                 </div>
                                             </div>
+                                            <?php }?>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5>On Time Charge</h5>
+                                                    <div class="table-responsive">
+                                                        <table
+                                                            class="table table-bordered dt-responsive nowrap table-hover table-striped"
+                                                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                            <thead class="bg-dark text-white">
+                                                                <tr>
+                                                                    <th style="width: 15%;text-align: center;">
+                                                                        Deskripsi
+                                                                    </th>
+                                                                    <th style="width: 10%;text-align: center;">
+                                                                        Harga Dasar
+                                                                    </th>
+                                                                    <th style="width: 10%;text-align: center;">
+                                                                        Harga Jual
+                                                                    </th>
+                                                                    <th style="width: 5%;text-align: center;">
+                                                                        PPN(%)
+                                                                    </th>
+                                                                    <th style="width: 10%;text-align: center;">
+                                                                        Subtotal
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php foreach ($profile_data_otc as $dt) {?>
+                                                                <tr>
+                                                                    <td>
+                                                                        <label><?=$dt->deskripsi_price?></label>
+                                                                    </td>
+                                                                    <td style="text-align: right;">
+                                                                        <span><?=number_format($dt->harga_dasar, 0, ',', '.')?></span>
+                                                                    </td>
+                                                                    <td style="text-align: right;">
+                                                                        <span><?=number_format($dt->harga_jual, 0, ',', '.')?></span>
+                                                                    </td>
+                                                                    <td style="text-align: center;">
+                                                                        <span><?=$dt->ppn_text?>%</span>
+                                                                    </td>
+                                                                    <td style="text-align: center;">
+                                                                        <span><?=number_format($dt->subtotal, 0, ',', '.')?></span>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php }?>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <div class="tab-pane" id="data_billing" role="tabpanel">
                                             <div class="card">
@@ -420,54 +456,82 @@
                                             </div>
                                         </div>
                                         <div class="tab-pane" id="messages-justify" role="tabpanel">
-                                            <div class="card">
+                                            <div class="card border-0 shadow-lg rounded-3">
                                                 <div class="card-body">
                                                     <div id="accordion">
-                                                        <?php foreach ($profile_dokumen as $index => $dt) {?>
-                                                        <?php $file_extension = strtolower(pathinfo($dt->file_name, PATHINFO_EXTENSION)); ?>
-                                                        <?php $file_url = base_url('upload/mitra/' . $dt->kode_mitra . '/' . $dt->file_name); // sesuaikan path file ?>
-                                                        <?php $collapseId = 'collapse' . $index; ?>
-                                                        <?php $headingId = 'heading' . $index; ?>
-                                                        <div class="card mb-2">
-                                                            <div class="card-header" id="<?=$headingId?>">
-                                                                <h5 class="m-0 font-size-14">
-                                                                    <a data-toggle="collapse" data-parent="#accordion"
-                                                                        href="#<?=$collapseId?>" aria-expanded="true"
-                                                                        aria-controls="<?=$collapseId?>"
-                                                                        class="text-dark">
-                                                                        <?=$dt->type_name?>
-                                                                    </a>
-                                                                </h5>
-                                                            </div>
+                                                        <?php foreach ($profile_dokumen as $index => $dt):
+    $file_extension = strtolower(pathinfo($dt->file_name, PATHINFO_EXTENSION));
+    $file_url = base_url('upload/mitra/' . $dt->kode_mitra . '/' . $dt->file_name);
+    $collapseId = 'collapse' . $index;
+    $headingId = 'heading' . $index;
+    ?>
+	                                                        <div class="mb-3 border rounded overflow-hidden shadow-sm">
+	                                                            <!-- Header Accordion -->
+	                                                            <div class="p-3 bg-gradient-primary text-white"
+	                                                                id="<?=$headingId?>" data-toggle="collapse"
+	                                                                data-target="#<?=$collapseId?>"
+	                                                                aria-expanded="<?=$index === 0 ? 'true' : 'false'?>"
+	                                                                aria-controls="<?=$collapseId?>"
+	                                                                style="cursor: pointer;">
+	                                                                <h6 class="mb-0 text-white">
+	                                                                    <i class="fas fa-file-alt me-2"></i>
+	                                                                    <?=$dt->type_name?>
+	                                                                </h6>
+	                                                            </div>
 
-                                                            <div id="<?=$collapseId?>"
-                                                                class="collapse <?=$index === 0 ? 'show' : ''?>"
-                                                                aria-labelledby="<?=$headingId?>"
-                                                                data-parent="#accordion">
-                                                                <div class="card-body text-center">
-                                                                    <?php if (in_array($file_extension, ['jpg', 'jpeg', 'png', 'gif'])): ?>
-                                                                    <img src="<?=$file_url?>" alt="Document Image"
-                                                                        class="img-fluid" style="max-height: 400px;">
-                                                                    <?php elseif ($file_extension === 'pdf'): ?>
-                                                                    <embed src="<?=$file_url?>" type="application/pdf"
-                                                                        width="100%" height="500px">
-                                                                    <?php elseif (in_array($file_extension, ['doc', 'docx'])): ?>
-                                                                    <p><strong>Dokumen Word:</strong> <a
-                                                                            href="<?=$file_url?>" target="_blank">Lihat
-                                                                            / Unduh</a></p>
+	                                                            <!-- Body Accordion -->
+	                                                            <div id="<?=$collapseId?>"
+	                                                                class="collapse <?=$index === 0 ? 'show' : ''?>"
+	                                                                aria-labelledby="<?=$headingId?>"
+	                                                                data-parent="#accordion">
+	                                                                <div class="p-3 text-center bg-light">
+	                                                                    <?php if (in_array($file_extension, ['jpg', 'jpeg', 'png', 'gif'])): ?>
+	                                                                    <img src="<?=$file_url?>" alt="Document Image"
+	                                                                        class="img-fluid rounded shadow-sm"
+	                                                                        style="max-height: 400px; object-fit: contain;">
+
+	                                                                    <?php elseif ($file_extension === 'pdf'): ?>
+                                                                    <?php if (preg_match('/Mobile|Android|iPhone|iPad/i', $_SERVER['HTTP_USER_AGENT'])): ?>
+                                                                    <!-- Versi HP pakai PDF.js -->
+                                                                    <iframe
+                                                                        src="<?=base_url('assets/pdfjs/web/viewer.html')?>?file=<?=urlencode($file_url)?>"
+                                                                        style="width:100%; height:500px; border:none;"></iframe>
+
                                                                     <?php else: ?>
-                                                                    <p><em>Tipe file tidak dikenali: <a
-                                                                                href="<?=$file_url?>"
-                                                                                target="_blank">Download File</a></em>
-                                                                    </p>
+                                                                    <!-- Versi Desktop pakai embed -->
+                                                                    <embed src="<?=$file_url?>" type="application/pdf"
+                                                                        width="100%" height="500px"
+                                                                        class="rounded shadow-sm">
+                                                                    <?php endif; ?>
+
+                                                                    <!-- Tombol Download -->
+                                                                    <a href="<?=$file_url?>" target="_blank"
+                                                                        class="btn btn-primary mt-2">
+                                                                        <i class="fas fa-download"></i> Download PDF
+                                                                    </a>
+
+                                                                    <?php elseif (in_array($file_extension, ['doc', 'docx'])): ?>
+                                                                    <p><strong>Dokumen Word</strong></p>
+                                                                    <a href="<?=$file_url?>" target="_blank"
+                                                                        class="btn btn-primary">
+                                                                        <i class="fas fa-download"></i> Lihat / Unduh
+                                                                    </a>
+
+                                                                    <?php else: ?>
+                                                                    <p><em>Tipe file tidak dikenali</em></p>
+                                                                    <a href="<?=$file_url?>" target="_blank"
+                                                                        class="btn btn-secondary">
+                                                                        <i class="fas fa-download"></i> Download File
+                                                                    </a>
                                                                     <?php endif; ?>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <?php }?>
+                                                        <?php endforeach; ?>
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -573,6 +637,26 @@
                                     </div>
                                 </div> -->
 
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(90deg, #0066cc, #004d99);
+}
 
+#accordion .collapse.show {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
 
 <?=$this->endSection();?>

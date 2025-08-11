@@ -106,6 +106,10 @@ app.controller("KemitraanAppController", function ($scope, $http) {
     });
   };
 
+  $scope.DeleteOtc = function (index) {
+    $scope.listDataOtcArray.splice(index, 1);
+  };
+
   $scope.DeleteLayanan = function (index) {
     $scope.listDataLayananArray.splice(index, 1);
   };
@@ -116,7 +120,7 @@ app.controller("KemitraanAppController", function ($scope, $http) {
     var email = $("#email").val();
     var no_kontak = $("#no_kontak").val();
     var alamat_perusahaan = $("#alamat_perusahaan").val();
-    var alamat_instalasi = $("#alamat_instalasi").val();
+    var npwp = $("#npwp").val();
 
     var formData = new FormData();
     formData.append("mitra_id", mitra_id);
@@ -124,7 +128,7 @@ app.controller("KemitraanAppController", function ($scope, $http) {
     formData.append("email", email);
     formData.append("no_kontak", no_kontak);
     formData.append("alamat_perusahaan", alamat_perusahaan);
-    formData.append("alamat_instalasi", alamat_instalasi);
+    formData.append("npwp", npwp);
 
     // Handle struktural
     var tbody1 = document.getElementById("tbody-struktural");
@@ -152,7 +156,6 @@ app.controller("KemitraanAppController", function ($scope, $http) {
     }
 
     formData.append("struktural", JSON.stringify(detail_struktural));
-
     // Handle tambahan
     var tbody2 = document.getElementById("tbody-tambahan");
     var rows2 = tbody2.getElementsByTagName("tr");
@@ -184,44 +187,67 @@ app.controller("KemitraanAppController", function ($scope, $http) {
     for (var i = 0; i < rows3.length; i++) {
       var cells3 = rows3[i].getElementsByTagName("td");
 
-      var rowData3 = {
-        deskripsi: cells3[1].querySelector("label").textContent.trim(), // ambil isi label
-        harga_dasar: UnFormatNumber(cells3[2].querySelector("input").value),
-        harga_jual: UnFormatNumber(cells3[3].querySelector("input").value),
-        ppn: cells3[4].querySelector("select").value,
-        subtotal: UnFormatNumber(cells3[5].querySelector("input").value),
-      };
+      var textarea = cells3[2].querySelector("textarea");
+      var hargaDasarInput = cells3[3].querySelector("input");
+      var hargaJualInput = cells3[4].querySelector("input");
+      var ppnSelect = cells3[5].querySelector("select");
+      var subtotalInput = cells3[6].querySelector("input");
 
+      if (
+        !textarea ||
+        !hargaDasarInput ||
+        !hargaJualInput ||
+        !ppnSelect ||
+        !subtotalInput
+      ) {
+        console.warn("Baris ke-" + i + " tidak lengkap dan dilewati.");
+        continue;
+      }
+      var rowData3 = {
+        deskripsi: textarea.value.trim(),
+        harga_dasar: UnFormatNumber(hargaDasarInput.value),
+        harga_jual: UnFormatNumber(hargaJualInput.value),
+        ppn: ppnSelect.value,
+        subtotal: UnFormatNumber(subtotalInput.value),
+      };
       otdata.push(rowData3);
     }
-
     formData.append("otc_data", JSON.stringify(otdata));
-    formData.append("jenis_layanan", $("#jenis_layanan").val());
-    formData.append("satuan_layanan", $("#satuan_layanan").val());
-    formData.append("kapasitas_layanan", $("#kapasitas_layanan").val());
-    formData.append("vendor_media", $("#vendor_media").val());
 
-    formData.append("deskripsi_price_month", $("#deskripsi_price_month").val());
-    formData.append(
-      "harga_dasar_price_month",
-      UnFormatNumber($("#harga_dasar_price_month").val())
-    );
-    formData.append(
-      "harga_jual_price_month",
-      UnFormatNumber($("#harga_jual_price_month").val())
-    );
-    formData.append(
-      "ppn_text_price_month",
-      UnFormatNumber($("#combo_ppn_price_month").val())
-    );
-    formData.append(
-      "nominal_ppn_price_month",
-      UnFormatNumber($("#nominal_ppn_price_month").val())
-    );
-    formData.append(
-      "subtotal_price_month",
-      UnFormatNumber($("#subtotal_price_month").val())
-    );
+    // Layanan Data Table
+    var data_layanan_array = [];
+
+    for (var i = 0; i < $scope.listDataLayananArray.length; i++) {
+      var layanan = $scope.listDataLayananArray[i];
+
+      var data_layanan = {
+        jenis_layanan: layanan.jenis_layanan || "",
+        kapasitas_layanan: layanan.kapasitas_layanan || "",
+        satuan_layanan: layanan.satuan_layanan || "",
+        vendor_media: layanan.vendor_media || "",
+        alamat_instalasi_layanan: layanan.alamat_instalasi_layanan || "",
+        status_layanan: layanan.status_layanan || "",
+        deskripsi_price_month: layanan.deskripsi_price_month || "",
+        harga_dasar_price_month: UnFormatNumber(
+          layanan.harga_dasar_price_month || "0"
+        ),
+        harga_jual_price_month: UnFormatNumber(
+          layanan.harga_jual_price_month || "0"
+        ),
+        combo_ppn_price_month: layanan.combo_ppn_price_month || "",
+        nominal_ppn_price_month: UnFormatNumber(
+          layanan.nominal_ppn_price_month || "0"
+        ),
+        subtotal_price_month: UnFormatNumber(
+          layanan.subtotal_price_month || "0"
+        ),
+      };
+
+      data_layanan_array.push(data_layanan);
+    }
+    // Tambahkan ke FormData atau kirim langsung via $http.post
+    formData.append("data_layanan", JSON.stringify(data_layanan_array));
+
     formData.append(
       "start_date_price_month",
       $("#start_date_price_month").val()
@@ -232,29 +258,29 @@ app.controller("KemitraanAppController", function ($scope, $http) {
       $("#pembayaran_paling_lama_month").val()
     );
 
-    // OTC Data Table
-    var tbody4 = document.getElementById("tbody-RefrencePeriode");
-    var rows4 = tbody4.getElementsByTagName("tr");
-    var refrencedata = [];
+    // // OTC Data Table
+    // var tbody4 = document.getElementById("tbody-RefrencePeriode");
+    // var rows4 = tbody4.getElementsByTagName("tr");
+    // var refrencedata = [];
 
-    for (var i = 0; i < rows4.length; i++) {
-      var cell4 = rows4[i].getElementsByTagName("td");
+    // for (var i = 0; i < rows4.length; i++) {
+    //   var cell4 = rows4[i].getElementsByTagName("td");
 
-      var rowData4 = {
-        deskripsi: cell4[0].querySelector("label").textContent.trim(),
-        harga_dasar: UnFormatNumber(cell4[1].querySelector("input").value),
-        harga_jual: UnFormatNumber(cell4[2].querySelector("input").value),
-        ppn_text: UnFormatNumber(cell4[3].querySelector("input").value) || 0, // ✅ FIX INI
-        subtotal: UnFormatNumber(cell4[4].querySelector("input").value),
-        periode: cell4[5].querySelector("input").value,
-        payment_late_date: cell4[6].querySelector("input").value,
-        denda: UnFormatNumber(cell4[7].querySelector("input").value),
-      };
+    //   var rowData4 = {
+    //     deskripsi: cell4[0].querySelector("label").textContent.trim(),
+    //     harga_dasar: UnFormatNumber(cell4[1].querySelector("input").value),
+    //     harga_jual: UnFormatNumber(cell4[2].querySelector("input").value),
+    //     ppn_text: UnFormatNumber(cell4[3].querySelector("input").value) || 0, // ✅ FIX INI
+    //     subtotal: UnFormatNumber(cell4[4].querySelector("input").value),
+    //     periode: cell4[5].querySelector("input").value,
+    //     payment_late_date: cell4[6].querySelector("input").value,
+    //     denda: UnFormatNumber(cell4[7].querySelector("input").value),
+    //   };
 
-      refrencedata.push(rowData4);
-    }
+    //   refrencedata.push(rowData4);
+    // }
 
-    formData.append("refrencedata", JSON.stringify(refrencedata));
+    // formData.append("refrencedata", JSON.stringify(refrencedata));
 
     Swal.fire({
       title: "Apakah anda yakin ?",
@@ -354,8 +380,6 @@ app.controller("KemitraanAppController", function ($scope, $http) {
       }
     }
   };
-
-  $scope.EditShow = function (dt) {};
 
   $scope.showProfile = function (dt) {
     $("#mitra_id_profile").val(dt.kode_mitra);
@@ -523,7 +547,7 @@ app.controller("KemitraanAppController", function ($scope, $http) {
     $scope.no_kontak_edit = dt.no_hp;
     $scope.email_edit = dt.email;
     $scope.alamat_perusahaan_edit = dt.alamat;
-    $scope.alamat_instalasi_edit = dt.alamat_instalasi;
+    $scope.npwp_edit = dt.npwp;
     $scope.GetMitraDetailForEdit(dt.kode_mitra);
     $scope.GetMitraDataLayananForEdit(dt.kode_mitra);
     $scope.GetMitraDataLayananTableRefrenceForEdit(dt.kode_mitra);
@@ -546,9 +570,7 @@ app.controller("KemitraanAppController", function ($scope, $http) {
   };
 
   $scope.GetMitraDataLayananForEdit = function (kode_mitra) {
-    var formdata = {
-      kode_mitra: kode_mitra,
-    };
+    var formdata = { kode_mitra: kode_mitra };
 
     $http
       .post(
@@ -556,25 +578,35 @@ app.controller("KemitraanAppController", function ($scope, $http) {
         formdata
       )
       .then(function (response) {
-        $scope.jenis_layanan_edit = response.data.jenis_layanan;
-        $scope.kapasitas_layanan_edit = response.data.kapasitas;
-        $scope.satuan_layanan_edit = response.data.quantity;
-        $scope.vendor_media_edit = response.data.vendor;
-        $scope.deskripsi_price_month_edit = response.data.deskripsi_price;
-        $scope.harga_dasar_price_month_edit = formatNumber(
-          response.data.harga_dasar
-        );
-        $scope.harga_jual_price_month_edit = formatNumber(
-          response.data.harga_jual
-        );
-        $scope.combo_ppn_price_month_edit = response.data.ppn_text;
-        $scope.nominal_ppn_price_month_edit = formatNumber(response.data.ppn);
-        $scope.subtotal_price_month_edit = formatNumber(response.data.subtotal);
+        $scope.listDataLayananArrayEdit = [];
 
-        $scope.start_date_price_month_edit = new Date(
-          response.data.period_start
-        );
-        $scope.end_date_price_month_edit = new Date(response.data.period_end);
+        // Ambil period_start dan period_end dari item pertama jika ada
+        if (response.data.length > 0) {
+          $("#start_date_price_month_edit").val(
+            formatToISO(response.data[0].period_start)
+          );
+          $("#end_date_price_month_edit").val(
+            formatToISO(response.data[0].period_end)
+          );
+        }
+
+        angular.forEach(response.data, function (layanan) {
+          $scope.listDataLayananArrayEdit.push({
+            jenis_layanan_edit: layanan.jenis_layanan,
+            kapasitas_layanan_edit: layanan.kapasitas,
+            satuan_layanan_edit: layanan.quantity,
+            vendor_media_edit: layanan.vendor,
+            alamat_instalasi_layanan_edit: layanan.alamat_instalasi,
+            status_layanan_edit: layanan.status_layanan,
+
+            deskripsi_price_month_edit: layanan.deskripsi_price,
+            harga_dasar_price_month_edit: formatNumber(layanan.harga_dasar),
+            harga_jual_price_month_edit: formatNumber(layanan.harga_jual),
+            combo_ppn_price_month_edit: layanan.ppn_text,
+            nominal_ppn_price_month_edit: formatNumber(layanan.ppn),
+            subtotal_price_month_edit: formatNumber(layanan.subtotal),
+          });
+        });
       })
       .catch(function (error) {
         console.error("Terjadi kesalahan:", error);
@@ -594,7 +626,11 @@ app.controller("KemitraanAppController", function ($scope, $http) {
         formdata
       )
       .then(function (response) {
-        $scope.ListDataArrayRefrencePeriodeEdit = response.data;
+        if (response.data.length > 0) {
+          var tanggal = response.data[0].last_pay_periode.split("-")[2]; // hasil: "15"
+          // alert(tanggal);
+          $("#pembayaran_paling_lama_month_edit").val(tanggal);
+        }
       })
       .catch(function (error) {
         console.error("Terjadi kesalahan:", error);
@@ -657,6 +693,9 @@ app.controller("KemitraanAppController", function ($scope, $http) {
   };
 
   $scope.GetMitraDataLayananOTCForEdit = function (kode_mitra) {
+    // Kosongkan array dulu agar tidak duplikat saat fungsi dipanggil ulang
+    $scope.listDataOtcArrayEdit = [];
+
     var formdata = {
       kode_mitra: kode_mitra,
     };
@@ -669,12 +708,77 @@ app.controller("KemitraanAppController", function ($scope, $http) {
         formdata
       )
       .then(function (response) {
-        $scope.listDataOtcEdit = response.data;
+        if (response.data && response.data.length > 0) {
+          angular.forEach(response.data, function (layanan) {
+            $scope.listDataOtcArrayEdit.push({
+              deskripsi_otc_edit: layanan.deskripsi_price || "",
+              price_dasar_edit: formatNumber(layanan.harga_dasar),
+              price_jual_edit: formatNumber(layanan.harga_jual),
+              combo_ppn_Edit: layanan.ppn_text || "",
+              subtotal_edit: formatNumber(layanan.subtotal),
+            });
+          });
+        } else {
+          console.warn("Data OTC kosong untuk mitra ini.");
+        }
       })
       .catch(function (error) {
         console.error("Terjadi kesalahan:", error);
       });
   };
+
+  $scope.DeleteOtcEdit = function (index) {
+    $scope.listDataOtcArrayEdit.splice(index, 1);
+  };
+
+  $scope.listDataLayananArrayEdit = [];
+  $scope.AddLayananEdit = function () {
+    $scope.listDataLayananArrayEdit.push({
+      jenis_layanan_edit: "",
+      kapasitas_layanan_edit: "",
+      satuan_layanan_edit: "",
+      vendor_media_edit: "",
+      alamat_instalasi_layanan_edit: "",
+      status_layanan_edit: "",
+      deskripsi_price_month_edit: "",
+      harga_dasar_price_month_edit: 0,
+      harga_jual_price_month_edit: 0,
+      combo_ppn_price_month_edit: "",
+      nominal_ppn_price_month_edit: 0,
+      subtotal_price_month_edit: 0,
+    });
+  };
+
+  $scope.listDataOtcArrayEdit = [];
+  $scope.AddBarisOTCEdit = function () {
+    $scope.listDataOtcArrayEdit.push({
+      deskripsi_otc_edit: "",
+      price_dasar_edit: "",
+      price_jual_edit: "",
+      combo_ppn_Edit: "",
+      subtotal_edit: "",
+    });
+  };
+
+  $scope.DeleteLayananEdit = function (index) {
+    $scope.listDataLayananArrayEdit.splice(index, 1);
+  };
+
+  $scope.UpdateSubtotalOtcEdit = function (dt) {
+    let hargaJual = parseFloat(
+      (dt.price_jual_edit || "0").replace(/\./g, "").replace(",", ".")
+    );
+    let ppn = parseFloat(dt.combo_ppn_Edit || 0);
+
+    let subtotal = hargaJual + hargaJual * (ppn / 100);
+    dt.subtotal_edit = subtotal.toLocaleString("id-ID"); // Format sebagai ribuan
+  };
+  // Fungsi bantu format angka ke format Rupiah (titik ribuan)
+  function formatNumber(value) {
+    const number = parseFloat(value);
+    if (isNaN(number)) return "";
+    return number.toLocaleString("id-ID");
+  }
 
   $scope.GetrefCode = function () {
     $http
@@ -689,31 +793,22 @@ app.controller("KemitraanAppController", function ($scope, $http) {
 
   $scope.GetrefCode();
 
-  $scope.CalculateHargaMonth = function () {
-    var harga_dasar =
-      parseFloat($("#harga_dasar_price_month").val().replace(/\./g, "")) || 0;
+  $scope.CalculateHargaMonth = function (layanan) {
     var harga_jual =
-      parseFloat($("#harga_jual_price_month").val().replace(/\./g, "")) || 0;
-    var ppn_persen = parseFloat($("#combo_ppn_price_month").val()) || 0;
-
+      parseFloat(
+        (layanan.harga_jual_price_month || "0").toString().replace(/\./g, "")
+      ) || 0;
+    var ppn_persen = parseFloat(layanan.combo_ppn_price_month) || 0;
     // Hitung nominal PPN
     var nominal_ppn = Math.round(harga_jual * (ppn_persen / 100));
-
     // Hitung subtotal
     var subtotal = harga_jual + nominal_ppn;
-
-    // Tampilkan hasil ke form (dengan format angka Indonesia)
-    $("#harga_dasar_price_month").val(formatNumber(harga_dasar));
-    $("#harga_jual_price_month").val(formatNumber(harga_jual));
-    $("#nominal_ppn_price_month").val(formatNumber(nominal_ppn));
-    $("#subtotal_price_month").val(formatNumber(subtotal));
+    // Simpan hasil ke objek
+    layanan.nominal_ppn_price_month = formatNumber(nominal_ppn);
+    layanan.subtotal_price_month = formatNumber(subtotal);
+    // Optional: Format ulang harga jual
+    layanan.harga_jual_price_month = formatNumber(harga_jual);
   };
-
-  $(
-    "#harga_dasar_price_month, #harga_jual_price_month, #combo_ppn_price_month"
-  ).on("input change", function () {
-    $scope.CalculateHargaMonth();
-  });
 
   $scope.UpdateSubtotalOtc = function (row) {
     $scope.FormatFieldNumber(row, "price_jual");
@@ -802,7 +897,7 @@ app.controller("KemitraanAppController", function ($scope, $http) {
     formData.append("email", $scope.email_edit);
     formData.append("no_kontak", $scope.no_kontak_edit);
     formData.append("alamat_perusahaan", $scope.alamat_perusahaan_edit);
-    formData.append("alamat_instalasi", $scope.alamat_instalasi_edit);
+    formData.append("npwp", $scope.npwp_edit);
 
     // Handle struktural
     var tbody1 = document.getElementById("tbody-struktural-edit");
@@ -855,82 +950,87 @@ app.controller("KemitraanAppController", function ($scope, $http) {
     formData.append("tambahan_file_data", JSON.stringify(tambahanDokumenEdit));
 
     // OTC Data Table
+    // OTC Data Table
     var tbody3 = document.getElementById("tbody-otc-edit");
     var rows3 = tbody3.getElementsByTagName("tr");
-    var otdataEdit = [];
+    var otdata = [];
 
     for (var i = 0; i < rows3.length; i++) {
       var cells3 = rows3[i].getElementsByTagName("td");
 
+      var textarea = cells3[2].querySelector("textarea");
+      var hargaDasarInput = cells3[3].querySelector("input");
+      var hargaJualInput = cells3[4].querySelector("input");
+      var ppnSelect = cells3[5].querySelector("select");
+      var subtotalInput = cells3[6].querySelector("input");
+
+      if (
+        !textarea ||
+        !hargaDasarInput ||
+        !hargaJualInput ||
+        !ppnSelect ||
+        !subtotalInput
+      ) {
+        console.warn("Baris ke-" + i + " tidak lengkap dan dilewati.");
+        continue;
+      }
       var rowData3 = {
-        deskripsi: cells3[1].querySelector("label").textContent.trim(), // ambil isi label
-        harga_dasar: UnFormatNumber(cells3[2].querySelector("input").value),
-        harga_jual: UnFormatNumber(cells3[3].querySelector("input").value),
-        ppn: cells3[4].querySelector("select").value,
-        subtotal: UnFormatNumber(cells3[5].querySelector("input").value),
+        deskripsi: textarea.value.trim(),
+        harga_dasar: UnFormatNumber(hargaDasarInput.value),
+        harga_jual: UnFormatNumber(hargaJualInput.value),
+        ppn: ppnSelect.value,
+        subtotal: UnFormatNumber(subtotalInput.value),
+      };
+      otdata.push(rowData3);
+    }
+    formData.append("otc_data", JSON.stringify(otdata));
+
+    // Layanan Data Table
+    var data_layanan_array = [];
+
+    for (var i = 0; i < $scope.listDataLayananArrayEdit.length; i++) {
+      var layanan = $scope.listDataLayananArrayEdit[i];
+
+      var data_layanan = {
+        jenis_layanan: layanan.jenis_layanan_edit || "",
+        kapasitas_layanan: layanan.kapasitas_layanan_edit || "",
+        satuan_layanan: layanan.satuan_layanan_edit || "",
+        vendor_media: layanan.vendor_media_edit || "",
+        alamat_instalasi_layanan: layanan.alamat_instalasi_layanan_edit || "",
+        status_layanan: layanan.status_layanan_edit || "",
+        deskripsi_price_month: layanan.deskripsi_price_month_edit || "",
+        harga_dasar_price_month: UnFormatNumber(
+          layanan.harga_dasar_price_month_edit || "0"
+        ),
+        harga_jual_price_month: UnFormatNumber(
+          layanan.harga_jual_price_month_edit || "0"
+        ),
+        combo_ppn_price_month: layanan.combo_ppn_price_month_edit || "",
+        nominal_ppn_price_month: UnFormatNumber(
+          layanan.nominal_ppn_price_month_edit || "0"
+        ),
+        subtotal_price_month: UnFormatNumber(
+          layanan.subtotal_price_month_edit || "0"
+        ),
       };
 
-      otdataEdit.push(rowData3);
+      data_layanan_array.push(data_layanan);
     }
+    // Tambahkan ke FormData atau kirim langsung via $http.post
+    formData.append("data_layanan", JSON.stringify(data_layanan_array));
 
-    formData.append("otc_data", JSON.stringify(otdataEdit));
-    formData.append("jenis_layanan", $scope.jenis_layanan_edit);
-    formData.append("satuan_layanan", $scope.satuan_layanan_edit);
-    formData.append("kapasitas_layanan", $scope.kapasitas_layanan_edit);
-    formData.append("vendor_media", $scope.vendor_media_edit);
-    formData.append("deskripsi_price_month", $scope.deskripsi_price_month_edit);
-    formData.append(
-      "harga_dasar_price_month",
-      UnFormatNumber($scope.harga_dasar_price_month_edit)
-    );
-    formData.append(
-      "harga_jual_price_month",
-      UnFormatNumber($scope.harga_jual_price_month_edit)
-    );
-    formData.append(
-      "ppn_text_price_month",
-      UnFormatNumber($scope.combo_ppn_price_month_edit)
-    );
-    formData.append(
-      "nominal_ppn_price_month",
-      UnFormatNumber($scope.nominal_ppn_price_month_edit)
-    );
-    formData.append(
-      "subtotal_price_month",
-      UnFormatNumber($scope.subtotal_price_month_edit)
-    );
     formData.append(
       "start_date_price_month",
-      $scope.start_date_price_month_edit
+      $("#start_date_price_month_edit").val()
     );
-    formData.append("end_date_price_month", $scope.end_date_price_month_edit);
+    formData.append(
+      "end_date_price_month",
+      $("#end_date_price_month_edit").val()
+    );
     formData.append(
       "pembayaran_paling_lama_month",
-      $scope.pembayaran_paling_lama_month_edit
+      $("#pembayaran_paling_lama_month_edit").val()
     );
-    // OTC Data Table
-    var tbody4 = document.getElementById("tbody-RefrencePeriode-Edit");
-    var rows4 = tbody4.getElementsByTagName("tr");
-    var refrencedataEdit = [];
-
-    for (var i = 0; i < rows4.length; i++) {
-      var cell4 = rows4[i].getElementsByTagName("td");
-
-      var rowData4 = {
-        deskripsi: cell4[0].querySelector("label").textContent.trim(),
-        harga_dasar: UnFormatNumber(cell4[1].querySelector("input").value),
-        harga_jual: UnFormatNumber(cell4[2].querySelector("input").value),
-        ppn_text: UnFormatNumber(cell4[3].querySelector("input").value) || 0, // ✅ FIX INI
-        subtotal: UnFormatNumber(cell4[4].querySelector("input").value),
-        periode: cell4[5].querySelector("input").value,
-        payment_late_date: cell4[6].querySelector("input").value,
-        denda: UnFormatNumber(cell4[7].querySelector("input").value),
-      };
-
-      refrencedataEdit.push(rowData4);
-    }
-
-    formData.append("refrencedata", JSON.stringify(refrencedataEdit));
 
     Swal.fire({
       title: "Apakah anda yakin Merubah Data ini ?",
@@ -1203,6 +1303,39 @@ app.controller("KemitraanAppController", function ($scope, $http) {
   };
 
   $scope.LoadDataDeletedHistory();
+
+  $scope.formatNumberAuto = function (value) {
+    if (!value) return "0";
+
+    // Hilangkan titik sebelumnya
+    var clean = value.toString().replace(/\./g, "");
+
+    // Pastikan angka
+    var number = parseInt(clean);
+    if (isNaN(number)) return "0";
+
+    // Format angka
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  $scope.CalculateHargaMonthEdit = function (layanan) {
+    var harga_jual =
+      parseFloat(
+        (layanan.harga_jual_price_month_edit || "0")
+          .toString()
+          .replace(/\./g, "")
+      ) || 0;
+    var ppn_persen = parseFloat(layanan.combo_ppn_price_month_edit) || 0;
+    // Hitung nominal PPN
+    var nominal_ppn = Math.round(harga_jual * (ppn_persen / 100));
+    // Hitung subtotal
+    var subtotal = harga_jual + nominal_ppn;
+    // Simpan hasil ke objek
+    layanan.nominal_ppn_price_month_edit = formatNumber(nominal_ppn);
+    layanan.subtotal_price_month_edit = formatNumber(subtotal);
+    // Optional: Format ulang harga jual
+    layanan.harga_jual_price_month_edit = formatNumber(harga_jual);
+  };
 });
 
 function UnFormatNumber(value) {
@@ -1217,4 +1350,10 @@ function formatNumber(value) {
   return value
     .toFixed(0) // tanpa desimal
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function formatToISO(dateString) {
+  var d = new Date(dateString);
+  if (isNaN(d)) return null;
+  return d.toISOString().substring(0, 10); // ambil 'YYYY-MM-DD'
 }

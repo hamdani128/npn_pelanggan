@@ -21,7 +21,7 @@ class DocumentController extends BaseController
 
     public function getdata()
     {
-        $data = $this->db->table('support_doc_types')->get()->getResultObject();
+        $data = $this->db->table('support_doc_types')->orderBy('squence', 'ASC')->get()->getResultObject();
         return $this->response->setJSON($data);
     }
 
@@ -31,6 +31,7 @@ class DocumentController extends BaseController
         $input = json_decode(file_get_contents('php://input'), true);
         $data = [
             'type_name' => $input['nama'],
+            'squence' => $input['squence'],
             'created_at' => date('Y-m-d H:i:s'),
             'created_by' => session('loggedUser'),
         ];
@@ -48,6 +49,7 @@ class DocumentController extends BaseController
         $input = json_decode(file_get_contents('php://input'), true);
         $data = [
             'type_name' => $input['nama'],
+            'squence' => $input['squence'],
             'updated_at' => date('Y-m-d H:i:s'),
             'updated_by' => session('loggedUser'),
         ];

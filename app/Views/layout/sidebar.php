@@ -103,6 +103,11 @@
                                         History Deleted Account
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="<?=base_url("profile_pelanggan/kemitraan_invoice")?>">
+                                        Invoice
+                                    </a>
+                                </li>
                                 <li><a href="javascript: void(0);">Data Pelanggan</a></li>
                             </ul>
                         </li>

@@ -33,6 +33,7 @@ app.controller("MasterDocumentAppController", function ($scope, $http) {
 
   $scope.Insert = function () {
     var nama = $("#nama").val();
+    var squence = $("#combo_squence").val();
     if (nama == "") {
       Swal.fire({
         icon: "error",
@@ -42,6 +43,7 @@ app.controller("MasterDocumentAppController", function ($scope, $http) {
     } else {
       var data = {
         nama: nama,
+        squence: squence,
       };
 
       $http
@@ -72,17 +74,20 @@ app.controller("MasterDocumentAppController", function ($scope, $http) {
   $scope.EditShow = function (dt) {
     $("#id_update").val(dt.id);
     $("#nama_edit").val(dt.type_name);
+    $("#combo_squence_edit").val(dt.squence);
     $("#My-Modal-Edit").modal("show");
   };
 
   $scope.Update = function () {
     var id = $("#id_update").val();
     var nama = $("#nama_edit").val();
+    var squence = $("#combo_squence_edit").val();
 
     $http
       .post(base_url("master/supported_document/update"), {
         id: id,
         nama: nama,
+        squence: squence,
       })
       .then(function (response) {
         if (response.data.status == "success") {

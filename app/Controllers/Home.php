@@ -60,6 +60,7 @@ class Home extends BaseController
             ->select('a.*, b.type_name')
             ->join('support_doc_types b', 'a.doc_type_id = b.id', 'LEFT')
             ->where('a.kode_mitra', $kode_mitra)
+            ->orderBy('b.squence', 'ASC')
             ->get()->getResult();
 
         $data = [

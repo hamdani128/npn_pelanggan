@@ -42,6 +42,7 @@
                                     <tr>
                                         <th style="width: 5%;">#</th>
                                         <th style="width: 35%;text-align: left;">Nama Dokumen</th>
+                                        <th style="width: 35%;text-align: center;">Squence</th>
                                         <th style="width: 15%;text-align: center;">Act</th>
                                     </tr>
                                 </thead>
@@ -49,6 +50,7 @@
                                     <tr ng-repeat="dt in LoadData" ng-if="LoadData.length > 0">
                                         <td>{{$index + 1}}</td>
                                         <td style="text-align: left;">{{dt.type_name}}</td>
+                                        <td style="text-align: center;">{{dt.squence}}</td>
                                         <td>
                                             <div class="input-group">
                                                 <button class="btn btn-md btn-danger" ng-click="Delete(dt)">
@@ -67,7 +69,6 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div> <!-- end col -->
@@ -92,6 +93,27 @@
                                 <label for="">Nama Dokumen</label>
                                 <input type="text" name="nama" id="nama" class="form-control"
                                     placeholder="Nama Dokumen">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Squence</label>
+                                <select name="combo_squence" id="combo_squence" class="form-control">
+                                    <option value="">Pilih :</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">5</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -133,6 +155,27 @@
                                 <label for="">Nama Dokumen</label>
                                 <input type="text" name="nama_edit" id="nama_edit" class="form-control"
                                     placeholder="Nama Dokumen">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Squence</label>
+                                <select name="combo_squence_edit" id="combo_squence_edit" class="form-control">
+                                    <option value="">Pilih :</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                </select>
                             </div>
                         </div>
                     </div>

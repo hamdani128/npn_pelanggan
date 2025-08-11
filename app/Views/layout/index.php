@@ -457,11 +457,17 @@
     <!-- custom -->
     <script src="<?=base_url()?>assets/custom/mitra/legalitas.js"></script>
     <script src="<?=base_url()?>assets/custom/mitra/register.js"></script>
+    <script src="<?=base_url()?>assets/custom/mitra/invoice.js"></script>
     <script src="<?=base_url()?>assets/custom/users-management.js"></script>
     <script src="<?=base_url()?>assets/custom/master-document.js"></script>
     <script src="<?=base_url()?>assets/custom/master-employee.js"></script>
     <!-- Datatable init js -->
     <script src="<?=base_url()?>assets/js/pages/datatables.init.js"></script>
+    <!--PDF JS -->
+    <script src="<?=base_url()?>assets/pdfjs/build/pdf.js"></script>
+    <script src="<?=base_url()?>assets/pdfjs/build/pdf.worker.js"></script>
+    <script src="<?=base_url()?>assets/pdfjs/web/viewer.html"></script>
+    <!-- End PDF -->
     <script src="<?=base_url()?>assets/js/app.js"></script>
     <!-- <script>
     (function() {

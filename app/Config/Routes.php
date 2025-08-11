@@ -62,4 +62,9 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->get('profile_pelanggan/kemitraan_reseller/detail/(:num)', 'Admin\Kemitraan\MitraController::pelanggan_detail/$1');
     $routes->post('profile_pelanggan/kemitraan_reseller/activate_account', 'Admin\Kemitraan\MitraController::activate_account');
     $routes->post('profile_pelanggan/kemitraan_reseller/nonactive_account', 'Admin\Kemitraan\MitraController::nonactive_account');
+
+    // Inovice Kemitraan
+    $routes->get('profile_pelanggan/kemitraan_invoice', 'Admin\Kemitraan\InvoiceController::index');
+    $routes->get('profile_pelanggan/get_code_mitra', 'Admin\Kemitraan\InvoiceController::get_code_mitra');
+
 });
