@@ -14,11 +14,13 @@ $routes->post('register/insert', 'MitraCorporateController::register_insert');
 $routes->post('auth/login/check_login', 'Admin\LoginController::check_login');
 $routes->get('auth/logout', 'Admin\LoginController::logout');
 $routes->get('auth/forgot_password', 'Admin\LoginController::forgot_password');
-$routes->post('/auth/forgot_password/send_email_password', 'Admin\LoginController::send_email');
+$routes->post('auth/forgot_password/send_email_password', 'Admin\LoginController::send_email');
 
 $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->get('admin', 'Home::index');
     $routes->get('mitra', 'Home::mitra');
+    $routes->get('mitra/pelanggan', 'Admin\Kemitraan\PelangganController::index');
+
     $routes->get('users_management', 'UsersManagement::index');
     $routes->get('users_management/getdata', 'UsersManagement::getdata');
     $routes->post('users_management/insert', 'UsersManagement::insert');
@@ -33,13 +35,11 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->post('master/supported_document/insert', 'Admin\Master\DocumentController::insert');
     $routes->post('master/supported_document/update', 'Admin\Master\DocumentController::update');
     $routes->post('master/supported_document/delete', 'Admin\Master\DocumentController::delete');
-
     $routes->get('master/employee_master', 'Admin\Master\EmployeeController::index');
     $routes->get('master/employee_master/getdata', 'Admin\Master\EmployeeController::employee_getdata');
     $routes->post('master/employee_master/insert', 'Admin\Master\EmployeeController::employee_insert');
 
     // $routes->get('master/ref_codes', '');
-    // Profile Mitra
     $routes->get('profile_pelanggan/register', 'MitraCorporateController::register_view_admin');
     $routes->get('profile_pelanggan/register_getdata', 'MitraCorporateController::register_admin_getdata');
     $routes->post('profile_pelanggan/register_approval', 'MitraCorporateController::register_approval');
@@ -62,9 +62,16 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->get('profile_pelanggan/kemitraan_reseller/detail/(:num)', 'Admin\Kemitraan\MitraController::pelanggan_detail/$1');
     $routes->post('profile_pelanggan/kemitraan_reseller/activate_account', 'Admin\Kemitraan\MitraController::activate_account');
     $routes->post('profile_pelanggan/kemitraan_reseller/nonactive_account', 'Admin\Kemitraan\MitraController::nonactive_account');
+    $routes->post('profile_pelanggan/get_profile_mitra', 'Admin\Kemitraan\MitraController::get_profile_mitra');
+    $routes->post('profile_pelanggan/get_profile_mitra_otc', 'Admin\Kemitraan\MitraController::get_profile_mitra_otc');
 
     // Inovice Kemitraan
     $routes->get('profile_pelanggan/kemitraan_invoice', 'Admin\Kemitraan\InvoiceController::index');
     $routes->get('profile_pelanggan/get_code_mitra', 'Admin\Kemitraan\InvoiceController::get_code_mitra');
-
+    $routes->get('profile_pelanggan/otc/get_number_invoice', 'Admin\Kemitraan\InvoiceController::generate_invoice_code_otc');
+    $routes->post('profile_pelanggan/otc/insert_otc', 'Admin\Kemitraan\InvoiceController::insert_otc');
+    $routes->post('profile_pelanggan/otc/update_otc', 'Admin\Kemitraan\InvoiceController::update_otc');
+    $routes->get('profile_pelanggan/otc/get_data_transaction', 'Admin\Kemitraan\InvoiceController::get_data_invoice_otc');
+    $routes->get('print_invoice_otc/(:any)', 'Admin\Kemitraan\InvoiceController::print_invoice_otc/$1');
+    $routes->post('profile_pelanggan/otc/get_data_transaction_by_kode_mitra', 'Admin\Kemitraan\InvoiceController::get_data_invoice_otc_by_kode_mitra');
 });

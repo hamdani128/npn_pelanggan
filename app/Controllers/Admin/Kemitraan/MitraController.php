@@ -747,4 +747,21 @@ class MitraController extends BaseController
         return $this->response->setJSON($query);
     }
 
+    public function get_profile_mitra()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = $this->request->getJSON(true); // true = return as array
+        $kode_mitra = $input['kode_mitra'];
+        $builder = $this->db->table('profile_mitra')->where('kode_mitra', $kode_mitra)->get()->getRowObject();
+        return $this->response->setJSON($builder);
+    }
+
+    public function get_profile_mitra_otc()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = $this->request->getJSON(true); // true = return as array
+        $kode_mitra = $input['kode_mitra'];
+        $builder = $this->db->table('profile_mitra_data_layanan_otc')->where('kode_mitra', $kode_mitra)->get()->getResult();
+        return $this->response->setJSON($builder);
+    }
 }

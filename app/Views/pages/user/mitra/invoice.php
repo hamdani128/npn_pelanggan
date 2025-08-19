@@ -86,8 +86,8 @@
                                         <thead class="bg-dark text-white text-center">
                                             <tr>
                                                 <th>#</th>
+                                                <th>Act</th>
                                                 <th>Invoice</th>
-                                                <th>Kode Mitra</th>
                                                 <th>Date Invoice</th>
                                                 <th>Date Tempo</th>
                                                 <th>Status</th>
@@ -95,37 +95,83 @@
                                             </tr>
                                         </thead>
                                         <tbody style="border: 1px solid #ddd;">
-                                            <tr ng-repeat="dt in otc_invoice" ng-if="otc_invoice.length > 0">
+                                            <tr ng-repeat="dt in TransactionOTC" ng-if="TransactionOTC.length > 0">
                                                 <td>{{$index + 1}}</td>
                                                 <td>
-                                                    <h5>{{dt.code}}</h5>
+                                                    <div class="button-group">
+                                                        <button class="btn btn-sm btn-dark"
+                                                            ng-click="PrintOutInvoiceOTC(dt)">
+                                                            <i class="fa fa-print"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-warning"
+                                                            ng-click="ShowEditOTC(dt)">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </div>
                                                 </td>
                                                 <td>
-                                                    <a href="#">{{dt.email}}</a>
-                                                    <p style="font-size: 12pt;font-weight: bold;">
-                                                        CC To : {{dt.email_cc}}
-                                                    </p>
-                                                    <p style="font-size: 12pt;font-weight: bold;">
-                                                        {{dt.fullname}} - [{{dt.department}}]</p>
+                                                    <h5>{{dt.invoice}}</h5>
+                                                    <table style="width: 100%; height: 50%;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width: 30%; font-weight: bold;">Kode Mitra
+                                                                </td>
+                                                                <td style="width: 5%; text-align: right;">:</td>
+                                                                <td>{{dt.kode_mitra}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">Nama</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.nama_perusahaan}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">Email</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.email}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">Kontak</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.no_hp}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">Alamat</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.alamat || '-'}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">NPWP</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.npwp || '-'}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </td>
                                                 <td>
-                                                    <p>{{dt.room}}</p>
+                                                    {{dt.inv_date}}
                                                 </td>
                                                 <td>
-                                                    <span>Date : {{dt.date_request}}</span>
-                                                    <span>Start : {{dt.time_start}}</span>
-                                                    <span>End : {{dt.time_end}}</span>
-                                                    <span>Topic : <span
-                                                            style="font-weight: bold;">{{dt.topic}}</span></span>
+                                                    {{dt.inv_date_tempo}}
                                                 </td>
                                                 <td>
-                                                    -
+                                                    <span class="badge badge-pill badge-success"
+                                                        ng-if="dt.status != '' && dt.status != null">
+                                                        Paid
+                                                    </span>
+                                                    <span class="badge badge-pill badge-danger"
+                                                        ng-if="dt.status == '' || dt.status == null">
+                                                        Unpaid
+                                                    </span>
                                                 </td>
                                                 <td>
-                                                    {{dt.created_at}}
+                                                    {{ dt.amount_total | number }}
                                                 </td>
+
                                             </tr>
-                                            <tr ng-if="otc_invoice.length === 0">
+                                            <tr ng-if="TransactionOTC.length === 0">
                                                 <td colspan="6" class="text-center">No data
                                                     available</td>
                                             </tr>
@@ -148,11 +194,136 @@
                 <div class="card">
                     <div class="card-header bg-success text-white">
                         <div class="d-flex align-items-center">
-                            <h5 class="mb-0 text-light">List Invoice Layanan</h5>
+                            <h6 class="mb-0 text-light">List Invoice Layanan</h6>
                         </div>
                     </div>
                     <div class="card-body">
-                        <!-- Konten kartu -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="">Filter Perusahaan :</label>
+                                    <div class="input-group">
+                                        <select name="" id="" class="form-control"></select>
+                                        <button class="btn btn-md btn-success">
+                                            <i class="fa fa-filter"></i>
+                                            Filter
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2"></div>
+                            <div class="col-md-6 text-right">
+                                <button class="btn btn-md btn-success mb-3" ng-click="AddLayananInvoice()">
+                                    <i class="fa fa-plus"></i>
+                                    Add Invoice
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dt-responsive nowrap" datatable="ng"
+                                        dt-options="vm.dtOptions"
+                                        style="border-collapse: collapse; border-spacing: 0; width: 120%;">
+                                        <thead class="bg-success text-white text-center">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Act</th>
+                                                <th>Invoice</th>
+                                                <th>Date Invoice</th>
+                                                <th>Date Tempo</th>
+                                                <th>Status</th>
+                                                <th>Amount</th>
+                                                <th>Deskripsi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="border: 1px solid #ddd;">
+                                            <tr ng-repeat="dt in TransactionLayanan"
+                                                ng-if="TransactionLayanan.length > 0">
+                                                <td>{{$index + 1}}</td>
+                                                <td>
+                                                    <div class="button-group">
+                                                        <button class="btn btn-sm btn-dark"
+                                                            ng-click="PrintOutInvoiceOTC(dt)">
+                                                            <i class="fa fa-print"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-warning">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <h5>{{dt.invoice}}</h5>
+                                                    <table style="width: 100%; height: 50%;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width: 30%; font-weight: bold;">Kode Mitra
+                                                                </td>
+                                                                <td style="width: 5%; text-align: right;">:</td>
+                                                                <td>{{dt.kode_mitra}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">Nama</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.nama_perusahaan}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">Email</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.email}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">Kontak</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.no_hp}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">Alamat</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.alamat || '-'}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="font-weight: bold;">NPWP</td>
+                                                                <td style="text-align: right;">:</td>
+                                                                <td>{{dt.npwp || '-'}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td>
+                                                    {{dt.inv_date}}
+                                                </td>
+                                                <td>
+                                                    {{dt.inv_date_tempo}}
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-success"
+                                                        ng-if="dt.status != '' && dt.status != null">
+                                                        Paid
+                                                    </span>
+                                                    <span class="badge badge-pill badge-danger"
+                                                        ng-if="dt.status == '' || dt.status == null">
+                                                        Unpaid
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    {{ dt.amount_total | number }}
+                                                </td>
+
+                                            </tr>
+                                            <tr ng-if="TransactionOTC.length === 0">
+                                                <td colspan="6" class="text-center">No data
+                                                    available</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -164,8 +335,8 @@
 
 
     <!-- Modal -->
-    <div id="my-modal-add" class="modal fade modal-right" tabindex="-1" role="dialog" aria-labelledby="sideModalLabel"
-        aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div id="my-modal-add-otc" class="modal fade modal-right" tabindex="-1" role="dialog"
+        aria-labelledby="sideModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-full modal-dialog-scrollable">
             <div class=" modal-content">
                 <div class="modal-header bg-dark">
@@ -238,22 +409,21 @@
                                                         {{item.kode_mitra}}
                                                     </option>
                                                 </select>
-
                                             </div>
                                             <div class="mb-1">
                                                 <small class="text-muted">Company :</small>
-                                                <input type="text" name="company_otc" id="company_otc"
-                                                    class="form-control" placeholder="Company">
+                                                <input type="text" ng-model="company_otc" class="form-control"
+                                                    placeholder="Company" readonly>
                                             </div>
                                             <div class="mb-1">
                                                 <small class="text-muted">Alamat :</small>
-                                                <textarea name="alamat_otc" id="alamat_otc" cols="2" rows="2"
-                                                    class="form-control" placeholder="Alamat"></textarea>
+                                                <textarea ng-model="alamat_otc" cols="5" rows="5" class="form-control"
+                                                    placeholder="Alamat" readonly></textarea>
                                             </div>
                                             <div class="mb-1">
                                                 <small class="text-muted">NPWP :</small>
-                                                <input type="text" name="npwp_otc" id="npwp_otc" class="form-control"
-                                                    placeholder="NPWP">
+                                                <input type="text" ng-model="npwp_otc" class="form-control"
+                                                    placeholder="NPWP" readonly>
                                             </div>
                                         </div>
                                         <!-- End Col -->
@@ -277,7 +447,7 @@
                                     <div class="row">
                                         <div class="col-md-12 mb-2">
                                             <button type="button" class="btn btn-sm btn-dark waves-effect waves-light"
-                                                ng-click="addItem()">
+                                                ng-click="AddBarisOTC()">
                                                 <i class="fa fa-plus"></i>
                                                 Add Item
                                             </button>
@@ -293,8 +463,10 @@
                                                     <thead class="bg-dark text-white">
                                                         <tr>
                                                             <th style="width: 2%;text-align: center;">
-                                                                #</th>
-                                                            <th style="width: 5%;">Act
+                                                                #
+                                                            </th>
+                                                            <th style="width: 5%;">
+                                                                Act
                                                             </th>
                                                             <th style="width: 25%;text-align: center;">
                                                                 Deskripsi
@@ -356,6 +528,51 @@
                                                             </td>
                                                         </tr>
                                                     </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="5"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="">Subtotal</label>
+                                                            </td>
+                                                            <td colspan="2"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="" id="subtotal-value">Rp.0</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="5"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="">PPN</label>
+                                                            </td>
+                                                            <td colspan="2"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="" id="ppn-value">Rp.0</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="5"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="">Grand Total</label>
+                                                            </td>
+                                                            <td colspan="2"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="" id="grandtotal-value">Rp.0</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="7"
+                                                                style="text-align: center;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label id="lb_terbilang"></label>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>
@@ -364,8 +581,10 @@
                             </div>
                         </div>
                     </div>
+
+
                     <div class="modal-footer justify-content-start">
-                        <button type="button" class="btn btn-dark waves-effect waves-light" ng-click="insert()">
+                        <button type="button" class="btn btn-dark waves-effect waves-light" ng-click="insert_otc()">
                             <i class="fa fa-paper-plane"></i> Submit
                         </button>
                         <button type="button" class="btn btn-secondary waves-effect waves-light"
@@ -383,6 +602,284 @@
 
 
     </div>
+    <!-- End Modal -->
+
+
+    <!-- Modal -->
+    <div id="my-modal-edit-otc" class="modal fade modal-right" tabindex="-1" role="dialog"
+        aria-labelledby="sideModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-full modal-dialog-scrollable">
+            <div class=" modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title text-white" id="sideModalLabel">Edit Invoice - <span
+                            id="no_invoice_otc_edit"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Row -->
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card shadow-sm border-warning">
+                                <div class="card-header bg-warning">
+                                    <h6 class="card-title text-white">Company Information</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-1">
+                                        <small class="text-muted">Company :</small><br>
+                                        <strong id="company_otc_edit" class="h6 m-0">PT. NETINDO PERSADA
+                                            NUSANTARA</strong>
+                                    </div>
+                                    <div class="mb-1">
+                                        <small class="text-muted">Alamat :</small><br>
+                                        <span id="alamat_otc_edit" class="h6 m-0">
+                                            Jl. Cucakrawa I No. 81, Kenangan Baru, Percut Sei Tuan, Deli Serdang, 20371
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">NPWP :</small><br>
+                                        <span id="npwp_otc_edit" class="h6 m-0">21.419.620.6-125.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-7">
+                            <!--  -->
+                            <div class="card shadow-sm border-warning">
+                                <div class="card-header bg-warning">
+                                    <h6 class="card-title text-white">Invoice Information</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-1">
+                                                <small class="text-muted">No.Faktur :</small><br>
+                                                <strong id="no_invoice_otc_edit_label" class="h6 m-0">-</strong>
+                                            </div>
+                                            <div class="mb-1">
+                                                <small class="text-muted">Tanggal Faktur :</small>
+                                                <input type="date" name="tgl_invoice_otc_edit" id="tgl_invoice_otc_edit"
+                                                    class="form-control" placeholder="Tanggal Faktur">
+                                            </div>
+                                            <div class="mb-0">
+                                                <small class="text-muted">Tanggal Jatuh Tempo :</small>
+                                                <input type="date" name="tgl_tempo_otc_edit" id="tgl_tempo_otc_edit"
+                                                    class="form-control" placeholder="Jatuh Tempo">
+                                            </div>
+                                        </div>
+
+                                        <!-- Col-6 -->
+                                        <div class="col-md-6">
+                                            <div class="mb-1">
+                                                <small class="text-muted">Kode Mitra :</small><br>
+                                                <input type="kode_mitra_edit" name="kode_mitra_edit"
+                                                    id="kode_mitra_edit" class="form-control" placeholder="Kode Mitra"
+                                                    readonly>
+                                            </div>
+                                            <div class="mb-1">
+                                                <small class="text-muted">Company :</small>
+                                                <input type="text" id="company_otc_edit_label"
+                                                    name="company_otc_edit_label" ng-model="company_otc_edit_label"
+                                                    class="form-control" placeholder="Company" readonly>
+                                            </div>
+                                            <div class="mb-1">
+                                                <small class="text-muted">Alamat :</small>
+                                                <textarea name="alamat_otc_edit_label" id="alamat_otc_edit_label"
+                                                    ng-model="alamat_otc_edit_label" cols="5" rows="5"
+                                                    class="form-control" placeholder="Alamat" readonly></textarea>
+                                            </div>
+                                            <div class="mb-1">
+                                                <small class="text-muted">NPWP :</small>
+                                                <input type="text" ng-model="npwp_otc_edit_label"
+                                                    name="npwp_otc_edit_label" id="npwp_otc_edit_label"
+                                                    class="form-control" placeholder="NPWP" readonly>
+                                            </div>
+                                        </div>
+                                        <!-- End Col -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end Cell -->
+                        </div>
+
+                    </div>
+                    <!-- End Row -->
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card shadow-sm border-warning">
+                                <div class="card-header bg-warning">
+                                    <h6 class="card-title text-white">Item List</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-2">
+                                            <button type="button"
+                                                class="btn btn-sm btn-warning waves-effect waves-light"
+                                                ng-click="AddBarisOTCEdit()">
+                                                <i class="fa fa-plus"></i>
+                                                Add Item
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered dt-responsive nowrap table-hover table-striped"
+                                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                    <thead class="bg-warning text-white">
+                                                        <tr>
+                                                            <th style="width: 2%;text-align: center;">
+                                                                #
+                                                            </th>
+                                                            <th style="width: 5%;">
+                                                                Act
+                                                            </th>
+                                                            <th style="width: 25%;text-align: center;">
+                                                                Deskripsi
+                                                            </th>
+                                                            <th style="width: 15%;text-align: center;">
+                                                                Harga Dasar
+                                                            </th>
+                                                            <th style="width: 15%;text-align: center;">
+                                                                Harga Jual
+                                                            </th>
+                                                            <th style="width: 8%;text-align: center;">
+                                                                PPN(%)
+                                                            </th>
+                                                            <th style="width: 15%;text-align: center;">
+                                                                Subtotal
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-otc-edit">
+                                                        <tr ng-repeat="dt in listDataOtcArrayEdit track by $index">
+                                                            <td>{{$index + 1}}</td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-danger"
+                                                                    ng-click="DeleteOtcEdit($index)">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                            <td>
+                                                                <textarea ng-model="dt.deskripsi_otc_edit"
+                                                                    name="deskripsi_otc_edit" id="deskripsi_otc_edit"
+                                                                    cols="3" rows="3" class="form-control"></textarea>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" ng-model="dt.price_dasar_edit"
+                                                                    class="form-control"
+                                                                    ng-change="FormatFieldNumber(dt, 'price_dasar_edit')" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" ng-model="dt.price_jual_edit"
+                                                                    class="form-control"
+                                                                    ng-change="UpdateSubtotalOtcEdit(dt)" />
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control"
+                                                                    ng-model="dt.combo_ppn_edit"
+                                                                    ng-change="UpdateSubtotalOtcEdit(dt)">
+                                                                    <option value="">
+                                                                        Pilih :</option>
+                                                                    <option value="10">
+                                                                        10%</option>
+                                                                    <option value="11">
+                                                                        11%</option>
+                                                                    <option value="12">
+                                                                        12%</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" ng-model="dt.subtotal_edit"
+                                                                    class="form-control" readonly />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="5"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="">Subtotal</label>
+                                                            </td>
+                                                            <td colspan="2"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="" id="subtotal-value-edit">Rp.0</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="5"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="">PPN</label>
+                                                            </td>
+                                                            <td colspan="2"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="" id="ppn-value-edit">Rp.0</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="5"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="">Grand Total</label>
+                                                            </td>
+                                                            <td colspan="2"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="" id="grandtotal-value-edit">Rp.0</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="7"
+                                                                style="text-align: center;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label id="lb_terbilang-edit"></label>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer justify-content-start">
+                        <button type="button" class="btn btn-warning waves-effect waves-light" ng-click="update_otc()">
+                            <i class="fa fa-paper-plane"></i>
+                            Update
+                        </button>
+                        <button type="button" class="btn btn-secondary waves-effect waves-light"
+                            data-bs-dismiss="modal">
+                            <i class="fa fa-ban"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Modal -->
+
+
+
+
+    </div>
+    <!-- End Modal -->
+
+
+
 
     <style>
     .hover-card {
@@ -465,14 +962,26 @@
 
     .modal-full {
         width: 100vw;
+        /* full lebar layar */
         max-width: 100vw;
-        height: 120vh;
+        height: 100vh;
+        /* full tinggi layar */
         margin: 0;
     }
 
     .modal-full .modal-content {
-        height: 120vh;
+        height: 100vh;
+        /* ikut full tinggi */
         border-radius: 0;
+        border: none;
+        /* biar rata */
+    }
+
+    .modal-full .modal-body {
+        overflow-y: auto;
+        /* biar isi bisa scroll */
+        height: calc(100vh - 120px);
+        /* sisain space untuk header+footer modal */
     }
     </style>
 

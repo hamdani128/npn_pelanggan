@@ -348,7 +348,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                         <div class="tab-pane" id="data_billing" role="tabpanel">
                                             <div class="card">
@@ -531,7 +530,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>

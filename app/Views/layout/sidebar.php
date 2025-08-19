@@ -15,7 +15,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="<?=base_url('pelanggan_mitra')?>" class=" waves-effect">
+                    <a href="<?=base_url('mitra/pelanggan')?>" class=" waves-effect">
                         <i class="mdi mdi-account-group"></i>
                         <span>Pelanggan</span>
                     </a>

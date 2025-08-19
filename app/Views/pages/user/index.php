@@ -94,8 +94,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#settings" data-toggle="tab">
-                                <i class="fas fa-solid fa-file-invoice mr-1"></i>
-                                Billing
+                                <i class="fas fa-solid fa-file mr-1"></i>
+                                Dokumen Support
                             </a>
                         </li>
                     </ul>
@@ -104,56 +104,60 @@
                     <div class="tab-content">
                         <div class="active tab-pane" id="activity">
                             <?php foreach ($profile_struktural as $row) {?>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-3">PENANGGUNG JAWAB STRUKTURAL
-                                        <?=$row->posisi?>
-                                    </h5>
-                                    <div class="table-responsive">
-                                        <table>
-                                            <tr>
-                                                <td style="width: 30%;">NIK</td>
-                                                <td style="width: 5%;">:</td>
-                                                <td><?=$row->nik?></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 30%;">Nama</td>
-                                                <td style="width: 5%;">:</td>
-                                                <td><?=$row->nama?></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 30%;">E-Mail</td>
-                                                <td style="width: 5%;">:</td>
-                                                <td><?=$row->email?></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 30%;">No.Kontak</td>
-                                                <td style="width: 5%;">:</td>
-                                                <td><?=$row->no_wa?></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 30%;">Dokumen</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3">
-                                                    <?php if ($row->filename != '' || $row->filename != null) {?>
-                                                    <img src="<?php echo base_url('upload/mitra/' . $row->kode_mitra . '/' . $row->filename); ?>"
-                                                        alt="" style="width: 300px; height: 200px;">
-                                                    <?php } else {?>
-                                                    <img src="<?php echo base_url('assets/images/id-card-blank.png'); ?>"
-                                                        alt="" style="width: 300px; height: 200px;">
-                                                    <?php }?>
-                                                </td>
-                                            </tr>
-                                        </table>
+                            <div class="card shadow-lg border-0 mb-4 rounded-3 overflow-hidden">
+                                <div class="card-header text-white"
+                                    style="background: linear-gradient(90deg, #0066cc, #004d99);">
+                                    <h6 class="mb-0 text-white">
+                                        <i class="fas fa-user-tie me-2"></i> PENANGGUNG JAWAB
+                                        STRUKTURAL - <?=$row->posisi?>
+                                    </h6>
+                                </div>
+                                <div class="card-body" style="background-color: #f8f9fa;">
+                                    <div class="row align-items-center">
+                                        <!-- Info Table -->
+                                        <div class="col-md-7">
+                                            <table class="table table-borderless table-sm mb-0">
+                                                <tbody>
+                                                    <tr>
+                                                        <th style="width: 35%">NIK</th>
+                                                        <td><?=$row->nik?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Nama</th>
+                                                        <td><?=$row->nama?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>E-Mail</th>
+                                                        <td><?=$row->email?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>No. Kontak</th>
+                                                        <td><?=$row->no_wa?></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- Image -->
+                                        <div class="col-md-5 text-center">
+                                            <?php if (!empty($row->filename)) {?>
+                                            <img src="<?=base_url('upload/mitra/' . $row->kode_mitra . '/' . $row->filename)?>"
+                                                alt="Dokumen" class="img-fluid rounded shadow-sm border"
+                                                style="max-height: 200px; object-fit: cover;">
+                                            <?php } else {?>
+                                            <img src="<?=base_url('assets/images/id-card-blank.png')?>"
+                                                alt="ID Card Kosong" class="img-fluid rounded shadow-sm border"
+                                                style="max-height: 200px; object-fit: cover;">
+                                            <?php }?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <?php }?>
                         </div>
+
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="timeline">
-                            <div class="card">
+                            <!-- <div class="card">
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table style="width: 100%; border-collapse: collapse;">
@@ -262,7 +266,6 @@
                                                                         </td>
                                                                     </tr>
                                                                     <?php }?>
-
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -273,12 +276,14 @@
 
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
+
+
                         </div>
                         <!-- /.tab-pane -->
 
                         <div class="tab-pane" id="settings">
-                            <div class="card">
+                            <!-- <div class="card">
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table
@@ -376,6 +381,75 @@
                                         </table>
                                     </div>
                                 </div>
+                            </div> -->
+
+                            <div class="card border-0 shadow-lg rounded-3">
+                                <div class="card-body">
+                                    <div id="accordion">
+                                        <?php foreach ($profile_dokumen as $index => $dt):
+    $file_extension = strtolower(pathinfo($dt->file_name, PATHINFO_EXTENSION));
+    $file_url = base_url('upload/mitra/' . $dt->kode_mitra . '/' . $dt->file_name);
+    $collapseId = 'collapse' . $index;
+    $headingId = 'heading' . $index;
+    ?>
+                                        <div class="mb-3 border rounded overflow-hidden shadow-sm">
+                                            <!-- Header Accordion -->
+                                            <div class="p-3 bg-gradient-primary text-white" id="<?=$headingId?>"
+                                                data-toggle="collapse" data-target="#<?=$collapseId?>"
+                                                aria-expanded="<?=$index === 0 ? 'true' : 'false'?>"
+                                                aria-controls="<?=$collapseId?>" style="cursor: pointer;">
+                                                <h6 class="mb-0 text-white">
+                                                    <i class="fas fa-file-alt me-2"></i>
+                                                    <?=$dt->type_name?>
+                                                </h6>
+                                            </div>
+
+                                            <!-- Body Accordion -->
+                                            <div id="<?=$collapseId?>" class="collapse <?=$index === 0 ? 'show' : ''?>"
+                                                aria-labelledby="<?=$headingId?>" data-parent="#accordion">
+                                                <div class="p-3 text-center bg-light">
+                                                    <?php if (in_array($file_extension, ['jpg', 'jpeg', 'png', 'gif'])): ?>
+                                                    <img src="<?=$file_url?>" alt="Document Image"
+                                                        class="img-fluid rounded shadow-sm"
+                                                        style="max-height: 400px; object-fit: contain;">
+
+                                                    <?php elseif ($file_extension === 'pdf'): ?>
+                                                    <?php if (preg_match('/Mobile|Android|iPhone|iPad/i', $_SERVER['HTTP_USER_AGENT'])): ?>
+                                                    <!-- Versi HP pakai PDF.js -->
+                                                    <iframe
+                                                        src="<?=base_url('assets/pdfjs/web/viewer.html')?>?file=<?=urlencode($file_url)?>"
+                                                        style="width:100%; height:500px; border:none;"></iframe>
+
+                                                    <?php else: ?>
+                                                    <!-- Versi Desktop pakai embed -->
+                                                    <embed src="<?=$file_url?>" type="application/pdf" width="100%"
+                                                        height="500px" class="rounded shadow-sm">
+                                                    <?php endif; ?>
+
+                                                    <!-- Tombol Download -->
+                                                    <a href="<?=$file_url?>" target="_blank"
+                                                        class="btn btn-primary mt-2">
+                                                        <i class="fas fa-download"></i> Download PDF
+                                                    </a>
+
+                                                    <?php elseif (in_array($file_extension, ['doc', 'docx'])): ?>
+                                                    <p><strong>Dokumen Word</strong></p>
+                                                    <a href="<?=$file_url?>" target="_blank" class="btn btn-primary">
+                                                        <i class="fas fa-download"></i> Lihat / Unduh
+                                                    </a>
+
+                                                    <?php else: ?>
+                                                    <p><em>Tipe file tidak dikenali</em></p>
+                                                    <a href="<?=$file_url?>" target="_blank" class="btn btn-secondary">
+                                                        <i class="fas fa-download"></i> Download File
+                                                    </a>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- /.tab-pane -->
@@ -390,6 +464,30 @@
 
 </div>
 <!-- container-fluid -->
+
+
+
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(90deg, #0066cc, #004d99);
+}
+
+#accordion .collapse.show {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
 
 
 <!-- end row -->
