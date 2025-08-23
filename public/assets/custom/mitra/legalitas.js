@@ -951,39 +951,39 @@ app.controller("KemitraanAppController", function ($scope, $http) {
 
     // OTC Data Table
     // OTC Data Table
-    var tbody3 = document.getElementById("tbody-otc-edit");
-    var rows3 = tbody3.getElementsByTagName("tr");
-    var otdata = [];
+    // var tbody3 = document.getElementById("tbody-otc-edit");
+    // var rows3 = tbody3.getElementsByTagName("tr");
+    // var otdata = [];
 
-    for (var i = 0; i < rows3.length; i++) {
-      var cells3 = rows3[i].getElementsByTagName("td");
+    // for (var i = 0; i < rows3.length; i++) {
+    //   var cells3 = rows3[i].getElementsByTagName("td");
 
-      var textarea = cells3[2].querySelector("textarea");
-      var hargaDasarInput = cells3[3].querySelector("input");
-      var hargaJualInput = cells3[4].querySelector("input");
-      var ppnSelect = cells3[5].querySelector("select");
-      var subtotalInput = cells3[6].querySelector("input");
+    //   var textarea = cells3[2].querySelector("textarea");
+    //   var hargaDasarInput = cells3[3].querySelector("input");
+    //   var hargaJualInput = cells3[4].querySelector("input");
+    //   var ppnSelect = cells3[5].querySelector("select");
+    //   var subtotalInput = cells3[6].querySelector("input");
 
-      if (
-        !textarea ||
-        !hargaDasarInput ||
-        !hargaJualInput ||
-        !ppnSelect ||
-        !subtotalInput
-      ) {
-        console.warn("Baris ke-" + i + " tidak lengkap dan dilewati.");
-        continue;
-      }
-      var rowData3 = {
-        deskripsi: textarea.value.trim(),
-        harga_dasar: UnFormatNumber(hargaDasarInput.value),
-        harga_jual: UnFormatNumber(hargaJualInput.value),
-        ppn: ppnSelect.value,
-        subtotal: UnFormatNumber(subtotalInput.value),
-      };
-      otdata.push(rowData3);
-    }
-    formData.append("otc_data", JSON.stringify(otdata));
+    //   if (
+    //     !textarea ||
+    //     !hargaDasarInput ||
+    //     !hargaJualInput ||
+    //     !ppnSelect ||
+    //     !subtotalInput
+    //   ) {
+    //     console.warn("Baris ke-" + i + " tidak lengkap dan dilewati.");
+    //     continue;
+    //   }
+    //   var rowData3 = {
+    //     deskripsi: textarea.value.trim(),
+    //     harga_dasar: UnFormatNumber(hargaDasarInput.value),
+    //     harga_jual: UnFormatNumber(hargaJualInput.value),
+    //     ppn: ppnSelect.value,
+    //     subtotal: UnFormatNumber(subtotalInput.value),
+    //   };
+    //   otdata.push(rowData3);
+    // }
+    // formData.append("otc_data", JSON.stringify(otdata));
 
     // Layanan Data Table
     var data_layanan_array = [];

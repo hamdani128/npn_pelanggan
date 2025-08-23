@@ -361,7 +361,7 @@
                                                                     <th style="width: 1%;text-align: center;">
                                                                         #
                                                                     </th>
-                                                                    <th style="width: 1%;text-align: center;">
+                                                                    <th style="width: 5%;text-align: center;">
                                                                         Act
                                                                     </th>
                                                                     <th style="width: 10%;text-align: center;">
@@ -376,21 +376,6 @@
                                                                     <th style="width: 12%;text-align: center;">
                                                                         Metode
                                                                     </th>
-                                                                    <th style="width: 15%;text-align: center;">
-                                                                        Deskripsi
-                                                                    </th>
-                                                                    <th style="width: 10%;text-align: center;">
-                                                                        Harga Dasar
-                                                                    </th>
-                                                                    <th style="width: 10%;text-align: center;">
-                                                                        Harga Jual
-                                                                    </th>
-                                                                    <th style="width: 5%;text-align: center;">
-                                                                        PPN(%)
-                                                                    </th>
-                                                                    <th style="width: 10%;text-align: center;">
-                                                                        Subtotal
-                                                                    </th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -399,10 +384,13 @@
                                                                 <tr>
                                                                     <td><?=$no++;?></td>
                                                                     <td>
-                                                                        <div class="button-group">
+                                                                        <div class="input-group">
                                                                             <?php if ($dt->status == '' || $dt->status == null) {?>
                                                                             <button class="btn btn-primary btn-sm">
                                                                                 <i class="fa fa-upload"></i>
+                                                                            </button>
+                                                                            <button class="btn btn-dark btn-sm">
+                                                                                <i class="fa fa-eye"></i>
                                                                             </button>
                                                                             <?php } else {?>
                                                                             <button class="btn btn-dark btn-sm">
@@ -430,21 +418,6 @@
                                                                     </td>
                                                                     <td>
                                                                         <label><?=$dt->metode?></label>
-                                                                    </td>
-                                                                    <td>
-                                                                        <label><?=$dt->deskripsi_price?></label>
-                                                                    </td>
-                                                                    <td style="text-align: right;">
-                                                                        <span><?=number_format($dt->harga_dasar, 0, ',', '.')?></span>
-                                                                    </td>
-                                                                    <td style="text-align: right;">
-                                                                        <span><?=number_format($dt->harga_jual, 0, ',', '.')?></span>
-                                                                    </td>
-                                                                    <td style="text-align: center;">
-                                                                        <span><?=$dt->ppn_text?>%</span>
-                                                                    </td>
-                                                                    <td style="text-align: center;">
-                                                                        <span><?=number_format($dt->subtotal, 0, ',', '.')?></span>
                                                                     </td>
                                                                 </tr>
                                                                 <?php }?>

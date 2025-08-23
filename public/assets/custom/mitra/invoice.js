@@ -48,9 +48,9 @@ app.controller("InvoiceAppController", function ($scope, $http) {
   $scope.listKodeMitra = [];
   $scope.selectedKodeMitra = "";
 
-  $scope.GetKodeMitra = function () {
+  $scope.GetKodeMitraForOTC = function () {
     $http
-      .get(base_url("profile_pelanggan/get_code_mitra"))
+      .get(base_url("profile_pelanggan/get_code_mitra_for_otc"))
       .then(function (response) {
         $scope.listKodeMitra = response.data;
       })
@@ -58,6 +58,21 @@ app.controller("InvoiceAppController", function ($scope, $http) {
         console.log(error);
       });
   };
+
+  $scope.GetKodeMitraForOTC();
+
+  $scope.GetKodeMitraForLayanan = function () {
+    $http
+      .get(base_url("profile_pelanggan/get_code_mitra_for_invoice_layanan"))
+      .then(function (response) {
+        $scope.listKodeMitraLayanan = response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  $scope.GetKodeMitraForLayanan();
 
   $scope.getProfileMitra = function () {
     if (!$scope.selectedKodeMitra) {
@@ -84,8 +99,6 @@ app.controller("InvoiceAppController", function ($scope, $http) {
         console.error(error);
       });
   };
-
-  $scope.GetKodeMitra();
 
   $scope.get_profile_mitra_otc = function (kode_mitra) {
     $http
@@ -191,6 +204,16 @@ app.controller("InvoiceAppController", function ($scope, $http) {
     }
   };
 
+  $scope.FormatFieldNumberLayanan = function (dt, field) {
+    var val = dt[field] || "";
+    val = val.toString().replace(/\D/g, "");
+    if (val) {
+      dt[field] = val.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    } else {
+      dt[field] = "";
+    }
+  };
+
   $scope.insert_otc = function () {
     var invoice_otc = document.getElementById("no_invoice_otc").innerText;
     var tgl_faktur = $("#tgl_invoice_otc").val();
@@ -280,7 +303,6 @@ app.controller("InvoiceAppController", function ($scope, $http) {
 
   $scope.PrintOutInvoiceOTC = function (dt) {
     var invoice_otc = dt.invoice;
-
     // buka tab baru menuju URL backend
     window.open(base_url("print_invoice_otc/" + invoice_otc, "_blank"));
   };
@@ -454,6 +476,149 @@ app.controller("InvoiceAppController", function ($scope, $http) {
           });
       }
     });
+  };
+
+  $scope.AddLayananInvoice = function () {
+    $scope.get_generate_invoice_layanan();
+    $("#my-modal-add-layanan").modal("show");
+  };
+
+  $scope.getProfileMitraLayanan = function () {
+    if (!$scope.selectedKodeMitraLayanan) {
+      Swal.fire({
+        title: "Error",
+        text: "Kode mitra tidak boleh kosong",
+        icon: "error",
+      });
+      return;
+    }
+
+    $http
+      .post(base_url("profile_pelanggan/get_profile_mitra"), {
+        kode_mitra: $scope.selectedKodeMitraLayanan,
+      })
+      .then(function (response) {
+        $scope.company_layanan = response.data.nama_perusahaan;
+        $scope.alamat_layanan = response.data.alamat;
+        $scope.npwp_layanan = response.data.npwp;
+        $scope.listDataLayananArray = [];
+        $scope.get_profile_mitra_layanan($scope.selectedKodeMitraLayanan);
+        $scope.get_periode_layanan($scope.selectedKodeMitraLayanan);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
+  $scope.get_generate_invoice_layanan = function () {
+    $http
+      .get(base_url("profile_pelanggan/layanan/get_number_invoice"))
+      .then(function (response) {
+        document.getElementById("no_invoice_layanan").innerText =
+          response.data.invoice;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  $scope.listDataLayananArray = [];
+
+  $scope.get_profile_mitra_layanan = function (kode_mitra) {
+    var formdata = {
+      kode_mitra: kode_mitra,
+    };
+    $http
+      .post(
+        base_url("profile_pelanggan/layanan/get_data_layanan_by_kode_mitra"),
+        formdata
+      )
+      .then(function (response) {
+        angular.forEach(response.data, function (row) {
+          $scope.listDataLayananArray.push({
+            deskripsi_add: row.deskripsi_price,
+            satuan: row.kapasitas + " " + row.quantity,
+            price_dasar_layanan: formatNumber(row.harga_dasar),
+            price_jual_layanan: formatNumber(row.harga_jual),
+            combo_ppn_layanan: row.ppn_text,
+            subtotal_layanan: formatNumber(row.subtotal),
+          });
+          $scope.UpdateTotalLayanan();
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  $scope.get_periode_layanan = function (kode_mitra) {
+    var formdata = {
+      kode_mitra: kode_mitra,
+    };
+    $http
+      .post(base_url("profile_pelanggan/layanan/get_periode_layanan"), formdata)
+      .then(function (response) {
+        $scope.periode_layanan = response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  // Fungsi update subtotal per baris
+  $scope.UpdateSubtotalLayanan = function (dt) {
+    $scope.FormatFieldNumberLayanan(dt, "price_jual_layanan");
+    var priceJual =
+      parseInt((dt.price_jual_layanan || "0").toString().replace(/\./g, "")) ||
+      0;
+    var ppnPersen = parseInt(dt.combo_ppn_layanan) || 0;
+    var ppnNominal = (priceJual * ppnPersen) / 100;
+
+    dt.subtotal_layanan = formatRupiah(priceJual + ppnNominal);
+    // setelah hitung per baris, update total semua
+    $scope.UpdateTotalLayanan();
+  };
+
+  // Fungsi update total semua baris
+  $scope.UpdateTotalLayanan = function () {
+    var totalSubtotal = 0;
+    var totalPpn = 0;
+
+    $scope.listDataLayananArray.forEach(function (row) {
+      var priceJual =
+        parseInt(
+          (row.price_jual_layanan || "0").toString().replace(/\./g, "")
+        ) || 0;
+      var ppnPersen = parseInt(row.combo_ppn_layanan) || 0;
+      var ppnNominal = (priceJual * ppnPersen) / 100;
+      totalSubtotal += priceJual;
+      totalPpn += ppnNominal;
+    });
+    var grandTotal = totalSubtotal + totalPpn;
+    document.getElementById("subtotal-value-layanan").innerText =
+      formatRupiah(totalSubtotal);
+    document.getElementById("ppn-value-layanan").innerText =
+      formatRupiah(totalPpn);
+    document.getElementById("grandtotal-value-layanan").innerText =
+      formatRupiah(grandTotal);
+    document.getElementById("lb_terbilang_layanan").innerText =
+      terbilang(grandTotal) + " Rupiah";
+  };
+
+  $scope.AddBarisLayanan = function () {
+    $scope.listDataLayananArray.push({
+      deskripsi_add: "",
+      satuan: "",
+      price_dasar_layanan: "",
+      price_jual_layanan: "",
+      combo_ppn_layanan: "",
+      subtotal_layanan: "",
+    });
+  };
+
+  $scope.DeleteLayanan = function (index) {
+    $scope.listDataLayananArray.splice(index, 1);
+    $scope.UpdateSubtotalLayanan();
   };
 });
 

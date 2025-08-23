@@ -203,7 +203,14 @@
                                 <div class="form-group">
                                     <label for="">Filter Perusahaan :</label>
                                     <div class="input-group">
-                                        <select name="" id="" class="form-control"></select>
+                                        <select name="cmb_filter_layanan_perusahaan" id="cmb_filter_layanan_perusahaan"
+                                            ng-model="cmb_filter_layanan_perusahaan" class="form-control">
+                                            <option value="">Pilih:</option>
+                                            <option ng-repeat="item in listKodeMitraLayanan"
+                                                value="{{item.kode_mitra}}">
+                                                {{item.kode_mitra}} - {{item.nama_perusahaan}}
+                                            </option>
+                                        </select>
                                         <button class="btn btn-md btn-success">
                                             <i class="fa fa-filter"></i>
                                             Filter
@@ -330,8 +337,6 @@
         </div>
     </div>
     <!-- end row -->
-
-
 
 
     <!-- Modal -->
@@ -879,135 +884,427 @@
     <!-- End Modal -->
 
 
+    <!-- Modal Invoice Layanan -->
+    <div id="my-modal-add-layanan" class="modal fade modal-right" tabindex="-1" role="dialog"
+        aria-labelledby="sideModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-full modal-dialog-scrollable">
+            <div class=" modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title text-white" id="sideModalLabel">Add Invoice</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Row -->
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card shadow-sm border-success">
+                                <div class="card-header bg-success">
+                                    <h6 class="card-title text-white">Company Information</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-1">
+                                        <small class="text-muted">Company :</small><br>
+                                        <strong id="company_layanan" class="h6 m-0">PT. NETINDO PERSADA
+                                            NUSANTARA</strong>
+                                    </div>
+                                    <div class="mb-1">
+                                        <small class="text-muted">Alamat :</small><br>
+                                        <span id="alamat_layanan" class="h6 m-0">
+                                            Jl. Cucakrawa I No. 81, Kenangan Baru, Percut Sei Tuan, Deli Serdang, 20371
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">NPWP :</small><br>
+                                        <span id="npwp_layanan" class="h6 m-0">21.419.620.6-125.000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-7">
+                            <!--  -->
+                            <div class="card shadow-sm border-success">
+                                <div class="card-header bg-success">
+                                    <h6 class="card-title text-white">Invoice Information</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-1">
+                                                <small class="text-muted">No.Faktur :</small><br>
+                                                <strong id="no_invoice_layanan" class="h6 m-0">-</strong>
+                                            </div>
+                                            <div class="mb-1">
+                                                <small class="text-muted">Tanggal Faktur :</small>
+                                                <input type="date" name="tgl_invoice_layanan" id="tgl_invoice_layanan"
+                                                    class="form-control" placeholder="Tanggal Faktur">
+                                            </div>
+                                            <div class="mb-0">
+                                                <small class="text-muted">Tanggal Jatuh Tempo :</small>
+                                                <input type="date" name="tgl_tempo_layanan" id="tgl_tempo_layanan"
+                                                    class="form-control" placeholder="Jatuh Tempo">
+                                            </div>
+
+                                            <div class="mb-0">
+                                                <small class="text-muted">Periode Pembayaran :</small>
+                                                <select class="form-control" name="cmb_periode_pembayaran"
+                                                    id="cmb_periode_pembayaran">
+                                                    <option value="">Pilih:</option>
+                                                    <div ng-repeat="item in periode_layanan">
+                                                        <option value="{{item.periode}}">{{item.periode}}</option>
+                                                    </div>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Col-6 -->
+                                        <div class="col-md-6">
+                                            <div class="mb-1">
+                                                <small class="text-muted">Kode Mitra :</small><br>
+                                                <select class="form-control" ng-model="selectedKodeMitraLayanan"
+                                                    ng-change="getProfileMitraLayanan()">
+                                                    <option value="">Pilih</option>
+                                                    <option ng-repeat="item in listKodeMitraLayanan"
+                                                        value="{{item.kode_mitra}}">
+                                                        {{item.kode_mitra}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-1">
+                                                <small class="text-muted">Company :</small>
+                                                <input type="text" ng-model="company_layanan" class="form-control"
+                                                    placeholder="Company" readonly>
+                                            </div>
+                                            <div class="mb-1">
+                                                <small class="text-muted">Alamat :</small>
+                                                <textarea ng-model="alamat_layanan" cols="5" rows="5"
+                                                    class="form-control" placeholder="Alamat" readonly></textarea>
+                                            </div>
+                                            <div class="mb-1">
+                                                <small class="text-muted">NPWP :</small>
+                                                <input type="text" ng-model="npwp_layanan" class="form-control"
+                                                    placeholder="NPWP" readonly>
+                                            </div>
+                                        </div>
+                                        <!-- End Col -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end Cell -->
+                        </div>
+
+                    </div>
+                    <!-- End Row -->
 
 
-    <style>
-    .hover-card {
-        cursor: pointer;
-        transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card shadow-sm border-success">
+                                <div class="card-header bg-success">
+                                    <h6 class="card-title text-white">Item List</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-2">
+                                            <button type="button"
+                                                class="btn btn-sm btn-success waves-effect waves-light"
+                                                ng-click="AddBarisLayanan()">
+                                                <i class="fa fa-plus"></i>
+                                                Add Item
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered dt-responsive nowrap table-hover table-striped"
+                                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                    <thead class="bg-success text-white">
+                                                        <tr>
+                                                            <th style="width: 2%;text-align: center;">
+                                                                #
+                                                            </th>
+                                                            <th style="width: 5%;">
+                                                                Act
+                                                            </th>
+                                                            <th style="width: 25%;text-align: center;">
+                                                                Deskripsi
+                                                            </th>
+                                                            <th style="width: 8%;text-align: center;">
+                                                                Satuans
+                                                            </th>
+                                                            <th style="width: 15%;text-align: center;">
+                                                                Harga Dasar
+                                                            </th>
+                                                            <th style="width: 15%;text-align: center;">
+                                                                Harga Jual
+                                                            </th>
+                                                            <th style="width: 8%;text-align: center;">
+                                                                PPN(%)
+                                                            </th>
+                                                            <th style="width: 15%;text-align: center;">
+                                                                Subtotal
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-otc">
+                                                        <tr ng-repeat="dt in listDataLayananArray track by $index">
+                                                            <td>{{$index + 1}}</td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-danger"
+                                                                    ng-click="DeleteLayanan($index)">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                            <td>
+                                                                <textarea ng-model="dt.deskripsi_add"
+                                                                    name="deskripsi_otc_add" id="deskripsi_otc_add"
+                                                                    cols="3" rows="3" class="form-control"></textarea>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" ng-model="dt.satuan"
+                                                                    class="form-control" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" ng-model="dt.price_dasar_layanan"
+                                                                    class="form-control"
+                                                                    ng-change="FormatFieldNumberLayanan(dt, 'price_dasar_layanan')" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" ng-model="dt.price_jual_layanan"
+                                                                    class="form-control"
+                                                                    ng-change="UpdateSubtotalLayanan(dt)" />
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control"
+                                                                    ng-model="dt.combo_ppn_layanan"
+                                                                    ng-change="UpdateSubtotalLayanan(dt)">
+                                                                    <option value="">
+                                                                        Pilih :</option>
+                                                                    <option value="10">
+                                                                        10%</option>
+                                                                    <option value="11">
+                                                                        11%</option>
+                                                                    <option value="12">
+                                                                        12%</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" ng-model="dt.subtotal_layanan"
+                                                                    class="form-control" readonly />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="6"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="">Subtotal</label>
+                                                            </td>
+                                                            <td colspan="2"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="" id="subtotal-value-layanan">Rp.0</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="6"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="">PPN</label>
+                                                            </td>
+                                                            <td colspan="2"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="" id="ppn-value-layanan">Rp.0</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="6"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="">Grand Total</label>
+                                                            </td>
+                                                            <td colspan="2"
+                                                                style="text-align: right;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label for="" id="grandtotal-value-layanan">Rp.0</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="8"
+                                                                style="text-align: center;font-size: 16px;font-weight: bold;
+                                                            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                                                                <label id="lb_terbilang_layanan"></label>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer justify-content-start">
+                        <button type="button" class="btn btn-success waves-effect waves-light"
+                            ng-click="insert_layanan()">
+                            <i class="fa fa-paper-plane"></i>
+                            Submit
+                        </button>
+                        <button type="button" class="btn btn-secondary waves-effect waves-light"
+                            data-bs-dismiss="modal">
+                            <i class="fa fa-ban"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Modal -->
+
+
+
+
+    </div>
+    <!-- End Modal Invoice Layanan  -->
+
+</div>
+<style>
+.hover-card {
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+.bg-dark.hover-card:hover {
+    background-color: #333 !important;
+    /* Warna saat hover untuk kartu dengan background gelap */
+}
+
+.bg-success.hover-card:hover {
+    background-color: #218838 !important;
+    /* Warna saat hover untuk kartu dengan background hijau */
+}
+
+.autocomplete-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.autocomplete-suggestions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.autocomplete-suggestions li {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.autocomplete-suggestions li:hover {
+    background-color: #f0f0f0;
+}
+
+
+
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
     }
 
-    .hover-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
-    }
-
-    .bg-dark.hover-card:hover {
-        background-color: #333 !important;
-        /* Warna saat hover untuk kartu dengan background gelap */
-    }
-
-    .bg-success.hover-card:hover {
-        background-color: #218838 !important;
-        /* Warna saat hover untuk kartu dengan background hijau */
-    }
-
-    .autocomplete-container {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        background-color: white;
-        border: 1px solid #ccc;
-        max-height: 200px;
-        overflow-y: auto;
-    }
-
-    .autocomplete-suggestions {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .autocomplete-suggestions li {
-        padding: 5px 10px;
-        cursor: pointer;
-    }
-
-    .autocomplete-suggestions li:hover {
-        background-color: #f0f0f0;
-    }
-
-
-
-    @media (max-width: 768px) {
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .table {
-            display: block;
-            width: 100%;
-            white-space: nowrap;
-        }
-    }
-
-
-    .modal.modal-right .modal-dialog {
-        position: fixed;
-        margin: 0;
-        right: 0;
-        top: 0;
-        height: 100%;
-        transform: translateX(100%);
-        transition: transform 0.3s ease-out;
+    .table {
+        display: block;
         width: 100%;
-        /* Full width */
+        white-space: nowrap;
     }
+}
 
-    .modal.show .modal-dialog {
-        transform: translateX(0);
+
+.modal.modal-right .modal-dialog {
+    position: fixed;
+    margin: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+    width: 100%;
+    /* Full width */
+}
+
+.modal.show .modal-dialog {
+    transform: translateX(0);
+}
+
+.modal-full {
+    width: 100vw;
+    /* full lebar layar */
+    max-width: 100vw;
+    height: 100vh;
+    /* full tinggi layar */
+    margin: 0;
+}
+
+.modal-full .modal-content {
+    height: 100vh;
+    /* ikut full tinggi */
+    border-radius: 0;
+    border: none;
+    /* biar rata */
+}
+
+.modal-full .modal-body {
+    overflow-y: auto;
+    /* biar isi bisa scroll */
+    height: calc(100vh - 120px);
+    /* sisain space untuk header+footer modal */
+}
+</style>
+
+
+<script>
+function show_otc() {
+    var display1 = document.getElementById("otc_invoice");
+    var display2 = document.getElementById("layanan_invoice");
+    if (display1.style.display === "none") {
+        display1.style.display = "block";
+        display2.style.display = "none";
+    } else {
+        display1.style.display = "none";
     }
+}
 
-    .modal-full {
-        width: 100vw;
-        /* full lebar layar */
-        max-width: 100vw;
-        height: 100vh;
-        /* full tinggi layar */
-        margin: 0;
+function show_invoice_layanan() {
+    var display1 = document.getElementById("otc_invoice");
+    var display2 = document.getElementById("layanan_invoice");
+    if (display2.style.display === "none") {
+        display2.style.display = "block";
+        display1.style.display = "none";
+    } else {
+        display2.style.display = "none";
     }
+}
+</script>
 
-    .modal-full .modal-content {
-        height: 100vh;
-        /* ikut full tinggi */
-        border-radius: 0;
-        border: none;
-        /* biar rata */
-    }
-
-    .modal-full .modal-body {
-        overflow-y: auto;
-        /* biar isi bisa scroll */
-        height: calc(100vh - 120px);
-        /* sisain space untuk header+footer modal */
-    }
-    </style>
-
-
-    <script>
-    function show_otc() {
-        var display1 = document.getElementById("otc_invoice");
-        var display2 = document.getElementById("layanan_invoice");
-        if (display1.style.display === "none") {
-            display1.style.display = "block";
-            display2.style.display = "none";
-        } else {
-            display1.style.display = "none";
-        }
-    }
-
-    function show_invoice_layanan() {
-        var display1 = document.getElementById("otc_invoice");
-        var display2 = document.getElementById("layanan_invoice");
-        if (display2.style.display === "none") {
-            display2.style.display = "block";
-            display1.style.display = "none";
-        } else {
-            display2.style.display = "none";
-        }
-    }
-    </script>
-
-    <?=$this->endSection();?>
+<?=$this->endSection();?>

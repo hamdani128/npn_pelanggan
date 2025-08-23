@@ -28,9 +28,11 @@ class InvoiceController extends BaseController
         return $this->response->setJSON($query);
     }
 
-    public function get_code_mitra()
+    public function get_code_mitra_for_otc()
     {
-        $SQL = "SELECT a.kode_mitra AS kode_mitra
+        $SQL = "SELECT
+                a.kode_mitra AS kode_mitra,
+                a.nama_perusahaan AS nama_perusahaan
                 FROM profile_mitra a
                 WHERE NOT EXISTS (
                     SELECT 1
@@ -40,6 +42,45 @@ class InvoiceController extends BaseController
                 ORDER BY a.kode_mitra ASC";
 
         $query = $this->db->query($SQL)->getResultArray();
+        return $this->response->setJSON($query);
+    }
+
+    public function get_code_mitra_for_invoice_layanan()
+    {
+        $SQL = "SELECT
+                a.kode_mitra AS kode_mitra,
+                a.nama_perusahaan AS nama_perusahaan
+                FROM profile_mitra a
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM profile_mitra_invoice_layanan b
+                    WHERE b.kode_mitra COLLATE utf8mb4_general_ci = a.kode_mitra COLLATE utf8mb4_general_ci
+                )
+                ORDER BY a.kode_mitra ASC";
+
+        $query = $this->db->query($SQL)->getResultArray();
+        return $this->response->setJSON($query);
+    }
+
+    public function get_periode_layanan()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = $this->request->getJSON(true);
+        $kode = $input['kode_mitra'];
+
+        $sql = "SELECT a.periode AS periode
+            FROM profile_mitra_data_layanan_periode a
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM profile_mitra_invoice_layanan b
+                WHERE b.kode_mitra COLLATE utf8mb4_general_ci = a.kode_mitra COLLATE utf8mb4_general_ci
+                AND b.kode_mitra = a.kode_mitra
+            )
+            AND a.kode_mitra = ?
+            ORDER BY a.periode ASC";
+
+        $query = $this->db->query($sql, [$kode])->getResultArray();
+
         return $this->response->setJSON($query);
     }
 
@@ -217,6 +258,32 @@ class InvoiceController extends BaseController
             ];
         }
         return $this->response->setJSON($response);
+    }
+
+    // Layanan
+    public function generate_invoice_code_layanan()
+    {
+        $SQL = "SELECT MAX(RIGHT(invoice, 4)) AS KD_MAX
+            FROM profile_mitra_invoice_layanan";
+        $query = $this->db->query($SQL);
+        if ($query->getNumRows() > 0) {
+            $row = $query->getRow();
+            $n = ((int) $row->KD_MAX) + 1;
+            $no = sprintf("%04s", $n);
+        } else {
+            $no = "0001";
+        }
+        $kode = "INV" . date('ymd') . $no;
+        return $this->response->setJSON(['invoice' => $kode]);
+    }
+
+    public function get_data_layanan_by_kode_mitra()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $input = $this->request->getJSON(true);
+        $kode_mitra = $input['kode_mitra'];
+        $data = $this->db->table('profile_mitra_data_layanan')->where('kode_mitra', $kode_mitra)->get()->getResultObject();
+        return $this->response->setJSON($data);
     }
 
 }

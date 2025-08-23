@@ -77,8 +77,6 @@ class MitraController extends BaseController
             $tgl_lambat = $this->request->getPost("pembayaran_paling_lama_month");
 
             foreach ($data_layanan as $index => $row) {
-                $start = new DateTime($start_date_price_month);
-                $end = new DateTime($end_date_price_month);
 
                 // Simpan data utama layanan
                 $data_temp = [
@@ -102,54 +100,50 @@ class MitraController extends BaseController
                 ];
 
                 $this->db->table("profile_mitra_data_layanan")->insert($data_temp);
-
-                // Simpan data per bulan
-                while ($start <= $end) {
-                    $period_start = $start->format('Y-m-01'); // awal bulan
-
-                    // Gunakan tgl_lambat jika valid, jika tidak pakai akhir bulan
-                    $last_day_of_month = $start->format('t');
-                    $tgl_akhir = is_numeric($tgl_lambat) && $tgl_lambat <= $last_day_of_month ? $tgl_lambat : $last_day_of_month;
-                    $period_end = $start->format("Y-m-") . str_pad($tgl_akhir, 2, "0", STR_PAD_LEFT);
-
-                    $data_temp_periode = [
-                        'kode_mitra' => $mitra_id,
-                        'deskripsi_price' => $row['deskripsi_price_month'] ?? '',
-                        'harga_dasar' => $row['harga_dasar_price_month'] ?? '',
-                        'harga_jual' => $row['harga_jual_price_month'],
-                        'ppn_text' => $row['combo_ppn_price_month'],
-                        'ppn' => $row['nominal_ppn_price_month'],
-                        'subtotal' => $row['subtotal_price_month'] ?? '',
-                        'periode' => $period_start,
-                        'last_pay_periode' => $period_end,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'created_by' => session()->get('username'),
-                    ];
-
-                    $this->db->table("profile_mitra_data_layanan_periode")->insert($data_temp_periode);
-
-                    // Tambah 1 bulan
-                    $start->modify('+1 month');
-                }
             }
 
-            // otc_data
-            $otc = json_decode($this->request->getPost("otc_data"), true);
-            // var_dump($otc);
-            foreach ($otc as $index => $row) {
-                $data_row = [
+            $start = new DateTime($start_date_price_month);
+            $end = new DateTime($end_date_price_month);
+            // Simpan data per bulan
+            while ($start <= $end) {
+                $period_start = $start->format('Y-m-01'); // awal bulan
+
+                // Gunakan tgl_lambat jika valid, jika tidak pakai akhir bulan
+                $last_day_of_month = $start->format('t');
+                $tgl_akhir = is_numeric($tgl_lambat) && $tgl_lambat <= $last_day_of_month ? $tgl_lambat : $last_day_of_month;
+                $period_end = $start->format("Y-m-") . str_pad($tgl_akhir, 2, "0", STR_PAD_LEFT);
+
+                $data_temp_periode = [
                     'kode_mitra' => $mitra_id,
-                    'deskripsi_price' => $row['deskripsi'] ?? '',
-                    'harga_dasar' => $row['harga_dasar'] ?? '',
-                    'harga_jual' => $row['harga_jual'] ?? '',
-                    'ppn_text' => $row['ppn'] ?? '',
-                    'ppn' => $row['harga_jual'] * ($row['ppn'] / 100) ?? '',
-                    'subtotal' => $row['subtotal'] ?? '',
+                    'periode' => $period_start,
+                    'last_pay_periode' => $period_end,
                     'created_at' => date('Y-m-d H:i:s'),
                     'created_by' => session()->get('username'),
                 ];
-                $this->db->table("profile_mitra_data_layanan_otc")->insert($data_row);
+
+                $this->db->table("profile_mitra_data_layanan_periode")->insert($data_temp_periode);
+
+                // Tambah 1 bulan
+                $start->modify('+1 month');
             }
+
+            // // otc_data
+            // $otc = json_decode($this->request->getPost("otc_data"), true);
+            // // var_dump($otc);
+            // foreach ($otc as $index => $row) {
+            //     $data_row = [
+            //         'kode_mitra' => $mitra_id,
+            //         'deskripsi_price' => $row['deskripsi'] ?? '',
+            //         'harga_dasar' => $row['harga_dasar'] ?? '',
+            //         'harga_jual' => $row['harga_jual'] ?? '',
+            //         'ppn_text' => $row['ppn'] ?? '',
+            //         'ppn' => $row['harga_jual'] * ($row['ppn'] / 100) ?? '',
+            //         'subtotal' => $row['subtotal'] ?? '',
+            //         'created_at' => date('Y-m-d H:i:s'),
+            //         'created_by' => session()->get('username'),
+            //     ];
+            //     $this->db->table("profile_mitra_data_layanan_otc")->insert($data_row);
+            // }
 
             // // Periode Price Month
 
@@ -277,9 +271,6 @@ class MitraController extends BaseController
             $this->db->table("profile_mitra_data_layanan")->where("kode_mitra", $mitra_id)->delete();
             $this->db->table("profile_mitra_data_layanan_periode")->where("kode_mitra", $mitra_id)->delete();
             foreach ($data_layanan as $index => $row) {
-                $start = new DateTime($start_date_price_month);
-                $end = new DateTime($end_date_price_month);
-
                 // Simpan data utama layanan
                 $data_temp = [
                     'kode_mitra' => $mitra_id,
@@ -302,39 +293,34 @@ class MitraController extends BaseController
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => session()->get('username'),
                 ];
-
                 $this->db->table("profile_mitra_data_layanan")->insert($data_temp);
 
-                // Simpan data per bulan
-                while ($start <= $end) {
-                    $period_start = $start->format('Y-m-01'); // awal bulan
+            }
+            // Simpan data per bulan
+            $start = new DateTime($start_date_price_month);
+            $end = new DateTime($end_date_price_month);
+            while ($start <= $end) {
+                $period_start = $start->format('Y-m-01'); // awal bulan
 
-                    // Gunakan tgl_lambat jika valid, jika tidak pakai akhir bulan
-                    $last_day_of_month = $start->format('t');
-                    $tgl_akhir = is_numeric($tgl_lambat) && $tgl_lambat <= $last_day_of_month ? $tgl_lambat : $last_day_of_month;
-                    $period_end = $start->format("Y-m-") . str_pad($tgl_akhir, 2, "0", STR_PAD_LEFT);
+                // Gunakan tgl_lambat jika valid, jika tidak pakai akhir bulan
+                $last_day_of_month = $start->format('t');
+                $tgl_akhir = is_numeric($tgl_lambat) && $tgl_lambat <= $last_day_of_month ? $tgl_lambat : $last_day_of_month;
+                $period_end = $start->format("Y-m-") . str_pad($tgl_akhir, 2, "0", STR_PAD_LEFT);
 
-                    $data_temp_periode = [
-                        'kode_mitra' => $mitra_id,
-                        'deskripsi_price' => $row['deskripsi_price_month'] ?? '',
-                        'harga_dasar' => $row['harga_dasar_price_month'] ?? '',
-                        'harga_jual' => $row['harga_jual_price_month'],
-                        'ppn_text' => $row['combo_ppn_price_month'],
-                        'ppn' => $row['nominal_ppn_price_month'],
-                        'subtotal' => $row['subtotal_price_month'] ?? '',
-                        'periode' => $period_start,
-                        'last_pay_periode' => $period_end,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'created_by' => session()->get('username'),
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'updated_by' => session()->get('username'),
-                    ];
+                $data_temp_periode = [
+                    'kode_mitra' => $mitra_id,
+                    'periode' => $period_start,
+                    'last_pay_periode' => $period_end,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => session()->get('username'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => session()->get('username'),
+                ];
 
-                    $this->db->table("profile_mitra_data_layanan_periode")->insert($data_temp_periode);
+                $this->db->table("profile_mitra_data_layanan_periode")->insert($data_temp_periode);
 
-                    // Tambah 1 bulan
-                    $start->modify('+1 month');
-                }
+                // Tambah 1 bulan
+                $start->modify('+1 month');
             }
 
             // Update profile mitra
@@ -351,24 +337,24 @@ class MitraController extends BaseController
             $this->db->table('profile_mitra')->where('kode_mitra', $mitra_id)->update($data_mitra);
 
             // Hapus dan simpan ulang OTC
-            $otc = json_decode($this->request->getPost("otc_data"), true);
-            $this->db->table("profile_mitra_data_layanan_otc")->where("kode_mitra", $mitra_id)->delete();
-            foreach ($otc as $index => $row) {
-                $data_row = [
-                    'kode_mitra' => $mitra_id,
-                    'deskripsi_price' => $row['deskripsi'] ?? '',
-                    'harga_dasar' => $row['harga_dasar'] ?? '',
-                    'harga_jual' => $row['harga_jual'] ?? '',
-                    'ppn_text' => $row['ppn'] ?? '',
-                    'ppn' => $row['harga_jual'] * ($row['ppn'] / 100) ?? '',
-                    'subtotal' => $row['subtotal'] ?? '',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'created_by' => session()->get('username'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => session()->get('username'),
-                ];
-                $this->db->table("profile_mitra_data_layanan_otc")->insert($data_row);
-            }
+            // $otc = json_decode($this->request->getPost("otc_data"), true);
+            // $this->db->table("profile_mitra_data_layanan_otc")->where("kode_mitra", $mitra_id)->delete();
+            // foreach ($otc as $index => $row) {
+            //     $data_row = [
+            //         'kode_mitra' => $mitra_id,
+            //         'deskripsi_price' => $row['deskripsi'] ?? '',
+            //         'harga_dasar' => $row['harga_dasar'] ?? '',
+            //         'harga_jual' => $row['harga_jual'] ?? '',
+            //         'ppn_text' => $row['ppn'] ?? '',
+            //         'ppn' => $row['harga_jual'] * ($row['ppn'] / 100) ?? '',
+            //         'subtotal' => $row['subtotal'] ?? '',
+            //         'created_at' => date('Y-m-d H:i:s'),
+            //         'created_by' => session()->get('username'),
+            //         'updated_at' => date('Y-m-d H:i:s'),
+            //         'updated_by' => session()->get('username'),
+            //     ];
+            //     $this->db->table("profile_mitra_data_layanan_otc")->insert($data_row);
+            // }
 
             // Pastikan folder upload ada
             $uploadPath = FCPATH . 'upload/mitra/' . $mitra_id . '/';

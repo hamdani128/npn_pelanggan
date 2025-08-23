@@ -67,11 +67,16 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
 
     // Inovice Kemitraan
     $routes->get('profile_pelanggan/kemitraan_invoice', 'Admin\Kemitraan\InvoiceController::index');
-    $routes->get('profile_pelanggan/get_code_mitra', 'Admin\Kemitraan\InvoiceController::get_code_mitra');
+    $routes->get('profile_pelanggan/get_code_mitra_for_otc', 'Admin\Kemitraan\InvoiceController::get_code_mitra_for_otc');
+    $routes->get('profile_pelanggan/get_code_mitra_for_invoice_layanan', 'Admin\Kemitraan\InvoiceController::get_code_mitra_for_invoice_layanan');
     $routes->get('profile_pelanggan/otc/get_number_invoice', 'Admin\Kemitraan\InvoiceController::generate_invoice_code_otc');
     $routes->post('profile_pelanggan/otc/insert_otc', 'Admin\Kemitraan\InvoiceController::insert_otc');
     $routes->post('profile_pelanggan/otc/update_otc', 'Admin\Kemitraan\InvoiceController::update_otc');
     $routes->get('profile_pelanggan/otc/get_data_transaction', 'Admin\Kemitraan\InvoiceController::get_data_invoice_otc');
     $routes->get('print_invoice_otc/(:any)', 'Admin\Kemitraan\InvoiceController::print_invoice_otc/$1');
     $routes->post('profile_pelanggan/otc/get_data_transaction_by_kode_mitra', 'Admin\Kemitraan\InvoiceController::get_data_invoice_otc_by_kode_mitra');
+    $routes->get('profile_pelanggan/layanan/get_number_invoice', 'Admin\Kemitraan\InvoiceController::generate_invoice_code_layanan');
+    $routes->post('profile_pelanggan/layanan/get_data_layanan_by_kode_mitra', 'Admin\Kemitraan\InvoiceController::get_data_layanan_by_kode_mitra');
+    $routes->post('profile_pelanggan/layanan/get_periode_layanan', 'Admin\Kemitraan\InvoiceController::get_periode_layanan');
+
 });
